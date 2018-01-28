@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
+import { Layout } from 'antd';
 import './AppHeader.css';
 
 class AppFooter extends Component {
 
     render() {
       return (
-        <div className="AppFooter">
-          <Footer>
-
-          </Footer>
-        </div>
+        <Layout.Footer className="AppFooter">
+          footer
+        </Layout.Footer>
       );
     }
   }

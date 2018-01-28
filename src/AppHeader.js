@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import { Layout } from 'antd';
 import './AppHeader.css';
 
 class AppHeader extends Component {
 
     render() {
       return (
-        <div className="AppHeader">
-          <Header>
-          </Header>
-        </div>
+        <Layout.Header className="AppHeader">
+          header
+        </Layout.Header>
       );
     }
   }

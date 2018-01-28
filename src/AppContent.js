@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
+import { Layout } from 'antd';
 import './AppContent.css';
 
 class AppContent extends Component {
 
     render() {
       return (
-        <div className="AppContent">
-          <Content>
-
-          </Content>
-        </div>
+        <Layout.Content className="AppContent">
+          content
+        </Layout.Content>
       );
     }
   }
