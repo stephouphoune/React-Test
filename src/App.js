@@ -10,9 +10,7 @@ class App extends Component {
   render() {
     return (
       <Layout className="App">  
-        <AppHeader/>
         <AppContent/>
-        <AppFooter/>
       </Layout>
     );
   }
