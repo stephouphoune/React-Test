@@ -1,0 +1,10 @@
+.SwitchDay
+{
+    flex:1;
+}
+
+.Calendar
+{
+    display:flex;
+    flex-direction: column;
+}
