@@ -1,0 +1,2 @@
+
+export const USER_REQUEST_SIGNIN = 'USER_REQUEST_SIGNIN'
