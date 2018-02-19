@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Layout, Tabs } from 'antd';
 import './AppContent.css';
 
-import HomePage from './pages/HomePage'
-import SettingsPage from './pages/SettingsPage'
-import StatsPage from './pages/StatsPage'
+import HomePage from './homePage/HomePage'
+import SettingsPage from './settingsPage/SettingsPage'
+import StatsPage from './statsPage/StatsPage'
 
 class AppContent extends Component {
 
