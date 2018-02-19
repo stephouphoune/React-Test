@@ -1,7 +1,17 @@
-
 .Calendar
 {
     display: flex;
     flex-direction: column;
     max-width: 12.5rem;
 }
+
+.Button
+{
+    width: '100%';
+}
+
+.ButtonGroup
+{
+    display: 'flex';
+}
+
