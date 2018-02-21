@@ -1,7 +1,5 @@
 import * as types from '../types/user'
-/*
-import { USER_REQUEST_SIGNIN } from '../types/user
-*/
+
 const initialState = {
     email: null,
     token: null,
@@ -25,7 +23,7 @@ const userReducer = (state = initialState, action) => {
                 token: action.token,
                 signinError: action.signinError,    
             }
-        
+
         default:
             return state
     }

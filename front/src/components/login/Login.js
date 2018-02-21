@@ -11,7 +11,9 @@ class Login extends Component {
     }
 
     render() {
+        //Permet d'actualiser le state dans le render
         const { email, password } = this.state
+        //permet d'actualiser les props dans le render
         const { signinLoading, signin, signinError } = this.props
 
         return (
@@ -33,7 +35,7 @@ class Login extends Component {
                     value="OK"
                     onClick={() => signin(email, password)}
                 />
-                {signinLoading ? 'connection en cours' : 'il se passe rien'}
+                {signinLoading ? 'connexion en cours' : 'il se passe rien'}
                 <div>
                     <b>{signinError}</b>
                     <br />
