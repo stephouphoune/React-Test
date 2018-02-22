@@ -4,6 +4,8 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { createSignIn } from '../../appState/actions/user'
 import { Calendar } from 'antd';
 
+import './Login.css'
+
 
 function onPanelChange(value, mode) {
   console.log(value, mode);
@@ -29,8 +31,8 @@ class Login extends Component {
         return (
             <div>
                 <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
-    <Calendar className="customCalendar" fullscreen={false} onPanelChange={onPanelChange} />
-  </div>
+                    <Calendar className="customCalendar" fullscreen={false} onPanelChange={onPanelChange} />
+                </div>
 
                 email 
                 <input
