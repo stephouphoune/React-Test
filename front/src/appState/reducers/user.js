@@ -1,7 +1,7 @@
 import * as types from '../types/user'
 
 const initialState = {
-    email: null,
+    username: null,
     token: null,
     signinError: '',
     signinLoading: false,
@@ -19,7 +19,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 signinLoading: false,
-                email: action.email,
+                username: action.username,
                 token: action.token,
                 signinError: action.signinError,    
             }

@@ -1,4 +1,32 @@
-.customCalendar > .ant-fullcalendar-header{
-    padding: 11px 16px 11px 16px;
-    text-align: center;
+.Login {
+    margin-top:auto;
+    margin-bottom: auto;
+}
+
+.LoginForm{
+    margin-left:auto;
+    margin-right: auto;
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 20rem;
+}
+
+.InputUsername{
+    width:20rem;
+}
+
+.InputPassword{
+    width:20rem;
+}
+
+.ButtonLogin{
+    width:20rem;
+}
+
+.TaskEat{
+    padding-bottom:2rem;
+    margin-left:auto;
+    margin-right: auto;
+    display:flex;
 }

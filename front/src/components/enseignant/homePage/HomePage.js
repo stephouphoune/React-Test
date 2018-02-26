@@ -8,6 +8,7 @@ const dateFormat = 'YYYY/MM/DD';
 
 const HomePage = (props) => (
   <div>
+    
     <div className="Calendar">
       <DatePicker format={dateFormat}/>            
       <Button.Group className="ButtonGroup">

@@ -4,19 +4,19 @@ const requestSignIn = () => ({
     type: types.USER_REQUEST_SIGNIN
 })
 
-const receiveSignIn = (email, token, signinError) => ({
+const receiveSignIn = (username, token, signinError) => ({
     type: types.USER_RECEIVE_SIGNIN,
-    email,
+    username,
     token,
     signinError
 })
 
-export const createSignIn = dispatch => (email, password) => {
+export const createSignIn = dispatch => (username, password) => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestSignIn())
 
     //Un fetch se décompose en header/body/footer si on le souhaite. 
-    fetch(`http://localhost:3001/api/user?email=${email}&password=${password}`, {
+    fetch(`http://localhost:3001/api/user?username=${username}&password=${password}`, {
         method: 'GET',
     })
     //Résultats du fetch
@@ -31,7 +31,7 @@ export const createSignIn = dispatch => (email, password) => {
     //Résultat <body>
     .then(body => {
         const token = body
-        dispatch(receiveSignIn(email, token))
+        dispatch(receiveSignIn(username, token))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveSignIn(null, null, 'Identifiant incorrect!'))
