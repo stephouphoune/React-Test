@@ -18,7 +18,7 @@ class Duration extends Component{
          parser={value => value.replace('min', '')}
          onChange={onChange}
       />
-    );
+  );
   }
 }
 export default Duration;

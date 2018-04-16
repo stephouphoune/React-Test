@@ -6,21 +6,10 @@
 .LoginForm{
     margin-left:auto;
     margin-right: auto;
-    display:flex;
-    flex-direction: column;
-    flex-wrap: wrap;
     width: 20rem;
 }
 
-.InputUsername{
-    width:20rem;
-}
-
-.InputPassword{
-    width:20rem;
-}
-
-.ButtonLogin{
+.InputUsername, .InputPassword, .ButtonLogin{
     width:20rem;
 }
 

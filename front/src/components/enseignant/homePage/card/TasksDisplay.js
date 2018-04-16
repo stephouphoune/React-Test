@@ -39,7 +39,9 @@ const data =[
  title: 'Recherche - Thales Waves - Encadrement',
  time: '2h00min',
 },
-]//differentes taches presentes dans la liste et modifiables
+]
+//differentes taches presentes dans la liste et modifiables
+
 class TasksDisplay extends Component{
   state = {
     loading: true,
@@ -51,20 +53,17 @@ class TasksDisplay extends Component{
   render(){
     return(
       <List
-  itemLayout="horizontal"
-  dataSource={data}
-  renderItem={item => (
-    <List.Item
-       actions={[<a>edit</a>,<a>delete</a>]}>
-       durée : {item.time}
-      <List.Item.Meta
-        title={<a href="https://ant.design">{item.title}</a>}
-        description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-      />
-    </List.Item>
-  )}
-/>
-
+        itemLayout="horizontal"
+        dataSource={data}
+        renderItem={item => (
+            <List.Item actions={[<a>edit</a>,<a>delete</a>]}>
+                durée : {item.time}
+                <List.Item.Meta
+                  title={<a href="https://ant.design">{item.title}</a>}
+                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                />
+            </List.Item>
+      )}/>
     );
   }
 }

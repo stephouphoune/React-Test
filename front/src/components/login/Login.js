@@ -4,7 +4,6 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { createSignIn } from '../../appState/actions/user'
 import { Calendar } from 'antd';
 import './Login.css'
-const FormItem = Form.Item;
 
 function onPanelChange(value, mode) {
   console.log(value, mode);
@@ -17,22 +16,16 @@ class Login extends Component {
         username: '',
         password: ''
     }
-
-    //----------------FUNCTIONS ANTD
-    //Function Submit
-
     render() {
         //Permet d'actualiser le state dans le render
-
-        
         const { username, password } = this.state
         //permet d'actualiser les props dans le render
         const { signinLoading, signin, signinError} = this.props
 
         return (
             <div className="Login">
-                    
-                    <FormItem className="LoginForm">
+
+                    <Form.Item className="LoginForm">
                         <img src="./task-eat.png" className="TaskEat"/>
                         <Input
                             className="InputUsername"
@@ -64,7 +57,7 @@ class Login extends Component {
                             htmlType="submit">
                         Log in
                         </Button>
-                    </FormItem>
+                    </Form.Item>
                     
                     {signinLoading ? 'connexion en cours':''}
                     <b>{signinError}</b>

@@ -11,25 +11,21 @@ import Duration_list from './Duration_list';
 class Carte extends Component{
   render(){
     return(
-      <div>
       <Card className="card_elements"
             title="Gestion des tâches du jour"
             style={{ width: '100%' }}
-            actions={[<ProgressBar className="Progressing_time" />]}>
-      <Row className="flex-container2">
-        <Button className="plus_button" shape="circle">
-          <Icon type="plus" />
-        </Button>
-        <TasksEdit/>
-        <Duration/>
-     </Row>
-     <Row>
-      <TasksDisplay/>
-      <Duration_list/>
-     </Row>
-
-   </Card>
-      </div>
+            actions={[<ProgressBar className="Progressing_time"/>]}>
+        <Row className="flex-container2">
+          <Button className="plus_button" shape="circle">
+            <Icon type="plus" />
+          </Button>
+          <TasksEdit/>
+          <Duration/>
+        </Row>
+        <Row>
+          <TasksDisplay/>
+        </Row>
+      </Card>
     );
   }
 }

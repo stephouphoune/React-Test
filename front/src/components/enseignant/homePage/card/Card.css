@@ -1,8 +1,6 @@
 .flex-container2{
   display: flex;
   justify-content: space-around;
-
-
 }
 .plus_button,.ant-btn-circle
 {

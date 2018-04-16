@@ -19,14 +19,14 @@ function Complete() {
 }
 
 class TasksEdit extends Component{
-  state = {
+    state = {
       inputValue: 1,
       dataSource:[],
     }
 
   onChange = (value) => {
     this.setState({
-    inputValue: value,
+      inputValue: value,
     });
   }
 
@@ -34,8 +34,8 @@ class TasksEdit extends Component{
     return(
       <InputGroup compact className="saisie_tache_auto">
             <Complete />
-           <Complete />
-           <Complete />
+            <Complete />
+            <Complete />
        </InputGroup>
     )
   }
