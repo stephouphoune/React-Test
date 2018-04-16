@@ -13,13 +13,13 @@ class AppContent extends Component {
       <Layout.Content className="AppContent">
         <div className="card-container">
           <Tabs type="card">
-            <Tabs.TabPane tab="Tab Title 1" key="1">
+            <Tabs.TabPane tab="Gestion" key="1">
               <HomePage />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Tab Title 2" key="2">
+            <Tabs.TabPane tab="Analyse" key="2">
               <StatsPage />
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Tab Title 3" key="3">
+            <Tabs.TabPane tab="Paramètres" key="3">
               <SettingsPage />
             </Tabs.TabPane>
           </Tabs>

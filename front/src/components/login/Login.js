@@ -55,6 +55,7 @@ class Login extends Component {
                                             color: 'rgba(0,0,0,.25)'
                                         }} 
                                     />} 
+                            type="password"
                             placeholder="Password" />
                         <Button 
                             className="ButtonLogin"

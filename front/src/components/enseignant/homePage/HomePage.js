@@ -1,34 +1,28 @@
-import React from 'react'
-import { DatePicker, Button, Icon } from 'antd';
-import moment from 'moment';
-
+import React, { Component } from 'react';
+import {Row,Col} from 'antd';
 import './HomePage.css';
+import Agenda from './Agenda';
+import Card from './card/Card';
 
-const dateFormat = 'YYYY/MM/DD';
 
-const HomePage = (props) => (
-  <div>
-    
-    <div className="Calendar">
-      <DatePicker format={dateFormat}/>            
-      <Button.Group className="ButtonGroup">
-        <Button
-          className = "Button"
-          size="small"
-          type="default"
-        >
-          <Icon type="left" />Hier
-        </Button>
-        <Button
-          className="Button"
-          size="small"
-          type="default"
-        >
-          Demain<Icon type="right" />
-        </Button>
-      </Button.Group>
-    </div>
-  </div>
-);
+class HomePage extends Component{
 
-export default HomePage
+  render() {
+    return (
+          <div>
+            <Row>
+              <Col span={6}>
+                <Agenda/>
+              </Col>
+              <Col span={2}>
+              </Col>
+              <Col span={16}>
+                <Card/>
+              </Col>
+            </Row>
+          </div>
+    );
+  }
+}
+
+export default HomePage;
