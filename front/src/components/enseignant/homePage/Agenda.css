@@ -1,23 +1,21 @@
 /*Ici voir comment faire pour ne pas être aussi précis tout en l'étant ? :D*/
 
-.custom_calendar > .ant-fullcalendar-header
+.ant-fullcalendar-header
 {
   padding-top: 1.35rem;
   text-align: center;
 }
 
-.custom_calendar > .ant-fullcalendar table
+.ant-fullcalendar table
 {
   height: 28rem;
   width: 25rem;
 }
 .BoutonActualiser
 {
-  display: 'flex';
-  align-self: center;
   margin-top: 1rem;
-
 }
+
 .flex-container{
   display: flex;
   flex-direction: column;

@@ -9,18 +9,14 @@ class HomePage extends Component{
 
   render() {
     return (
-          <div>
-            <Row>
-              <Col span={6}>
-                <Agenda/>
-              </Col>
-              <Col span={2}>
-              </Col>
-              <Col span={16}>
-                <Card/>
-              </Col>
-            </Row>
-          </div>
+        <Row className="HomePage">
+          <Col span={8}>
+            <Agenda/>
+          </Col>
+          <Col span={16}>
+            <Card/>
+          </Col>
+        </Row>
     );
   }
 }

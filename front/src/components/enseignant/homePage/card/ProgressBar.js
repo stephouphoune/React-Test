@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Progress, Button } from 'antd';
 import './ProgressBar.css';
-const ButtonGroup = Button.Group;
+
 
 class ProgressBar extends Component{
   state = {
@@ -24,11 +24,7 @@ decline = () => {
   render(){
     return(
       <div>
-         <Progress percent={this.state.percent} />
-         <ButtonGroup>
-           <Button onClick={this.decline} icon="minus" />
-           <Button onClick={this.increase} icon="plus" />
-         </ButtonGroup>
+         <Progress className="Progress" percent={this.state.percent} />
        </div>
 
     );

@@ -1,0 +1,16 @@
+.Row2{
+    display: flex;
+    justify-content:left; 
+}
+
+.Row3{
+    margin-top:5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.Deconnexion
+{
+    text-align: right;
+}
+  

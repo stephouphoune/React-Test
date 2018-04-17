@@ -53,6 +53,7 @@ class TasksDisplay extends Component{
   render(){
     return(
       <List
+        className="TaskList"
         itemLayout="horizontal"
         dataSource={data}
         renderItem={item => (

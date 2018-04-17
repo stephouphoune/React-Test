@@ -1,23 +1,7 @@
-.flex-container2{
+.Top_Gestion{
   display: flex;
-  justify-content: space-around;
 }
-.plus_button,.ant-btn-circle
+.plus_button
 {
-  width: 2.5rem;
-}
-.card_elements
-{
-  height: 38rem;
-  display: flex;
-  flex-direction: column;
-
-}
-.Progressing_time, .ant-progress-line
-{
-  width: 40rem;
-  max-width: 40rem;
-  margin-top: 0.5rem;
-  position: relative;
-  /*margin-top: 1rem;*/
+  width:2.5rem;
 }

@@ -5,21 +5,21 @@ import Duration from './Duration';
 import ProgressBar from './ProgressBar';
 import TasksEdit from './TasksEdit';
 import TasksDisplay from './TasksDisplay';
-import Duration_list from './Duration_list';
 
 
 class Carte extends Component{
   render(){
     return(
-      <Card className="card_elements"
-            title="Gestion des tâches du jour"
+      <Card title="Gestion des tâches du jour"
             style={{ width: '100%' }}
-            actions={[<ProgressBar className="Progressing_time"/>]}>
-        <Row className="flex-container2">
+            actions={[<ProgressBar/>]}>
+        <Row className="Top_Gestion">
           <Button className="plus_button" shape="circle">
             <Icon type="plus" />
           </Button>
+          {/*Insertion du nom des tâches dans les input*/}
           <TasksEdit/>
+          {/*Increment pour la duree des tâches*/}
           <Duration/>
         </Row>
         <Row>
