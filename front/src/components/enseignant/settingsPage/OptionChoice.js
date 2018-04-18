@@ -16,14 +16,22 @@ class OptionChoice extends Component{
   }
 
   render(){
-    const radioStyle = {
-        display: 'block'
-    };
     return(
-        <Radio.Group className='choice' onChange={this.onChange} value={this.state.value}>
-         <Radio  style={radioStyle} value={1}>Lien URL Agenda : <Input placeholder="Adresse web de l'agenda" disabled={this.state.value===2 ? true : false}/>
+        <Radio.Group className='choice' 
+                     onChange={this.onChange} 
+                     value={this.state.value}>
+         <Radio  
+            value={1}>Lien URL Agenda : 
+                <Input 
+                    placeholder="Adresse web de l'agenda" 
+                    disabled={this.state.value===2 ? true : false}
+                />
          </Radio>
-         <Radio style={radioStyle} value={2}>Fichier csv : <Button disabled={this.state.value===1 ? true : false}>Importer Csv</Button>
+         <Radio 
+            value={2}>Fichier csv : 
+                <Button 
+                    disabled={this.state.value===1 ? true : false}>Importer Csv
+                </Button>
          </Radio>
         </Radio.Group>
     );

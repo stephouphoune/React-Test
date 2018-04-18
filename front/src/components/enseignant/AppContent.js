@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Tabs } from 'antd';
 import './AppContent.css';
-
 import HomePage from './homePage/HomePage'
-import SettingsPage from './settingsPage/SettingsPage'
+import SettingsPage from '../administrateur/settingsPage/SettingsPage'
 import StatsPage from './statsPage/StatsPage'
 import Administration from '../administrateur/administration/Administration'
 
