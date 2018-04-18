@@ -5,13 +5,13 @@ import './AppContent.css';
 import HomePage from './homePage/HomePage'
 import SettingsPage from './settingsPage/SettingsPage'
 import StatsPage from './statsPage/StatsPage'
+import Administration from '../administrateur/administration/Administration'
 
 class AppContent extends Component {
 
   render() {
     return (
       <Layout.Content className="AppContent">
-        <div className="card-container">
           <Tabs type="card">
             <Tabs.TabPane tab="Gestion" key="1">
               <HomePage />
@@ -22,8 +22,10 @@ class AppContent extends Component {
             <Tabs.TabPane tab="Paramètres" key="3">
               <SettingsPage />
             </Tabs.TabPane>
+            <Tabs.TabPane tab="Administration" key="4">
+              <Administration/>
+            </Tabs.TabPane>
           </Tabs>
-        </div>
       </Layout.Content>
     );
   }
