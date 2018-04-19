@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './Day.css';
 import {Select, InputNumber} from 'antd';
+
+import './Duration.css';
 
 function handleChange(value) {
     console.log(`selected ${value}`);
@@ -15,9 +16,9 @@ class Day extends Component{
 
   render(){
     return(
-        <div className="Duree">
+        <div className="Duration">
             <h3>Temps total de travail : 39h</h3>
-            <Select style={{width:170}} placeholder="Sélectionnez un jour" onChange={handleChange}>
+            <Select className="Day" style={{width:170}} placeholder="Sélectionnez un jour" onChange={handleChange}>
                 <Select.Option value="lundi">Lundi</Select.Option>
                 <Select.Option value="mardi">Mardi</Select.Option>
                 <Select.Option value="mercredi">Mercredi</Select.Option>

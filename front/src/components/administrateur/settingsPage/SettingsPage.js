@@ -3,7 +3,7 @@ import './SettingsPage.css';
 import {Card, Row, Col, Icon, Button, Input, Select,InputNumber} from 'antd';
 import OptionChoice from './OptionChoice';
 import Arborescence from './Arborescence';
-import Day from './Day';
+import Duration from './Duration';
 
 function handleChange(value) {
   console.log(`selected ${value}`);
@@ -46,17 +46,14 @@ class SettingsPage extends Component{
                             <OptionChoice/>
                         </Row>
                         <Row type="flex" justify="start">
-                            <h3>Langue :</h3>
-                            <div>
-                            <Select defaultValue="Francais" onChange={handleChange}>
+                            <Select className="Language" defaultValue="Francais" onChange={handleChange}>
                                 <Select.Option value="francais">Francais</Select.Option>
                                 <Select.Option value="english">English</Select.Option>
                             </Select>
-                            </div>
                         </Row>
                         <Row type="flex" justify="start">
                             {/*Appel du composant DAY*/}
-                            <Day/>
+                            <Duration/>
                         </Row>
                         <Row type="flex" justify="center">
                           <Button className="Enregistrer" type="primary" ghost loading={this.state.loading} onClick={this.enterLoading}>

@@ -25,23 +25,23 @@ class SettingsPage extends Component{
   render() {
     return (
         <div>
-                <Row>
-                  <Col span={12}>
+                <Row type="flex" justify="end">
+                  <Col span={6}>
                       <OptionChoice/>
                   </Col>
-                  <Col span={12} className="Deconnexion">
+                  <Col span={18} className="Deconnexion">
                       <Button type="danger">Déconnexion</Button>
                   </Col>
                 </Row>
 
-                <Row className='Row2'>
+                <Row type="flex" justify="start">
                     <Select defaultValue="Francais" onChange={handleChange}>
                         <Select.Option value="francais">Francais</Select.Option>
                         <Select.Option value="english">English</Select.Option>
                     </Select>
                 </Row>
 
-                <Row className='Row3'>
+                <Row type="flex" justify="center" className='Row3'>
                   <Button loading={this.state.loading} onClick={this.enterLoading}>
                     Enregistrer les modifications
                   </Button>
