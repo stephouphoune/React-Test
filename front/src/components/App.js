@@ -12,7 +12,6 @@ class App extends Component {
     return (
       <Layout className="App">
       {token ? <AppContent /> : <Login />}
-      {token}
       </Layout>
     );
   }

@@ -2,14 +2,14 @@
   margin-bottom: 2rem;
 }
 
-.choice{
-  margin-top: 4rem;
-}
-
 .choice .ant-input{
   width:auto;
 }
 
 .choice .ant-radio-wrapper{
   margin-right: 0px;
+}
+
+.choice{
+  width:100%;
 }

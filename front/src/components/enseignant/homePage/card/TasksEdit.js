@@ -10,9 +10,10 @@ const Option = Select.Option;
 function Complete() {
   return (
     <AutoComplete
-      style={{ width: '100%' }}
+      style={{ width: "auto" }}
+      size="large"
       dataSource={dataSource}
-      placeholder="try to type `b`"
+      placeholder="Activité"
       filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
     />
   );
@@ -32,7 +33,7 @@ class TasksEdit extends Component{
 
   render(){
     return(
-      <InputGroup compact className="saisie_tache_auto">
+      <InputGroup compact>
             <Complete/>
             <Complete/>
             <Complete/>

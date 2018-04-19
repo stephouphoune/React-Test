@@ -9,7 +9,9 @@ function onChange(value) {
 class Duration extends Component{
   render(){
     return(
-      <InputNumber className="increment"
+      <InputNumber 
+         className="increment"
+         size="large"
          defaultValue={15}
          min={0}
          max={120}

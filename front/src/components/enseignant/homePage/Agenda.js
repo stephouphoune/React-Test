@@ -10,7 +10,7 @@ class Agenda extends Component{
   render(){
     return(
       <div className="flex-container">
-        <Calendar fullscreen={false} onPanelChange={onPanelChange}/>
+        <Calendar  fullscreen={false} onPanelChange={onPanelChange}/>
         <Button.Group>
             <Button>
                 <Icon type="left"/>Hier
