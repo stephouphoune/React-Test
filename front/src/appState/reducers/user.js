@@ -3,7 +3,7 @@ import * as types from '../types/user'
 const initialState = {
     username: null,
     token: null,
-    signinError: '',
+    signinError: false,
     signinLoading: false,
     isAdmin: true
 }

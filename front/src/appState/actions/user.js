@@ -16,6 +16,7 @@ export const createSignIn = dispatch => (username, password) => {
     dispatch(requestSignIn())
 
     //Un fetch se décompose en header/body/footer si on le souhaite. 
+    //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     fetch(`http://localhost:3001/api/user?username=${username}&password=${password}`, {
         method: 'GET',
     })
@@ -31,11 +32,10 @@ export const createSignIn = dispatch => (username, password) => {
     //Résultat <body>
     .then(body => {
         const token = body
-        dispatch(receiveSignIn(username, token))
+        dispatch(receiveSignIn(username, token, false))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveSignIn(null, null, 'Identifiant incorrect!'))
+        dispatch(receiveSignIn(null, null, true))
     })
-    
 }
 

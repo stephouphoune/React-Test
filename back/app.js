@@ -9,13 +9,19 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
 const cors = require('cors');
 
 const executeQuery=require('./services/executeQuery.js')
 var app = express();
 
-
 app.use(cors())
+
+//-------------------------------Appel des ressources
+//Appel de index.js
+app.use('/', index);
+//app.use('/users', users);
+//-------------------------------Appel des ressources
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,17 +34,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
-
-//Appel de index.js
-app.use('/', index);
-//app.use('/users', users);
-
-
-
 
 
 // catch 404 and forward to error handler

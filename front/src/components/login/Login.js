@@ -24,7 +24,6 @@ class Login extends Component {
 
         return (
             <div className="Login">
-
                     <Form.Item className="LoginForm">
                         <img src="./task-eat.png" className="TaskEat"/>
                         <Input
@@ -54,13 +53,13 @@ class Login extends Component {
                             className="ButtonLogin"
                             onClick={() => signin(username, password)} 
                             type="primary" 
-                            htmlType="submit">
-                        Log in
+                            htmlType="submit"
+                            icon="key">
+                        Connexion
                         </Button>
-                    </Form.Item>
-                    
-                    {signinLoading ? 'connexion en cours':''}
-                    <b>{signinError}</b>
+                        {signinLoading ? 'Connexion en cours':''}
+                        <b>{signinError ? 'Identifiants incorrects' : ''}</b>    
+                    </Form.Item>   
             </div>
         );
     }
