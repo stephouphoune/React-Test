@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { Component } from 'react'
+import CardStatsPage from './CardStatsPage'
 
-const StatsPage = (props) => (
-    <div>
-        La page d'analyse
-    </div>
-);
+class StatsPage extends Component{
+  render() {
+    return (
+      <div>
+        <CardStatsPage/>
+      </div>
+    );
+  }
+}
 
 export default StatsPage

@@ -1,11 +1,7 @@
-.Top_Gestion{
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1rem;
-}
+
 .plus_button
 {
-  width:3rem;
+  width:2.5rem;
   height:2.5rem;
   margin-right: 1rem;
 }

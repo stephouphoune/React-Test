@@ -1,4 +1,5 @@
-.HomePage{
-    display: flex;
-    flex-direction: row;
+.Progress{
+    width:90%;
+    min-width: 10rem;
+    margin-top: 2rem;
 }

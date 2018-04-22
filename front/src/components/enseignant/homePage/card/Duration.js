@@ -16,9 +16,8 @@ class Duration extends Component{
          min={0}
          max={120}
          step={15}
-         formatter={value => `${value} min`}
+         formatter={value => `${value}min`}
          parser={value => value.replace('min', '')}
-         onChange={onChange}
       />
   );
   }

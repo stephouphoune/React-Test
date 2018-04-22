@@ -1,0 +1,10 @@
+.ExportChoice{
+  display: flex;
+  justify-content: space-around;
+}
+.PDFButton{
+  width:100%;
+}
+.XLSButton{
+  width:100%;
+}
