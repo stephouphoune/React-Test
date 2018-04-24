@@ -12,34 +12,39 @@ router.get('/api/user', (req, res) => {
 
   try {
     executeQuery('SELECT username FROM USER WHERE username='+'"'+username+'"', (err,rows) => {
-      if (err){
+      if (err) {
         res.status(500);
+        res.end()
+        return;
       }
-      //Si il y en a un, alors on vérifie le mot de passe
-      if (rows.length>0)
-      {
-        executeQuery('SELECT password, isAdmin FROM USER WHERE username='+'"'+username+'"', (err,rows) => {
-          //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
-          //le premier élément du tableau qui nous intéresse
-          const jsRows = JSON.parse(JSON.stringify(rows))[0];
-          if (jsRows.password===password) {
-              res.status(200)
-              const token = jwt.sign({ username, password }, 'monsupermotdepasseincracable');
-              const isAdmin = jsRows.isAdmin;
-              console.log(isAdmin);
-              res.send(token)
-              res.end()
-              return;
-          }
-          res.status(401)
-          res.end()
-        });
+      if (jsRows.length === 0) {
+        res.status(401)
+        res.end()
+        return;
       }
-      //S'il n'y a rien alors on quitte avec une erreur 401 : identifiants incorrects
-      else {
-        res.status(401);
-        res.end();
-      }
+      // JSON.parse peut engendrer un crash (donc try / catch)
+      try {
+        //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
+        //le premier élément du tableau qui nous intéresse
+        const user = JSON.parse(JSON.stringify(rows))[0];
+        if (user.password===password) {
+            const isAdmin = user.isAdmin || false;
+            const token = jwt.sign({ username, password, isAdmin }, 'monsupermotdepasseincracable');
+            const responseBody = JSON.stringify({
+              token,
+              user
+            })
+            res.status(200)
+            res.send(responseBody)
+            res.end()
+            return;
+        }
+  
+       } catch (e) {
+        res.status(500)
+        res.end()
+        return;
+       }
     });
   }
   catch(e) {
