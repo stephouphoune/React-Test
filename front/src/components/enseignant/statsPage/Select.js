@@ -10,6 +10,7 @@ const steps = [{
 }, {
   title: 'Projet',
   content: 'Sélection du Projet',
+  
 }, {
   title: 'Tâche',
   content: 'Sélection de la Tâche',
@@ -52,7 +53,7 @@ class Select extends Component {
             {
               this.state.current === steps.length - 1
               &&
-              <Button type="primary" onClick={() => message.success('Analyse réussie')}>
+              <Button type="primary" onClick={() => message.success('Analyse terminée')}>
                 Done
               </Button>
             }

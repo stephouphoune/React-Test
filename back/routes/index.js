@@ -18,13 +18,15 @@ router.get('/api/user', (req, res) => {
       //Si il y en a un, alors on vérifie le mot de passe
       if (rows.length>0)
       {
-        executeQuery('SELECT password FROM USER WHERE username='+'"'+username+'"', (err,rows) => {
+        executeQuery('SELECT password, isAdmin FROM USER WHERE username='+'"'+username+'"', (err,rows) => {
           //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
           //le premier élément du tableau qui nous intéresse
           const jsRows = JSON.parse(JSON.stringify(rows))[0];
           if (jsRows.password===password) {
               res.status(200)
               const token = jwt.sign({ username, password }, 'monsupermotdepasseincracable');
+              const isAdmin = jsRows.isAdmin;
+              console.log(isAdmin);
               res.send(token)
               res.end()
               return;
@@ -39,9 +41,7 @@ router.get('/api/user', (req, res) => {
         res.end();
       }
     });
-    
   }
-  
   catch(e) {
     res.status(500);
     res.end();

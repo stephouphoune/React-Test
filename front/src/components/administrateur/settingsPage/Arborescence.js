@@ -18,19 +18,30 @@ class Arborescence extends Component{
                 defaultExpandedKeys={['0-0']}
                 onSelect={this.onSelect}
             >
-                <TreeNode title="parent 1" key="0-0">
-                <TreeNode title="parent 1-0" key="0-0-0">
-                    <TreeNode title="leaf" key="0-0-0-0" />
-                    <TreeNode title="leaf" key="0-0-0-1" />
-                    <TreeNode title="leaf" key="0-0-0-2" />
+                <TreeNode title="Enseignement" key="0-0">
+                    <TreeNode title="Cours" key="0-0-0">
+                        <TreeNode title="Traitement du signal" key="0-0-0-0" />
+                        <TreeNode title="Programmation système" key="0-0-0-1" />
+                    </TreeNode>
+                    <TreeNode title="TD" key="0-0-1">
+                        <TreeNode title="Traitement du signal" key="0-0-1-0" />
+                    </TreeNode>
+                    <TreeNode title="TP" key="0-0-2">
+                        <TreeNode title="Traitement du signal" key="0-0-2-0" />
+                        <TreeNode title="Programmation système" key="0-0-2-1" />
+                    </TreeNode>
                 </TreeNode>
-                <TreeNode title="parent 1-1" key="0-0-1">
-                    <TreeNode title="leaf" key="0-0-1-0" />
+                <TreeNode title="Administration" key="0-1">
+
                 </TreeNode>
-                <TreeNode title="parent 1-2" key="0-0-2">
-                    <TreeNode title="leaf" key="0-0-2-0" />
-                    <TreeNode title="leaf" key="0-0-2-1" />
-                </TreeNode>
+                <TreeNode title="Recherche" key="0-2">
+                    <TreeNode title="Waves" key="0-2-0">
+                        <TreeNode title="Encadrement" key="0-2-0-0" />
+                        <TreeNode title="Publication" key="0-2-0-1" />
+                    </TreeNode>
+                    <TreeNode title="Thales" key="0-2-1">
+
+                    </TreeNode>
                 </TreeNode>
             </Tree>
             <Button className="plus_button2" shape="circle">

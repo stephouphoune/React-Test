@@ -1,7 +1,25 @@
 import React, { Component } from 'react';
-import { Button, Radio, Input} from 'antd';
+import { Button, Radio, Input, message, Upload} from 'antd';
 import './OptionChoice.css';
 
+const props = {
+  accept:'.csv',
+  name: 'file',
+  action: '//jsonplaceholder.typicode.com/posts/',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`Votre fichier ${info.file.name} a bien été uploadé !`);
+    } else if (info.file.status === 'error') {
+      message.error(`Problème lors de l'upload du fichier ${info.file.name} !`);
+    }
+  },
+};
 
 class OptionChoice extends Component{
   state = {
@@ -9,7 +27,6 @@ class OptionChoice extends Component{
   }
 
   onChange = (e) => {
-    console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
     });
@@ -29,9 +46,11 @@ class OptionChoice extends Component{
                     />
               </Radio>
               <Radio 
-                  value={2}>Fichier csv : <Button 
-                       disabled={this.state.value===1 ? true : false}>Importer Csv
+                  value={2}>Fichier csv : <Upload {...props}>
+                    <Button icon="upload" 
+                       disabled={this.state.value===1 ? true : false}>Importer .csv
                     </Button>
+                    </Upload>
               </Radio>
       </Radio.Group>
     );

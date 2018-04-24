@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Row,Col, Progress} from 'antd';
+import {Row,Col, Progress, Button, Popover} from 'antd';
 import './HomePage.css';
 import Agenda from './Agenda';
 import Card from './card/Card';
@@ -17,6 +17,7 @@ class HomePage extends Component{
     this.setState({ percent });
   }
 
+  
 
   render() {
     return (
@@ -29,7 +30,10 @@ class HomePage extends Component{
               <Card/>
             </Row>
             <Row>
-              <Progress className="Progress" percent={this.state.percent}/>
+              <Progress className="Progress" format={this.state.format} percent={this.state.percent}/>
+              <Popover content={<Button style={{width:"100%"}}>Oui</Button>} placement="topRight" trigger="click" title="Êtes-vous sûr de vouloir terminer la journée ?"> 
+                <Button type="danger" ghost>Remplir les trous ?</Button>
+              </Popover>
             </Row>
           </Col>
         </Row>
