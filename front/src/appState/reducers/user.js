@@ -2,10 +2,12 @@ import * as types from '../types/user'
 
 const initialState = {
     username: null,
+    firstName:null,
+    lastName:null,
     token: null,
     signinError: false,
     signinLoading: false,
-    isAdmin: true
+    isAdmin: false
 }
 
 const userReducer = (state = initialState, action) => {
@@ -20,7 +22,10 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 signinLoading: false,
                 username: action.username,
+                firstName:action.firstName,
+                lastName:action.lastName,
                 token: action.token,
+                isAdmin:action.isAdmin,
                 signinError: action.signinError,    
             }
 

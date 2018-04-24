@@ -33,8 +33,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+//LIGNE DE CODE POUR LE BUILD
+//app.use(express.static('public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

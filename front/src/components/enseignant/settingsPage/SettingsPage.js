@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './SettingsPage.css';
 import {Card, Row, Col, Icon, Button, Input, Select} from 'antd';
 import OptionChoice from './OptionChoice';
-
+import Login from '../../login/Login'
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
@@ -18,9 +18,6 @@ class SettingsPage extends Component{
     this.setState({ loading: true });
   }
   
-  enterIconLoading = () => {
-    this.setState({ iconLoading: true });
-  }
 
   render() {
     return (
@@ -30,7 +27,7 @@ class SettingsPage extends Component{
                       <OptionChoice/>
                   </Col>
                   <Col span={18} className="Deconnexion">
-                      <Button type="danger">Déconnexion</Button>
+                    <Button type="danger">Déconnexion</Button>
                   </Col>
                 </Row>
 
@@ -41,8 +38,8 @@ class SettingsPage extends Component{
                     </Select>
                 </Row>
 
-                <Row type="flex" justify="center" className='Row3'>
-                  <Button loading={this.state.loading} onClick={this.enterLoading}>
+                <Row type="flex" justify="center">
+                  <Button style={{marginTop:"3rem"}} type="primary" ghost loading={this.state.loading} onClick={this.enterLoading}>
                     Enregistrer les modifications
                   </Button>
                 </Row>

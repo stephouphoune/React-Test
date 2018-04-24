@@ -21,7 +21,7 @@ class HomePage extends Component{
 
   render() {
     return (
-        <Row type="flex" style={{marginTop:40}}>
+        <Row type="flex" style={{marginTop:10}}>
           <Col span={8}>
             <Agenda/>
           </Col>
@@ -29,11 +29,15 @@ class HomePage extends Component{
             <Row>
               <Card/>
             </Row>
-            <Row>
-              <Progress className="Progress" format={this.state.format} percent={this.state.percent}/>
+            <Row style={{marginTop:"2rem"}}  type="flex" align="middle">
+              <Col span={20}>
+              <Progress style={{width:"100%"}} format={this.state.format} percent={this.state.percent}/>
+              </Col>
+              <Col span={4}>
               <Popover content={<Button style={{width:"100%"}}>Oui</Button>} placement="topRight" trigger="click" title="Êtes-vous sûr de vouloir terminer la journée ?"> 
-                <Button type="danger" ghost>Remplir les trous ?</Button>
+                <Button style={{width:"100%"}} type="danger" ghost>Remplir les trous ?</Button>
               </Popover>
+              </Col>
             </Row>
           </Col>
         </Row>

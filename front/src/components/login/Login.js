@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import { createSignIn } from '../../appState/actions/user'
 import { Calendar } from 'antd';
 import './Login.css'
@@ -9,6 +9,8 @@ function onPanelChange(value, mode) {
   console.log(value, mode);
 }
 
+
+
 class Login extends Component {
 
     //----------------STATE
@@ -16,17 +18,24 @@ class Login extends Component {
         username: '',
         password: ''
     }
+
+    
+
     render() {
         //Permet d'actualiser le state dans le render
         const { username, password } = this.state
         //permet d'actualiser les props dans le render
         const { signinLoading, signin, signinError} = this.props
 
+        const success = () => {
+            message.success('Bienvenue '+this.state.username+' !');
+        };
+
         return (
             <div className="Login">
                     <Form.Item className="LoginForm">
                         <img src="./task-eat.png" className="TaskEat"/>
-                        <Input
+                        <Input 
                             className="InputUsername"
                             value={username}
                             onChange={event => this.setState({ username: event.target.value })} 
@@ -51,13 +60,13 @@ class Login extends Component {
                             placeholder="Password" />
                         <Button 
                             className="ButtonLogin"
-                            onClick={() => signin(username, password)} 
+                            onClick={() => signin(username, password)} //Comment mettre deux fonctions ici ?
+                            loading={signinLoading ? true : false}
                             type="primary" 
                             htmlType="submit"
                             icon="key">
                         Connexion
                         </Button>
-                        {signinLoading ? 'Connexion en cours':''}
                         <b>{signinError ? 'Identifiants incorrects' : ''}</b>    
                     </Form.Item>   
             </div>

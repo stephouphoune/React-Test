@@ -10,7 +10,7 @@ class PieChart extends Component{
         labels: ["Cours", "TD", "TP"],
         datasets: [{
           backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
-          data: [2478,5267,734]
+          data: [60,25,10]
         }]
       }
     }

@@ -18,28 +18,32 @@ class Arborescence extends Component{
                 defaultExpandedKeys={['0-0']}
                 onSelect={this.onSelect}
             >
-                <TreeNode title="Enseignement" key="0-0">
-                    <TreeNode title="Cours" key="0-0-0">
-                        <TreeNode title="Traitement du signal" key="0-0-0-0" />
-                        <TreeNode title="Programmation système" key="0-0-0-1" />
+                <TreeNode title="Enseignement" key="0">
+                    <TreeNode title="Cours" key="0-0">
+                        <TreeNode title="Traitement du signal" key="0-0-0" />
+                        <TreeNode title="Programmation système" key="0-0-1" />
                     </TreeNode>
-                    <TreeNode title="TD" key="0-0-1">
-                        <TreeNode title="Traitement du signal" key="0-0-1-0" />
+                    <TreeNode title="TD" key="0-1">
+                        <TreeNode title="Traitement du signal" key="0-1-0" />
                     </TreeNode>
-                    <TreeNode title="TP" key="0-0-2">
-                        <TreeNode title="Traitement du signal" key="0-0-2-0" />
-                        <TreeNode title="Programmation système" key="0-0-2-1" />
+                    <TreeNode title="TP" key="0-2">
+                        <TreeNode title="Traitement du signal" key="0-2-0" />
+                        <TreeNode title="Programmation système" key="0-2-1" />
                     </TreeNode>
                 </TreeNode>
-                <TreeNode title="Administration" key="0-1">
+                <TreeNode title="Administration" key="1">
 
                 </TreeNode>
-                <TreeNode title="Recherche" key="0-2">
-                    <TreeNode title="Waves" key="0-2-0">
-                        <TreeNode title="Encadrement" key="0-2-0-0" />
-                        <TreeNode title="Publication" key="0-2-0-1" />
+                <TreeNode title="Recherche" key="2">
+                    <TreeNode title="Waves" key="2-0">
+                        <TreeNode title="Encadrement" key="2-0-0" />
+                        <TreeNode title="Publication" key="2-0-1" />
+                        <TreeNode title="Encadrement" key="2-0-0" />
+                        <TreeNode title="Publication" key="2-0-1" />
+                        <TreeNode title="Encadrement" key="2-0-0" />
+                        <TreeNode title="Publication" key="2-0-1" />
                     </TreeNode>
-                    <TreeNode title="Thales" key="0-2-1">
+                    <TreeNode title="Thales" key="2-1">
 
                     </TreeNode>
                 </TreeNode>

@@ -1,0 +1,12 @@
+.AppContent {
+    background-color: #fafafa;
+    padding:0.5rem;
+}
+
+.TaskEatMini{
+    margin-left:auto;
+    margin-right: auto;
+    display:flex;
+    width:8rem;
+    height:3rem;
+}

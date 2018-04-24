@@ -17,16 +17,12 @@ class SettingsPage extends Component{
 
   state = {
     loading: false,
-    iconLoading: false,
   }
   
   enterLoading = () => {
     this.setState({ loading: true });
   }
   
-  enterIconLoading = () => {
-    this.setState({ iconLoading: true });
-  }
 
   render() {
     return (

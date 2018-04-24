@@ -4,11 +4,14 @@ const requestSignIn = () => ({
     type: types.USER_REQUEST_SIGNIN
 })
 
-const receiveSignIn = (username, token, signinError) => ({
+const receiveSignIn = (username, firstName, lastName, token, isAdmin, signinError) => ({
     type: types.USER_RECEIVE_SIGNIN,
     username,
     token,
-    signinError
+    isAdmin,
+    signinError,
+    firstName, 
+    lastName,
 })
 
 export const createSignIn = dispatch => (username, password) => {
@@ -31,8 +34,14 @@ export const createSignIn = dispatch => (username, password) => {
     })
     //Résultat <body>
     .then(body => {
-        const token = body
-        dispatch(receiveSignIn(username, token, false))
+        try{
+            body=JSON.parse(body)
+            dispatch(receiveSignIn(username, body.firstName, body.lastName, body.token, body.isAdmin, false))
+        }
+        catch(e)
+        {
+            return;
+        }
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveSignIn(null, null, true))

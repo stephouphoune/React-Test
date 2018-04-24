@@ -10,7 +10,7 @@
 }
 
 .InputUsername, .InputPassword, .ButtonLogin{
-    width:20rem;
+    width:100%;
 }
 
 .TaskEat{
