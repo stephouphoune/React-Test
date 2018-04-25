@@ -33,7 +33,7 @@ class AppContent extends Component {
                           <Administration/>
                        </Tabs.TabPane>: null}
           </Tabs>
-          {success()}
+          
       </Layout.Content>
     );
   }

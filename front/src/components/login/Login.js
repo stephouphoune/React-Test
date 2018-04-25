@@ -5,12 +5,6 @@ import { createSignIn } from '../../appState/actions/user'
 import { Calendar } from 'antd';
 import './Login.css'
 
-function onPanelChange(value, mode) {
-  console.log(value, mode);
-}
-
-
-
 class Login extends Component {
 
     //----------------STATE
@@ -18,8 +12,6 @@ class Login extends Component {
         username: '',
         password: ''
     }
-
-    
 
     render() {
         //Permet d'actualiser le state dans le render

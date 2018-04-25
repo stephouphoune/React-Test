@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+var activity = require('./routes/activity')
 var users = require('./routes/users');
 
 const cors = require('cors');
@@ -20,6 +21,7 @@ app.use(cors())
 //-------------------------------Appel des ressources
 //Appel de index.js
 app.use('/', index);
+app.use('/activity', activity);
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

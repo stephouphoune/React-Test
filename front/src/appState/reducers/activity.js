@@ -1,21 +1,21 @@
 import * as types from '../types/activity'
 
 const initialState = {
-    activity_id:null,
-    name:null,
+    activities:[]
 }
 
 const activityReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.ACTIVITY_REQUEST:
+        case types.REQUEST_GET_ACTIVITIES:
+        //Peut être penser à mettre une variable à true pour montrer
+        //que c'est en train de charger
             return {
                 ...state,
             }
-        case types.ACTIVITY_RECEIVE:
+        case types.RECEIVE_GET_ACTIVITIES:
             return {
                 ...state,
-                activity_id:action.activity_id,
-                name: action.name,    
+                activities:action.activities
             }
         default:
             return state

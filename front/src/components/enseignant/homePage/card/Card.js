@@ -4,7 +4,6 @@ import './Card.css';
 import Duration from './Duration';
 import TaskEdit from './TaskEdit';
 import TaskDisplay from './TaskDisplay';
-import { showActivity } from '../../../../appState/actions/activity'
 
 const dataSource = {
   activite:['Enseigment', 'Administration', 'Recherche'],

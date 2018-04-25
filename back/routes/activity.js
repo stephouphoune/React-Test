@@ -2,13 +2,18 @@ const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 
+
+
+const createActivity = rawActivity => ({
+  id:rawActivity.activity_id,
+  name:rawActivity.name
+})
+
+const createActivities = rawActivities => rawActivities.map(createActivity)
+
+
 /* GET Projects */
 router.get('/api/activity', (req, res) => {
-  
-    //ES6 -> const username = req.query.username et
-    //const password = req.query.password
-    const { activity_id, name } = req.query
-
     try {
         executeQuery('SELECT * FROM activity', (err,rows) => {
           if (err) {
@@ -19,7 +24,7 @@ router.get('/api/activity', (req, res) => {
           
           if (rows.length === 0) {
             res.status(200);
-            res.send("Aucune activité disponible");
+            res.send(JSON.stringify({activities:[]}));
             res.end()
             return;
           }
@@ -28,15 +33,13 @@ router.get('/api/activity', (req, res) => {
           try {
             //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
             //le premier élément du tableau qui nous intéresse
-            const activity = JSON.parse(JSON.stringify(rows))[0];
-            activity_id=activity.activity_id
-            name=activity.activity.name
-            const responseBody = JSON.stringify({
-                activity_id,
-                name
-            })
+            const rawActivities = JSON.parse(JSON.stringify(rows));
+            const activities = createActivities(rawActivities);
+            
+            const responseBody = JSON.stringify({activities})
             res.status(200)
             res.send(responseBody)
+            console.log(responseBody)
             res.end()
             return;
       
@@ -54,4 +57,10 @@ router.get('/api/activity', (req, res) => {
     
     });
     
+
+router.delete('/api/activity/:id', (req, res) => {
+  //Route qui décrit un paramètre d'entrée (c'est du routing)
+  const { id } = req.params
+})
+
 module.exports = router;
