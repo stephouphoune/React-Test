@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Row,Col, Progress, Button, Popover} from 'antd';
 import './HomePage.css';
 import Agenda from './Agenda';
-import Card from './card/Card';
+import Carte from './card/Card';
 
 class HomePage extends Component{
   state = {
@@ -27,7 +27,7 @@ class HomePage extends Component{
           </Col>
           <Col span={16}>
             <Row>
-              <Card/>
+              <Carte/>
             </Row>
             <Row style={{marginTop:"2rem"}}  type="flex" align="middle">
               <Col span={20}>

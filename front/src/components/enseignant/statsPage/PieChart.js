@@ -7,7 +7,7 @@ import {Line, Bar, Pie} from 'react-chartjs-2';
 class PieChart extends Component{
     state = {
       charData:{//on stocke les data dans un objet pour mettre a jour le graph a chaque changement du state
-        labels: ["Cours", "TD", "TP"],
+        labels: ["Traitement du signal", "Programmation système", "Linux"],
         datasets: [{
           backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
           data: [60,25,10]

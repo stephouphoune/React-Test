@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Line, Bar, Pie} from 'react-chartjs-2';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 //inserer des donnees a traiter
 
@@ -10,7 +9,7 @@ const data = [
       {name: 'Avril', Enseignement: 20, Administration: 20, Recherche: 50},
 ];
 //*****************************
-class BarChart extends Component{
+class AeraChart extends Component{
   
   render() {
     return (
@@ -28,4 +27,4 @@ class BarChart extends Component{
   }
 }
 
-export default BarChart;
+export default AeraChart;

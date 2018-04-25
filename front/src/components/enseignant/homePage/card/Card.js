@@ -4,15 +4,26 @@ import './Card.css';
 import Duration from './Duration';
 import TaskEdit from './TaskEdit';
 import TaskDisplay from './TaskDisplay';
+import { showActivity } from '../../../../appState/actions/activity'
 
 const dataSource = {
-  activite:['Enseignement', 'Recherche', 'Administration'],
+  activite:['Enseigment', 'Administration', 'Recherche'],
   projet:['Cours', 'TP', 'TD'], 
   tache:['Traitement du signal', 'Programmation système']
 }
 
+
 class Carte extends Component{
+
+  state = {
+      activity_id: '',
+      name: ''
+  }
+
+
+
   render(){
+    const { activity_id, name } = this.state
     return(
       <Card title="Gestion des tâches du jour"
             style={{ width: '100%'}}>
@@ -40,4 +51,5 @@ class Carte extends Component{
     );
   }
 }
+
 export default Carte;

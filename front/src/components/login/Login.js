@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
+import { Form, Icon, Input, Button, Checkbox} from 'antd';
 import { createSignIn } from '../../appState/actions/user'
 import { Calendar } from 'antd';
 import './Login.css'
@@ -26,10 +26,6 @@ class Login extends Component {
         const { username, password } = this.state
         //permet d'actualiser les props dans le render
         const { signinLoading, signin, signinError} = this.props
-
-        const success = () => {
-            message.success('Bienvenue '+this.state.username+' !');
-        };
 
         return (
             <div className="Login">
