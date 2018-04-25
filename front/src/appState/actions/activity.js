@@ -1,20 +1,19 @@
 import * as types from '../types/activity'
 
 const requestActivity = () => ({
-    type: types.ACTIVITY_REQUEST
+    type: types.REQUEST_GET_ACTIVITIES
 })
 
-const receiveActivity = (activity_id, name) => ({
-    type: types.ACTIVITY_RECEIVE,
-    activity_id,
-    name,
+const receiveActivity = (activities = []) => ({
+    type: types.RECEIVE_GET_ACTIVITIES,
+    activities
 })
 
-export const showActivity = dispatch => () => {
+export const requestGetActivities = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestActivity())
 
-    //Un fetch se décompose en header/body/footer si on le souhaite. 
+    //Un fetch se décompose en header/body/footer si on le souhaite.
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     fetch(`http://localhost:3001/api/activity`, {
         method: 'GET',
@@ -30,16 +29,11 @@ export const showActivity = dispatch => () => {
     })
     //Résultat <body>
     .then(body => {
-        try{
-            body=JSON.parse(body)
-            dispatch(receiveActivity(body.activity_id, body.name))
-        }
-        catch(e)
-        {
-            return;
-        }
+        // pas besoin de try catch dans les promises (ça part directement dans le .catch(() => ))
+        activities = JSON.parse(body)
+        dispatch(receiveActivities(activities))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveActivity(null, null))
+        dispatch(receiveActivities())
     })
 }
