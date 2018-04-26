@@ -1,4 +1,3 @@
-
 var express = require('express');
 var mysql=require('mysql');
 var path = require('path');
@@ -7,9 +6,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var activity = require('./routes/activity')
-var users = require('./routes/users');
+const index = require('./routes/index');
+const activity = require('./routes/activity')
+const project = require('./routes/project')
+const users = require('./routes/users');
+const label = require('./routes/label')
 
 const cors = require('cors');
 
@@ -20,8 +21,10 @@ app.use(cors())
 
 //-------------------------------Appel des ressources
 //Appel de index.js
-app.use('/', index);
-app.use('/activity', activity);
+app.use('/', index)
+app.use('/', activity)
+app.use('/', project)
+app.use('/', label)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

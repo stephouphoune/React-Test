@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {Card, Row, Col, Icon, Button} from 'antd';
-import './Card.css';
+import './Manage.css';
 import Duration from './Duration';
 import TaskEdit from './TaskEdit';
 import TaskDisplay from './TaskDisplay';
@@ -12,17 +13,16 @@ const dataSource = {
 }
 
 
-class Carte extends Component{
+class Manage extends Component{
 
   state = {
-      activity_id: '',
-      name: ''
+      
   }
 
-
-
   render(){
-    const { activity_id, name } = this.state
+
+    const { activities } = this.props;
+
     return(
       <Card title="Gestion des tâches du jour"
             style={{ width: '100%'}}>
@@ -34,6 +34,9 @@ class Carte extends Component{
             </Col>
             <Col span={16}>
             {/*Insertion du nom des tâches dans les input*/}
+            {console.log(this.props.projects)}
+            {console.log(this.props.activities)}
+            {console.log(this.props.labels)}
             <TaskEdit dataSource={dataSource.activite}/>
             <TaskEdit dataSource={dataSource.projet}/>
             <TaskEdit dataSource={dataSource.tache}/>
@@ -51,4 +54,12 @@ class Carte extends Component{
   }
 }
 
-export default Carte;
+const mapStateToProps = store => ({
+  activities:store.activity.activities,
+  projects:store.project.projects, 
+  labels:store.label.labels
+})
+
+export default connect(
+  mapStateToProps
+)(Manage)

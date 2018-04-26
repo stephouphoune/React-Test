@@ -28,6 +28,16 @@ const data =[
   description:'Cours de Traitement de Signal pour la promotion CSI3',
   time: '1h00min',
 },
+{
+  title: 'Enseignement - TD - Traitement de signal',
+  description:'Cours de Traitement de Signal pour la promotion CSI3',
+  time: '1h00min',
+},
+{
+  title: 'Enseignement - TD - Traitement de signal',
+  description:'Cours de Traitement de Signal pour la promotion CSI3',
+  time: '1h00min',
+},
 ]
 //differentes taches presentes dans la liste et modifiables
 
@@ -37,7 +47,6 @@ class TaskDisplay extends Component{
     loadingMore: false,
     data: [],
   }
-
 
   render(){
     return(
@@ -50,7 +59,7 @@ class TaskDisplay extends Component{
                   <a>Modifier</a>,
                   <a>Supprimer</a>
                 ]}>
-                durée : {item.time}
+                Durée : {item.time}
                 <List.Item.Meta
                   title={item.title}
                   description={item.description}

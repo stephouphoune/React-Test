@@ -6,8 +6,8 @@ class DownloadButton extends Component {
   render(){
     const content = (
       <div className="ExportChoice">
-        <Button className="PDFButton">pdf</Button>
-        <Button className="XLSButton">xls</Button>
+        <Button className="PDFButton">.pdf</Button>
+        <Button className="XLSButton">.xls</Button>
       </div>
     );
     return(

@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 
-
-
 const createActivity = rawActivity => ({
   id:rawActivity.activity_id,
   name:rawActivity.name
@@ -11,8 +9,7 @@ const createActivity = rawActivity => ({
 
 const createActivities = rawActivities => rawActivities.map(createActivity)
 
-
-/* GET Projects */
+/* GET Activity */
 router.get('/api/activity', (req, res) => {
     try {
         executeQuery('SELECT * FROM activity', (err,rows) => {
@@ -35,11 +32,10 @@ router.get('/api/activity', (req, res) => {
             //le premier élément du tableau qui nous intéresse
             const rawActivities = JSON.parse(JSON.stringify(rows));
             const activities = createActivities(rawActivities);
-            
+            //Pourquoi mettre des accolades autour de activities ?
             const responseBody = JSON.stringify({activities})
             res.status(200)
             res.send(responseBody)
-            console.log(responseBody)
             res.end()
             return;
       

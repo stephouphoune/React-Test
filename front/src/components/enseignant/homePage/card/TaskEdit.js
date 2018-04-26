@@ -3,15 +3,7 @@ import {Input, Col, Select, InputNumber, Button, Icon, AutoComplete, Divider} fr
 import './TaskEdit.css';
 
 class TaskEdit extends Component{
-    state = {
-      inputValue: 1,
-    }
 
-  onChange = (value) => {
-    this.setState({
-      inputValue: value,
-    });
-  }
 
   render(){
     return(
@@ -20,7 +12,6 @@ class TaskEdit extends Component{
       size="large"
       dataSource={this.props.dataSource}
       placeholder={this.props.placeholder}
-      filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
     />
     )
   }

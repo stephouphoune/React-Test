@@ -9,6 +9,7 @@ const receiveActivity = (activities = []) => ({
     activities
 })
 
+
 export const requestGetActivities = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestActivity())
@@ -31,7 +32,8 @@ export const requestGetActivities = dispatch => () => {
     //Résultat <body>
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
-            const activities=JSON.parse(body)
+            const data=JSON.parse(body)
+            const { activities } = data
             dispatch(receiveActivity(activities))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
