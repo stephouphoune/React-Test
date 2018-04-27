@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { requestGetActivities } from '../appState/actions/activity'
 import { requestGetProjects } from '../appState/actions/project'
 import { requestGetLabels } from '../appState/actions/label'
+import { requestGetUsers } from '../appState/actions/users'
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
@@ -26,6 +27,7 @@ class App extends Component {
       nextProps.getActivities()
       nextProps.getProjects()
       nextProps.getLabels()
+      nextProps.getUsers()
     }
   }
 
@@ -48,6 +50,7 @@ const mapDispatchtoProps = dispatch => ({
   getActivities: requestGetActivities(dispatch),
   getProjects: requestGetProjects(dispatch),
   getLabels: requestGetLabels(dispatch),
+  getUsers:requestGetUsers(dispatch),
 })
 
 export default connect(

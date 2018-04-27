@@ -21,7 +21,6 @@ class Manage extends Component{
 
   render(){
 
-    const { activities } = this.props;
 
     return(
       <Card title="Gestion des tâches du jour"
@@ -37,10 +36,11 @@ class Manage extends Component{
             {console.log(this.props.projects)}
             {console.log(this.props.activities)}
             {console.log(this.props.labels)}
+              {console.log(this.props.isAdmin)}
             <TaskEdit dataSource={dataSource.activite}/>
             <TaskEdit dataSource={dataSource.projet}/>
             <TaskEdit dataSource={dataSource.tache}/>
-          </Col>
+            </Col>
           {/*Increment pour la duree des tâches*/}
           <Col span={2} offset={4}>
             <Duration/>
@@ -57,7 +57,9 @@ class Manage extends Component{
 const mapStateToProps = store => ({
   activities:store.activity.activities,
   projects:store.project.projects, 
-  labels:store.label.labels
+  labels:store.label.labels,
+  users:store.users.users,
+  isAdmin: store.user.isAdmin,
 })
 
 export default connect(

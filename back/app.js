@@ -25,6 +25,7 @@ app.use('/', index)
 app.use('/', activity)
 app.use('/', project)
 app.use('/', label)
+app.use('/', users)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

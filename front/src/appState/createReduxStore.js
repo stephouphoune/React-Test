@@ -4,7 +4,7 @@ import taskReducer from './reducers/task'
 import activityReducer from './reducers/activity'
 import projectReducer from './reducers/project'
 import labelReducer from './reducers/label'
-
+import usersReducer from './reducers/users'
 
 export default () => {
     const store = createStore(
@@ -13,7 +13,8 @@ export default () => {
             project:projectReducer,
             activity:activityReducer,
             task:taskReducer,
-            label:labelReducer
+            label:labelReducer, 
+            users:usersReducer,
         })
     )
     return store
