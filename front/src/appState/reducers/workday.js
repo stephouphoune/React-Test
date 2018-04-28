@@ -1,25 +1,25 @@
-import * as types from '../types/activity'
+import * as types from '../types/workday'
 
 const initialState = {
-    activities: []
+    workdays:[]
 }
 
-const activityReducer = (state = initialState, action) => {
+const workdayReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.REQUEST_GET_ACTIVITIES:
+        case types.REQUEST_GET_WORKDAYS:
         //Peut être penser à mettre une variable à true pour montrer
         //que c'est en train de charger
             return {
                 ...state,
             }
-        case types.RECEIVE_GET_ACTIVITIES:
+        case types.RECEIVE_GET_WORKDAYS:
             return {
                 ...state,
-                activities: action.activities
+                workdays:action.workdays
             }
         default:
             return state
     }
 }
 
-export default activityReducer
+export default workdayReducer

@@ -2,25 +2,18 @@ const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 
-const createLabel = rawLabel => ({
-  name: rawLabel.name
-})
-
-const createLabels = rawLabels => rawLabels.map(createLabel)
-
-/* GET Label */
-router.get('/api/label', (req, res) => {
+/* GET Activity */
+router.get('/api/workdays', (req, res) => {
     try {
-        executeQuery('SELECT * FROM label', (err,rows) => {
+        executeQuery('SELECT * FROM workday', (err,rows) => {
           if (err) {
             res.status(500);
             res.end()
             return;
           }
-          
           if (rows.length === 0) {
             res.status(200);
-            res.send(JSON.stringify({labels:[]}));
+            res.send(JSON.stringify({workdays:[]}));
             res.end()
             return;
           }
@@ -29,10 +22,10 @@ router.get('/api/label', (req, res) => {
           try {
             //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
             //le premier élément du tableau qui nous intéresse
-            const rawLabels = JSON.parse(JSON.stringify(rows));
-            const labels = createLabels(rawLabels);
-            //Pourquoi mettre des accolades autour de Labels ?
-            const responseBody = JSON.stringify({labels})
+            const workdays = JSON.parse(JSON.stringify(rows));
+            //Pourquoi mettre des accolades autour de activities ?
+            const responseBody = JSON.stringify({workdays})
+        
             res.status(200)
             res.send(responseBody)
             res.end()
@@ -53,7 +46,7 @@ router.get('/api/label', (req, res) => {
     });
     
 
-router.delete('/api/label/:id', (req, res) => {
+router.delete('/api/workdays/:id', (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params
 })

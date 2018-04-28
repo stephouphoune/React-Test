@@ -3,9 +3,9 @@ const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 
 const createProject = rawProject => ({
-  id:rawProject.project_id,
-  name:rawProject.name,
-  activityId:rawProject.activity_id
+  id: rawProject.project_id,
+  name: rawProject.name,
+  activityId: rawProject.activity_id
 })
 
 const createProjects = rawProjects => rawProjects.map(createProject)

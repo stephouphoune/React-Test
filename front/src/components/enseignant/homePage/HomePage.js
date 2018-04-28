@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Row,Col, Progress, Button, Popover} from 'antd';
+import moment from 'moment'
 import './HomePage.css';
 import Agenda from './Agenda';
 import Manage from './card/Manage';
@@ -7,6 +8,8 @@ import Manage from './card/Manage';
 class HomePage extends Component{
   state = {
     percent: 0,
+    selectedDate: moment(), 
+
   }
 
   actualize = (value) => {
@@ -17,13 +20,21 @@ class HomePage extends Component{
     this.setState({ percent });
   }
 
-  
+  handleDateSelected = selectedDate => {
+    console.log('selectedDate', selectedDate)
+    this.setState({
+      selectedDate
+    })
+  }
 
   render() {
     return (
         <Row type="flex" style={{marginTop:10}}>
           <Col span={8}>
-            <Agenda/>
+            <Agenda 
+              onSelect={this.handleDateSelected}
+              selectedDate={this.state.selectedDate}
+            />
           </Col>
           <Col span={16}>
             <Row>

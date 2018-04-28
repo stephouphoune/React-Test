@@ -29,9 +29,11 @@ class AppContent extends Component {
             <Tabs.TabPane tab="Paramètres" key="3">
                 {isAdmin ? <SettingsPageAdmin /> : <SettingsPage/>} 
             </Tabs.TabPane>
-            {isAdmin ? <Tabs.TabPane tab="Administration" key="4">
-                          <Administration/>
-                       </Tabs.TabPane>: null}
+            {isAdmin && (
+              <Tabs.TabPane tab="Administration" key="4">
+                <Administration/>
+              </Tabs.TabPane>
+            )}
           </Tabs>
           
       </Layout.Content>

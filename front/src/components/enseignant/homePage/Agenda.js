@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import {Calendar, Button, Icon} from 'antd';
 import './Agenda.css';
 
-function onPanelChange(value, mode) {
-  console.log(value, mode);
-}
 
 class Agenda extends Component{
   render(){
     return(
       <div className="flex-container">
-        <Calendar  fullscreen={false} onPanelChange={onPanelChange}/>
+        <Calendar
+          defaultValue={this.props.selectedDate}
+          value={this.props.selectedDate}
+          fullscreen={false}
+          onSelect={this.props.onSelect}
+        />
         <Button
             className = "BoutonActualiser"
             type="primary"

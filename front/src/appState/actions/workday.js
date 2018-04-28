@@ -1,27 +1,22 @@
-import * as types from '../types/task'
-import store from '../createReduxStore'
+import * as types from '../types/workday'
 
-const requestTask = () => ({
-    type: types.REQUEST_GET_TASKS
+const requestWorkdays = () => ({
+    type: types.REQUEST_GET_WORKDAYS
 })
 
-const receiveTask = (tasks = []) => ({
-    type: types.RECEIVE_GET_TASKS,
-    tasks
+const receiveWorkdays = (workdays = []) => ({
+    type: types.RECEIVE_GET_WORKDAYS,
+    workdays
 })
 
-
-export const requestGetTasks = dispatch => () => {
+export const requestGetWorkdays = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
-    dispatch(requestTask())
+    dispatch(requestWorkdays())
     
     //Un fetch se décompose en header/body/footer si on le souhaite. 
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
-    fetch(`http://localhost:3001/api/task`, {
+    fetch(`http://localhost:3001/api/workdays`, {
         method: 'GET',
-        headers: {
-            'X-AUTH-TOKEN': store.getState().user.token
-        }
     })
     
     //Résultats du fetch
@@ -37,10 +32,10 @@ export const requestGetTasks = dispatch => () => {
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
-            const { tasks } = data
-            dispatch(receiveTask(tasks))
+            const { workdays } = data
+            dispatch(receiveWorkdays(workdays))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveTask())
+        dispatch(receiveWorkdays())
     })
 }

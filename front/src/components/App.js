@@ -4,6 +4,8 @@ import { requestGetActivities } from '../appState/actions/activity'
 import { requestGetProjects } from '../appState/actions/project'
 import { requestGetLabels } from '../appState/actions/label'
 import { requestGetUsers } from '../appState/actions/users'
+import { requestGetTasks } from '../appState/actions/task'
+import { requestGetWorkdays } from '../appState/actions/workday'
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
@@ -28,6 +30,8 @@ class App extends Component {
       nextProps.getProjects()
       nextProps.getLabels()
       nextProps.getUsers()
+      nextProps.getTasks()
+      nextProps.getWorkdays()
     }
   }
 
@@ -50,7 +54,9 @@ const mapDispatchtoProps = dispatch => ({
   getActivities: requestGetActivities(dispatch),
   getProjects: requestGetProjects(dispatch),
   getLabels: requestGetLabels(dispatch),
-  getUsers:requestGetUsers(dispatch),
+  getUsers: requestGetUsers(dispatch),
+  getTasks: requestGetTasks(dispatch), 
+  getWorkdays: requestGetWorkdays(dispatch),
 })
 
 export default connect(

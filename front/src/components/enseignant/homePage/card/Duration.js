@@ -2,20 +2,17 @@ import React, { Component } from 'react';
 import {InputNumber, Button, Icon} from 'antd';
 import './Duration.css';
 
-function onChange(value) {
-  console.log('changed', value);
-}
-
 class Duration extends Component{
   render(){
     return(
       <InputNumber 
          className="increment"
          size="large"
-         defaultValue={15}
-         min={0}
-         max={120}
+         value={this.props.duration}
+         min={15}
+         max={240}
          step={15}
+         onChange={this.props.onChange}
          formatter={value => `${value}min`}
          parser={value => value.replace('min', '')}
       />

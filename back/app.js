@@ -5,12 +5,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken')
 
 const index = require('./routes/index');
 const activity = require('./routes/activity')
 const project = require('./routes/project')
 const users = require('./routes/users');
-const label = require('./routes/label')
+const label = require('./routes/label');
+const task = require('./routes/task');
+const workdays = require('./routes/workdays')
 
 const cors = require('cors');
 
@@ -19,6 +22,41 @@ var app = express();
 
 app.use(cors())
 
+const tokenMiddleware = (req, res, next) => {
+  
+  if (req.path === '/') {
+    next()
+    return;
+  }
+
+  const token = req.get('X-AUTH-TOKEN')
+  console.log('token', token)
+  if (!token) {
+    // res.status(401)
+    // res.end()
+    next()
+    return;
+  }
+  try {
+    const user = jwt.verify(token, 'monsupermotdepasseincracable');
+      
+    console.log('user', user)
+    if (!user) {
+      res.status(401)
+      res.end()
+      return;
+    }
+
+    req.user = user
+  } catch(e) {
+    console.log('error', e)
+  }
+  next()
+  
+}
+
+app.use(tokenMiddleware)
+
 //-------------------------------Appel des ressources
 //Appel de index.js
 app.use('/', index)
@@ -26,6 +64,8 @@ app.use('/', activity)
 app.use('/', project)
 app.use('/', label)
 app.use('/', users)
+app.use('/', task)
+app.use('/', workdays)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

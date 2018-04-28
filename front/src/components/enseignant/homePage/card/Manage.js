@@ -1,22 +1,65 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Card, Row, Col, Icon, Button} from 'antd';
+import {Card, Row, Col, Icon, Button, Input} from 'antd';
 import './Manage.css';
 import Duration from './Duration';
 import TaskEdit from './TaskEdit';
 import TaskDisplay from './TaskDisplay';
 
-const dataSource = {
-  activite:['Enseigment', 'Administration', 'Recherche'],
-  projet:['Cours', 'TP', 'TD'], 
-  tache:['Traitement du signal', 'Programmation système']
-}
-
-
 class Manage extends Component{
 
   state = {
-      
+    selectedActivity: null,
+    selectedProject: null,
+    selectedTask: null,
+    duration: 15, 
+    description: ''
+  }
+
+  onChangeDuration = value => {
+    this.setState({
+      duration: value
+    })
+  }
+
+  handleActivitySelect = selectedActivity => {
+    console.log('activity', selectedActivity)
+    this.setState({
+      selectedActivity,
+      selectedProject: null,
+      selectedTask: null
+    })
+  }
+
+  handleProjectSelect = selectedProject => {
+    this.setState({
+      selectedProject, 
+      selectedTask: null
+    })
+  }
+
+  handleTaskSelect = selectedTask => {
+    this.setState({
+      selectedTask
+    })
+  }
+
+  handleDescriptionChange = e => {
+    this.setState({
+      description: e.target.value
+    })
+  }
+
+  getProjectsFromActivity = () => {
+    return this.props.projects.filter(project =>
+      project.activityId === this.state.selectedActivity.id
+    )
+  }
+
+  getTasksFromProject = () => {
+    return this.props.tasks.filter(task =>
+      task.projectId === this.state.selectedProject.id
+    )
   }
 
   render(){
@@ -30,21 +73,50 @@ class Manage extends Component{
             <Button className="plus_button" shape="circle">
               <Icon type="plus" />
             </Button>
-            </Col>
-            <Col span={16}>
-            {/*Insertion du nom des tâches dans les input*/}
-            {console.log(this.props.projects)}
-            {console.log(this.props.activities)}
-            {console.log(this.props.labels)}
-              {console.log(this.props.isAdmin)}
-            <TaskEdit dataSource={dataSource.activite}/>
-            <TaskEdit dataSource={dataSource.projet}/>
-            <TaskEdit dataSource={dataSource.tache}/>
-            </Col>
-          {/*Increment pour la duree des tâches*/}
-          <Col span={2} offset={4}>
-            <Duration/>
           </Col>
+          <Col span={16}>
+              <TaskEdit
+                data={this.props.activities}
+                dataNameKey="name"
+                placeholder="Activité"
+                selectedData={this.state.selectedActivity}
+                onSelect={this.handleActivitySelect}
+              />
+              {this.state.selectedActivity &&
+                <TaskEdit
+                  data={this.getProjectsFromActivity()}
+                  dataNameKey="name"
+                  placeholder="Projet"
+                  selectedData={this.state.selectedProject}
+                  onSelect={this.handleProjectSelect}
+                />
+              }
+              {this.state.selectedProject &&
+                <TaskEdit
+                  data={this.getTasksFromProject()}
+                  dataNameKey="name"
+                  placeholder="Tâche"
+                  selectedData={this.state.selectedTask}
+                  onSelect={this.handleTaskSelect}
+                />
+              }
+              
+          </Col>          
+          <Col span={3} offset={3}>
+            <Duration
+              onChange={this.onChangeDuration}
+              duration={this.state.duration}
+            />
+          </Col>
+        </Row>
+        <Row>
+        {this.state.selectedTask &&
+          <Input 
+            placeholder="Description" 
+            value={this.state.description}
+            onChange={this.handleDescriptionChange}
+          />
+        }
         </Row>
         <Row>
           <TaskDisplay/>
@@ -55,11 +127,12 @@ class Manage extends Component{
 }
 
 const mapStateToProps = store => ({
-  activities:store.activity.activities,
-  projects:store.project.projects, 
-  labels:store.label.labels,
-  users:store.users.users,
+  activities: store.activity.activities,
+  projects: store.project.projects, 
+  labels: store.label.labels,
+  users: store.users.users,
   isAdmin: store.user.isAdmin,
+  tasks: store.task.tasks
 })
 
 export default connect(
