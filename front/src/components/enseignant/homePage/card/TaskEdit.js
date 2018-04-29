@@ -7,7 +7,8 @@ class TaskEdit extends Component{
   state = {
     dataSource: [],
     searchDataSource: [],
-    isSearching: false
+    isSearching: false,
+    query: ''
   }
 
   componentDidMount() {
@@ -36,7 +37,8 @@ class TaskEdit extends Component{
 
     if (!query) {
       return this.setState({
-        isSearching: false
+        isSearching: false,
+        query: ''
       })
     }
 
@@ -46,7 +48,8 @@ class TaskEdit extends Component{
 
     this.setState({
       searchDataSource,
-      isSearching: true
+      isSearching: true,
+      query
     })
   
   }
@@ -70,8 +73,7 @@ class TaskEdit extends Component{
     } = this.props
     const value = selectedData
       ? selectedData[dataNameKey]
-      : null
-    console.log(this.props)
+      : this.state.query
     return(
       <AutoComplete
         style={{ marginRight: 5 }}

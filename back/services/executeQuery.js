@@ -6,7 +6,7 @@ const pool = mysql.createPool({
     user: 'root',
     password: 'password',
     database: 'outil_activite',
-    debug: false,
+    debug: true,
 });
 
 const executeQuery = (query, callback) => {

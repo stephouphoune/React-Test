@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import {Row,Col, Progress, Button, Popover} from 'antd';
 import moment from 'moment'
 import './HomePage.css';
 import Agenda from './Agenda';
 import Manage from './card/Manage';
+import { postEvent, getEvents, modifyEvent } from '../../../appState/actions/event'
 
 class HomePage extends Component{
   state = {
@@ -22,9 +24,18 @@ class HomePage extends Component{
 
   handleDateSelected = selectedDate => {
     console.log('selectedDate', selectedDate)
+    this.props.getEvents(selectedDate.toDate())
     this.setState({
       selectedDate
     })
+  }
+
+  handleAddEvent = (partialEvent) => {
+    this.props.postEvent({...partialEvent, date: this.state.selectedDate})
+  }
+
+  handleEditEvent = (event) => {
+    this.props.modifyEvent(event)
   }
 
   render() {
@@ -38,11 +49,17 @@ class HomePage extends Component{
           </Col>
           <Col span={16}>
             <Row>
-              <Manage/>
+              <Manage
+                onAddEvent={this.handleAddEvent}
+                onEditEvent={this.handleEditEvent}
+                selectedDate={this.state.selectedDate}
+              />
             </Row>
             <Row style={{marginTop:"2rem"}}  type="flex" align="middle">
               <Col span={20}>
-              <Progress style={{width:"100%"}} format={this.state.format} percent={this.state.percent}/>
+              <Progress 
+                style={{width:"100%"}}
+                percent={this.state.percent}/>
               </Col>
               <Col span={4}>
               <Popover content={<Button style={{width:"100%"}}>Oui</Button>} placement="topRight" trigger="click" title="Êtes-vous sûr de vouloir terminer la journée ?"> 
@@ -56,4 +73,13 @@ class HomePage extends Component{
   }
 }
 
-export default HomePage;
+const mapDispatchtoProps = dispatch => ({
+  postEvent: postEvent(dispatch),
+  getEvents: getEvents(dispatch), 
+  modifyEvent: modifyEvent(dispatch),
+})
+
+export default connect(
+  null,
+  mapDispatchtoProps
+)(HomePage);

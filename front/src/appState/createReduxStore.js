@@ -8,6 +8,8 @@ import projectReducer from './reducers/project'
 import labelReducer from './reducers/label'
 import usersReducer from './reducers/users'
 import workdayReducer from './reducers/workday'
+import eventReducer from './reducers/event'
+import statsReducer from './reducers/stats'
 
 const store = createStore(
     combineReducers({
@@ -18,6 +20,8 @@ const store = createStore(
         label:labelReducer, 
         users:usersReducer,
         workday:workdayReducer,
+        event:eventReducer,
+        stats:statsReducer,
     }),
     compose(
         applyMiddleware(createLogger())

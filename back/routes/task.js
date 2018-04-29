@@ -56,6 +56,8 @@ router.get('/api/task', (req, res) => {
     
     });
 
+
+
 router.delete('/api/task/:id', (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params

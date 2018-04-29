@@ -1,46 +1,12 @@
 import React, { Component } from 'react';
-import { List, message, Avatar, Spin, Icon } from 'antd';
+import { connect } from 'react-redux';
+import { List, message, Avatar, Spin, Icon, Popconfirm } from 'antd';
+import { deleteEvent } from '../../../../appState/actions/event'
 import './TaskDisplay.css';
+import 'moment/locale/fr.js';
+import moment from 'moment'
 
-const data =[
-  {
-   title: 'Enseignement - Cours - Programmation système',
-   description:'Cours de Programmation système pour la promotion M1',
-   time: '1h30min',
- },
- {
-   title: 'Enseignement - TD - Traitement de signal',
-   description:'Cours de Traitement de Signal pour la promotion CSI3',
-   time: '1h00min',
- },
- {
-  title: 'Enseignement - TD - Traitement de signal',
-  description:'Cours de Traitement de Signal pour la promotion CSI3',
-  time: '1h00min',
-},
-{
-  title: 'Enseignement - TD - Traitement de signal',
-  description:'Cours de Traitement de Signal pour la promotion CSI3',
-  time: '1h00min',
-},
-{
-  title: 'Enseignement - TD - Traitement de signal',
-  description:'Cours de Traitement de Signal pour la promotion CSI3',
-  time: '1h00min',
-},
-{
-  title: 'Enseignement - TD - Traitement de signal',
-  description:'Cours de Traitement de Signal pour la promotion CSI3',
-  time: '1h00min',
-},
-{
-  title: 'Enseignement - TD - Traitement de signal',
-  description:'Cours de Traitement de Signal pour la promotion CSI3',
-  time: '1h00min',
-},
-]
 //differentes taches presentes dans la liste et modifiables
-
 class TaskDisplay extends Component{
   state = {
     loading: true,
@@ -48,25 +14,63 @@ class TaskDisplay extends Component{
     data: [],
   }
 
-  render(){
+  getCurrentEvents = () =>
+    this.props.events.filter(event => moment(event.startDate).isSame(this.props.selectedDate, 'day'))
+
+  
+  confirmDeletion = (eventId, eventName) => () => {
+    message.success(`"${eventName}" a bien été supprimé !`);
+    this.props.deleteEvent(eventId)
+  }
+
+  render() {
+
+
     return(
       <List
         className="TaskList"
         itemLayout="horizontal"
-        dataSource={data}
-        renderItem={item => (
-            <List.Item actions={[
-                  <a>Modifier</a>,
-                  <a>Supprimer</a>
-                ]}>
-                Durée : {item.time}
+        dataSource={this.getCurrentEvents()}
+        renderItem={event => {
+          const startDate = moment(event.startDate)
+          const endDate = moment(event.endDate)
+          return (
+            <List.Item
+              key={event.id}
+              actions={[
+                <a onClick={() => this.props.requestModifying(event)} href="#">Modifier</a>,
+                <Popconfirm 
+                title="Êtes vous sûr de vouloir supprimer cet évènement" 
+                onConfirm={this.confirmDeletion(event.id, event.name)}
+                okText="Yes" 
+                cancelText="No"
+              >
+                <a href="#" style={{color:"red"}}>Supprimer</a>
+              </Popconfirm>,
+              ]}
+            >
+                Durée : {moment.duration(endDate.diff(startDate)).asMinutes()} minutes
                 <List.Item.Meta
-                  title={item.title}
-                  description={item.description}
+                  title={event.name}
+                  description={event.description}
                 />
             </List.Item>
-      )}/>
+          )
+        }
+      }/>
     );
   }
 }
-export default TaskDisplay;
+
+const mapStateToProps = store => ({
+  events: store.event.events,
+});
+
+const mapDispatchToProps = dispatch => ({
+  deleteEvent: deleteEvent(dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TaskDisplay);

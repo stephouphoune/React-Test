@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Steps, Button, message, Row, Icon} from 'antd';
 import TaskEdit from '../homePage/card/TaskEdit';
+import { getStats } from '../../../appState/actions/stats'
 import './Select.css'
 
 const Step = Steps.Step;
@@ -25,18 +27,44 @@ const steps = [{
 //(3)=> selection de la tâche puis bouton DONE et mise a jour auto du camembert et du graphique
 
 class Select extends Component {
-    state = {
-      current: 0,
-    };
-  next() {
+  state = {
+    selectedActivity: null,
+    selectedProject: null,
+    current: 0,
+  };
+
+  next = () => {
     const current = this.state.current + 1;
     this.setState({ current });
   }
-  prev() {
+  prev = () => {
     const current = this.state.current - 1;
     this.setState({ current });
   }
 
+  handleActivitySelect = selectedActivity => {
+    console.log('selectedActivity', selectedActivity)
+    this.setState({
+      selectedActivity,
+      selectedProject: null,
+      current: selectedActivity ? 1 : 0
+    })
+  }
+
+  handleProjectSelect = selectedProject => {
+    this.setState({
+      selectedProject,
+      current: 1
+    })
+  }
+
+  handleGetStats = () => {
+    this.next();
+    this.props.getStats(this.state.selectedProject)
+  }
+
+  getProjectFromActivity = () => this.props.projects
+    .filter(project => project.activityId === this.state.selectedActivity.id)
 
   render() {
     const { current } = this.state;
@@ -45,28 +73,27 @@ class Select extends Component {
         <Steps current={current}>
           {steps.map(item => <Step icon={item.icon} key={item.title} title={item.title} />)}
         </Steps>
-        <Row style={{marginTop:12}} type="flex" justify="start" align="middle">
-          <TaskEdit placeholder={steps[this.state.current].content}/>
+        <Row style={{marginTop:12}} type="flex" justify="start" align="middle"> 
+          <TaskEdit
+            placeholder="Actvité"
+            selectedData={this.state.selectedActivity}
+            onSelect={this.handleActivitySelect}
+            data={this.props.activities}
+            dataNameKey="name"
+          /> 
+          {current >= 1 && 
+            <TaskEdit
+              placeholder="Projet"
+              selectedData={this.state.selectedProject}
+              onSelect={this.handleProjectSelect}
+              data={this.getProjectFromActivity()}
+              dataNameKey="name"
+            /> 
+          }
           <div style={{marginLeft:8}}>
-            {
-              this.state.current < steps.length - 2
-              &&
-              <Button type="primary" onClick={() => this.next()}>
-                Suivant
-              </Button>
-            }
-            {
-              this.state.current === steps.length - 2
-              &&
-              <Button type="primary" onClick={() => this.next()}>
+            {this.state.current === steps.length - 2 && 
+              <Button type="primary" onClick={this.handleGetStats}>
                 Terminer
-              </Button>
-            }
-            {
-              this.state.current > 0
-              &&
-              <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                Précédent
               </Button>
             }
           </div>
@@ -75,4 +102,17 @@ class Select extends Component {
     );
   }
 }
-export default Select;
+
+const mapStateToProps = store => ({
+  activities: store.activity.activities,
+  projects: store.project.projects
+})
+
+const mapDispatchToProps = dispatch => ({
+  getStats: getStats(dispatch),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Select);

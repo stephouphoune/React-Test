@@ -14,6 +14,8 @@ const users = require('./routes/users');
 const label = require('./routes/label');
 const task = require('./routes/task');
 const workdays = require('./routes/workdays')
+const event = require('./routes/event')
+const stats = require('./routes/stats')
 
 const cors = require('cors');
 
@@ -21,6 +23,9 @@ const executeQuery=require('./services/executeQuery.js')
 var app = express();
 
 app.use(cors())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser())
 
 const tokenMiddleware = (req, res, next) => {
   
@@ -30,7 +35,7 @@ const tokenMiddleware = (req, res, next) => {
   }
 
   const token = req.get('X-AUTH-TOKEN')
-  console.log('token', token)
+  //console.log('token', token)
   if (!token) {
     // res.status(401)
     // res.end()
@@ -66,6 +71,8 @@ app.use('/', label)
 app.use('/', users)
 app.use('/', task)
 app.use('/', workdays)
+app.use('/', event)
+app.use('/', stats)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 
@@ -75,10 +82,7 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(logger('dev'));;
 
 //LIGNE DE CODE POUR LE BUILD
 //app.use(express.static('public'));
