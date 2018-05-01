@@ -45,13 +45,14 @@ router.get('/api/stats', (req, res) => {
           }
 
           try {
-
+            
             const events = JSON.parse(JSON.stringify(rows2))
-            const stats = events.reduce((stats, event) => {
-              const statTaskIndex = stats.findIndex(item => item.taskId === event.task_id)
+            
+            const stats = events.reduce((acc, event) => {
+              const statTaskIndex = acc.findIndex(item => item.taskId === event.task_id)
               if (statTaskIndex === -1) {
                 return [
-                  ...stats,
+                  ...acc,
                   {
                     taskId: event.task_id,
                     duration: event.duration
@@ -59,8 +60,8 @@ router.get('/api/stats', (req, res) => {
                 ]
               }
 
-              const currentStat = stats[statTaskIndex]
-              const newStats = [...stats]
+              const currentStat = acc[statTaskIndex]
+              const newStats = [...acc]
               newStats[statTaskIndex] = {
                 ...currentStat,
                 duration: currentStat.duration + event.duration

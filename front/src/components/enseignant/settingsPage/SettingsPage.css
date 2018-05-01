@@ -3,3 +3,32 @@
     text-align: right;
 }
   
+.URLContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.URL{
+    flex:2;
+}
+
+.URLText{
+    flex:1;
+}
+
+.LanguageContainer2{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Language{
+    flex:2;
+}
+
+.LanguageText{
+    flex:1;
+}

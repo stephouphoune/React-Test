@@ -6,27 +6,35 @@ import './HomePage.css';
 import Agenda from './Agenda';
 import Manage from './card/Manage';
 import { postEvent, getEvents, modifyEvent } from '../../../appState/actions/event'
+import { getAdvancement } from '../../../appState/actions/advancement'
 
 class HomePage extends Component{
   state = {
-    percent: 0,
-    selectedDate: moment(), 
-
+    percent: 0,//((this.props.advancement.map(adv => adv["sumduration"]))/(8*60)*100).toFixed(1),
+    selectedDate: moment(),
   }
 
-  actualize = (value) => {
-    let percent = this.state.percent + Number((value).toFix(1));
-    if (percent > 100) {
-      percent = 100;
-    }
-    this.setState({ percent });
+  //mettre dans le state percent = advancement/nombre d'heures de la journée
+  //Il faut donc récupérer ici le nombre d'heure de la journée
+  componentDidMount(){
+    this.props.getAdvancement(this.state.selectedDate.toDate())
+    //console.log('fjizojfijezijfoizejfoi',((this.props.advancement.map(adv => adv["sumduration"]))/(8*60)*100).toFixed(1))
+    this.setState({
+      percent:10
+    })
+    //console.log('hello-------', this.props.advancement)
+  }
+
+  componentWillReceiveProps(){
+    //this.props.getAdvancement(this.state.selectedDate.toDate())
+    //console.log("hello-----------------")
   }
 
   handleDateSelected = selectedDate => {
-    console.log('selectedDate', selectedDate)
     this.props.getEvents(selectedDate.toDate())
+    console.log('fjizojfijezijfoizejfoi',((this.props.advancement.map(adv => adv["sumduration"]))/(8*60)*100).toFixed(1))
     this.setState({
-      selectedDate
+      selectedDate,
     })
   }
 
@@ -73,13 +81,18 @@ class HomePage extends Component{
   }
 }
 
-const mapDispatchtoProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
   postEvent: postEvent(dispatch),
   getEvents: getEvents(dispatch), 
   modifyEvent: modifyEvent(dispatch),
+  getAdvancement: getAdvancement(dispatch),
 })
 
+const mapStateToProps = store => ({
+  advancement: store.advancement.advancement,
+});
+
 export default connect(
-  null,
-  mapDispatchtoProps
+  mapStateToProps,
+  mapDispatchToProps
 )(HomePage);

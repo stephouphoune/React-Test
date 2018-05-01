@@ -15,7 +15,6 @@ const eventReducer = (state = initialState, action) => {
                     if (!event) return newEvents;
 
                     const existingEventIndex = newEvents.findIndex(item => item.id === event.id)
-                    console.log('existingEventIndex', existingEventIndex, event)
                     if (existingEventIndex === -1) { // si il est pas dedans
                         return [...newEvents, event] // on l'ajoute
                     }

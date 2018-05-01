@@ -16,6 +16,7 @@ const createEvent = rawEvent => ({
     isenId: rawEvent.isen_id,
     taskId: rawEvent.task_id,
     username: rawEvent.username,
+    duration: rawEvent.duration,
 })
   
 const createEvents = rawEvents => rawEvents.map(createEvent)
@@ -45,9 +46,8 @@ router.post('/api/event', (req, res) => {
     try {
         const data = req.body
         const now = new Date()
-        const duration = data.duration
         //console.log(req.body)
-        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.startDate).toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${duration})`, (err, result) => {
+        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.startDate).toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
@@ -68,6 +68,7 @@ router.post('/api/event', (req, res) => {
                 isenId: null,
                 taskId: data.taskId,
                 username: data.username,
+                duration: data.duration
             }
             
             res.send(JSON.stringify({ event: newEvent }))
@@ -133,6 +134,7 @@ router.put('/api/event/:id', (req, res) => {
                 isenId: data.isenId,
                 taskId: data.taskId,
                 username: data.username,
+                duration: data.duration,
             }
             
             res.send(JSON.stringify({ event: newEvent }))

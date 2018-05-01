@@ -6,6 +6,31 @@
     margin-top: 2rem;
 }
 
+.URLContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.URL{
+    flex:2;
+}
+
+.URLText{
+    flex:1;
+}
+
+.LanguageContainer{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .Language{
-    margin-bottom: 1rem;
+    flex:2;
+}
+
+.LanguageText{
+    flex:1;
 }

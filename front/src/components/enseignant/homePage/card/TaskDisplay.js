@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List, message, Avatar, Spin, Icon, Popconfirm } from 'antd';
 import { deleteEvent } from '../../../../appState/actions/event'
+import { getAdvancement } from '../../../../appState/actions/advancement'
 import './TaskDisplay.css';
 import 'moment/locale/fr.js';
 import moment from 'moment'
@@ -14,13 +15,14 @@ class TaskDisplay extends Component{
     data: [],
   }
 
-  getCurrentEvents = () =>
+  getCurrentEvents = () => 
     this.props.events.filter(event => moment(event.startDate).isSame(this.props.selectedDate, 'day'))
 
   
   confirmDeletion = (eventId, eventName) => () => {
     message.success(`"${eventName}" a bien été supprimé !`);
     this.props.deleteEvent(eventId)
+    this.props.getAdvancement(this.props.selectedDate)
   }
 
   render() {
@@ -39,17 +41,19 @@ class TaskDisplay extends Component{
               key={event.id}
               actions={[
                 <a onClick={() => this.props.requestModifying(event)} href="#">Modifier</a>,
+                
                 <Popconfirm 
+                placement="topRight"
                 title="Êtes vous sûr de vouloir supprimer cet évènement" 
                 onConfirm={this.confirmDeletion(event.id, event.name)}
-                okText="Yes" 
-                cancelText="No"
+                okText="Oui" 
+                cancelText="Non"
               >
                 <a href="#" style={{color:"red"}}>Supprimer</a>
               </Popconfirm>,
               ]}
             >
-                Durée : {moment.duration(endDate.diff(startDate)).asMinutes()} minutes
+                Durée : {event.duration} minutes
                 <List.Item.Meta
                   title={event.name}
                   description={event.description}
@@ -67,7 +71,8 @@ const mapStateToProps = store => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteEvent: deleteEvent(dispatch)
+  deleteEvent: deleteEvent(dispatch),
+  getAdvancement: getAdvancement(dispatch),
 })
 
 export default connect(

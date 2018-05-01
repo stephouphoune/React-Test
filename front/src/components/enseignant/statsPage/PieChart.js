@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {Line, Bar, Pie} from 'react-chartjs-2';
-
 //inserer des donnees a traiter
 
 //*****************************
-const redRotation = 0
-const greenRotation = 2 * Math.PI / 3
-const blueRotation = 4 * Math.PI / 3
-
-function getRandomColor() {
-  var letters = '89ABCDEF89ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
 
 function rainbow(numOfSteps, step) {
   // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
@@ -92,20 +79,13 @@ const getRandomColors = count => {
 }
 */
 class PieChart extends Component{
-    state = {
-      charData:{//on stocke les data dans un objet pour mettre a jour le graph a chaque changement du state
-        labels: ["Traitement du signal", "Programmation système", "Linux", "a", "b", "c"],
-        datasets: [{
-          backgroundColor: getRandomColors(6),
-          data: [60,25,10, 10, 10, 10]
-        }]
-      }
-    }
+
   static defaultProps = {//proprietes par default du composant graphique
     displayTitle:'true',
     displayLegend: 'true',
     legendPosition : 'right'
   }
+
 
   getChartData = () => {
     return {
@@ -117,7 +97,12 @@ class PieChart extends Component{
     }
   }
   render() {
-    console.log('data', this.getChartData())
+    if (this.props.stats.length === 0)
+    {
+      return <img src="./smiley.png" className="smiley"/>
+    }
+    else
+    {
     return (
       <Pie
       data={this.getChartData()}
@@ -131,22 +116,24 @@ class PieChart extends Component{
         }
       }}
       />
+    
     );
+  }
   }
 }
 
 const getProperStats = store => {
   const { stats } = store.stats
-  console.log('stats', stats)
-  return stats.map(stat => {
-    console.log('stat', stat)
-    const task = store.task.tasks.find(task => task.id === stat.taskId)
-    return {
-      taskName: task ? task.name : 'tache inconnue',
-      taskId: stat.taskId,
-      duration: stat.duration
-    }
-  })
+  
+    return stats.map(stat => {
+      const task = store.task.tasks.find(task => task.id === stat.taskId)
+
+      return {
+        taskName: task ? task.name : 'tache inconnue',
+        taskId: stat.taskId,
+        duration: stat.duration, 
+      }
+    })
 }
 
 const mapStateToProps = store => ({

@@ -44,11 +44,4 @@ router.get('/api/workdays', (req, res) => {
       }
     
     });
-    
-
-router.delete('/api/workdays/:id', (req, res) => {
-  //Route qui décrit un paramètre d'entrée (c'est du routing)
-  const { id } = req.params
-})
-
 module.exports = router;

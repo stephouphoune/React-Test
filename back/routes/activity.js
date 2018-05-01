@@ -30,10 +30,12 @@ router.get('/api/activity', (req, res) => {
           try {
             //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
             //le premier élément du tableau qui nous intéresse
+            
             const rawActivities = JSON.parse(JSON.stringify(rows));
             const activities = createActivities(rawActivities);
             //Pourquoi mettre des accolades autour de activities ?
             const responseBody = JSON.stringify({activities})
+            console.log('----------------2222222222------', responseBody)
             res.status(200)
             res.send(responseBody)
             res.end()

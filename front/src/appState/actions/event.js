@@ -42,19 +42,18 @@ const receiveModifyEvent = (event) => ({
 export const postEvent = dispatch => ({ activity, project, task, description, duration, date }) => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestPostEvent())
-    
     //Un fetch se décompose en header/body/footer si on le souhaite. 
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
-    const noon = moment().hour(12).minute(0).second(0).toDate()
-    const endDate = moment().hour(12).minute(0).second(0).add(duration, 'minutes').toDate()
+    //const noon = moment().hour(12).minute(0).second(0).toDate()
+    //const endDate = moment().hour(12).minute(0).second(0).add(duration, 'minutes').toDate()
 
     const data = {
         activityId: activity.id,
         projectId: project.id,
         taskId: task.id,
         description,
-        startDate: noon,
-        endDate,
+        startDate: date.toDate(),
+        endDate: date.add(duration, 'minutes').toDate(),
         isModified: false,
         isDeleted: false,
         name: `${activity.name} - ${project.name} - ${task.name}`,

@@ -10,6 +10,7 @@ import usersReducer from './reducers/users'
 import workdayReducer from './reducers/workday'
 import eventReducer from './reducers/event'
 import statsReducer from './reducers/stats'
+import advancementReducer from './reducers/advancement';
 
 const store = createStore(
     combineReducers({
@@ -22,6 +23,7 @@ const store = createStore(
         workday:workdayReducer,
         event:eventReducer,
         stats:statsReducer,
+        advancement:advancementReducer,
     }),
     compose(
         applyMiddleware(createLogger())

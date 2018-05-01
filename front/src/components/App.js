@@ -7,11 +7,11 @@ import { requestGetUsers } from '../appState/actions/users'
 import { requestGetTasks } from '../appState/actions/task'
 import { requestGetWorkdays } from '../appState/actions/workday'
 import { getEvents } from '../appState/actions/event'
+import { getAdvancement } from '../appState/actions/advancement'
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
 import { Layout } from 'antd';
-import { RECEIVE_GET_ACTIVITIES } from '../appState/types/activity';
 
 
 class App extends Component {
@@ -60,6 +60,7 @@ const mapDispatchtoProps = dispatch => ({
   getTasks: requestGetTasks(dispatch), 
   getWorkdays: requestGetWorkdays(dispatch),
   getEvents: getEvents(dispatch),
+  getAdvancement: getAdvancement(dispatch),
 })
 
 export default connect(

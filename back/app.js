@@ -16,6 +16,7 @@ const task = require('./routes/task');
 const workdays = require('./routes/workdays')
 const event = require('./routes/event')
 const stats = require('./routes/stats')
+const advancement = require('./routes/advancement')
 
 const cors = require('cors');
 
@@ -73,6 +74,8 @@ app.use('/', task)
 app.use('/', workdays)
 app.use('/', event)
 app.use('/', stats)
+app.use('/', advancement)
+app.use('/', workdays)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

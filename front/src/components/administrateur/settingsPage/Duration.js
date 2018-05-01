@@ -17,7 +17,6 @@ class Day extends Component{
   render(){
     return(
         <div className="Duration">
-            <h3>Temps total de travail : 39h</h3>
             <Select className="Day" style={{width:170}} placeholder="Sélectionnez un jour" onChange={handleChange}>
                 <Select.Option value="lundi">Lundi</Select.Option>
                 <Select.Option value="mardi">Mardi</Select.Option>

@@ -61,6 +61,7 @@ class Select extends Component {
   handleGetStats = () => {
     this.next();
     this.props.getStats(this.state.selectedProject)
+    this.props.isLoaded(true)
   }
 
   getProjectFromActivity = () => this.props.projects
@@ -91,7 +92,7 @@ class Select extends Component {
             /> 
           }
           <div style={{marginLeft:8}}>
-            {this.state.current === steps.length - 2 && 
+            {current >=1 && this.state.selectedProject && 
               <Button type="primary" onClick={this.handleGetStats}>
                 Terminer
               </Button>

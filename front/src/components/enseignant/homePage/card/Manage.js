@@ -17,7 +17,7 @@ class Manage extends Component{
     duration: 15, 
     description: '',
     isModifying: false,
-    modifyingEvent: null
+    modifyingEvent: null,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,7 +34,6 @@ class Manage extends Component{
   }
 
   handleActivitySelect = selectedActivity => {
-    console.log('activity', selectedActivity)
     this.setState({
       selectedActivity,
       selectedProject: null,
@@ -88,8 +87,8 @@ class Manage extends Component{
         duration: this.state.duration,
         description: this.state.description,
       })
-    } else {
-
+    } 
+    else if (this.state.selectedActivity && this.state.selectedProject && this.state.selectedTask){  
       this.props.onAddEvent({
         activity: this.state.selectedActivity,
         project: this.state.selectedProject,
@@ -98,7 +97,6 @@ class Manage extends Component{
         description: this.state.description,
       })
     }
-
     this.resetState()
   }
 
@@ -108,7 +106,7 @@ class Manage extends Component{
       selectedProject: null,
       selectedTask: null,
       isModifying: false,
-      description: null,
+      description: '',
       duration: 15
     })
   }
@@ -125,9 +123,8 @@ class Manage extends Component{
     )
   }
 
+
   render(){
-
-
     return(
       <Card title="Gestion des tâches du jour"
             style={{ width: '100%'}}>
@@ -180,6 +177,7 @@ class Manage extends Component{
         {this.state.selectedTask &&
           <Input 
             placeholder="Description" 
+            //defaultValue={this.state.selectedTask["description"]}
             value={this.state.description}
             onChange={this.handleDescriptionChange}
           />

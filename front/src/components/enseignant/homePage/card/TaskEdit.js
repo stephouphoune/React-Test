@@ -69,7 +69,8 @@ class TaskEdit extends Component{
   render(){
     const {
       selectedData,
-      dataNameKey
+      dataNameKey, 
+      placeholder
     } = this.props
     const value = selectedData
       ? selectedData[dataNameKey]
@@ -86,7 +87,7 @@ class TaskEdit extends Component{
         }
         onSelect={this.handleSelect}
         onSearch={this.handleSearch}
-        placeholder={this.props.placeholder}
+        placeholder={placeholder}
       />
     )
   }
