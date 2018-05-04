@@ -5,9 +5,8 @@ import { requestGetProjects } from '../appState/actions/project'
 import { requestGetLabels } from '../appState/actions/label'
 import { requestGetUsers } from '../appState/actions/users'
 import { requestGetTasks } from '../appState/actions/task'
-import { requestGetWorkdays } from '../appState/actions/workday'
+import { getWorkdays } from '../appState/actions/workday'
 import { getEvents } from '../appState/actions/event'
-import { getAdvancement } from '../appState/actions/advancement'
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
@@ -20,13 +19,19 @@ class App extends Component {
   //S'il est connecté au lancement de l'application
     if (this.props.token) {
       this.props.getActivities()
+      this.props.getProjects()
+      this.props.getLabels()
+      this.props.getUsers()
+      this.props.getTasks()
+      this.props.getWorkdays()
+      this.props.getEvents()
     }
   }
 
   componentWillReceiveProps(nextProps){
 
     //Si l'utilisateur vient de se connecter
-    if (this.props.token !== nextProps.token){
+    if (this.props.token !== nextProps.token && nextProps.token){
       nextProps.getActivities()
       nextProps.getProjects()
       nextProps.getLabels()
@@ -58,9 +63,8 @@ const mapDispatchtoProps = dispatch => ({
   getLabels: requestGetLabels(dispatch),
   getUsers: requestGetUsers(dispatch),
   getTasks: requestGetTasks(dispatch), 
-  getWorkdays: requestGetWorkdays(dispatch),
+  getWorkdays: getWorkdays(dispatch),
   getEvents: getEvents(dispatch),
-  getAdvancement: getAdvancement(dispatch),
 })
 
 export default connect(

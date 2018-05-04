@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './SettingsPage.css';
+import { connect } from 'react-redux';
+import { receiveSignIn } from '../../../appState/actions/user'
+import { forceReset } from '../../../appState/actions/reset'
 import {Card, Row, Col, Icon, Button, Input, Select} from 'antd';
 import Login from '../../login/Login'
 function handleChange(value) {
@@ -35,7 +38,7 @@ class SettingsPage extends Component{
                     </div>
                   </Col>
                   <Col span={18} className="Deconnexion">
-                    <Button type="danger">Déconnexion</Button>
+                  <Button onClick={this.props.disconnect} type="danger">Déconnexion</Button>
                   </Col>
                 </Row>
 
@@ -61,4 +64,12 @@ class SettingsPage extends Component{
   }
 }
 
-export default SettingsPage;
+const mapDispatchToProps = dispatch => ({
+  disconnect: () => {
+    dispatch(receiveSignIn())
+    dispatch(forceReset())
+  }
+})
+
+
+export default connect(null, mapDispatchToProps)(SettingsPage);

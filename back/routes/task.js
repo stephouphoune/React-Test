@@ -7,6 +7,7 @@ const createTask = rawTask => ({
   name: rawTask.name,
   description: rawTask.description,
   projectId: rawTask.project_id,
+  isDiverse: rawTask.isDiverse,
 })
 
 const createTasks = rawTasks => rawTasks.map(createTask)

@@ -54,7 +54,12 @@ class Administration extends Component{
                 </Select>
             </Row>
             <Row type="flex" justify="center" className="Connexion">
-                <Button type="primary" icon="key" loading={this.state.iconLoading} onClick={this.enterIconLoading}>
+                <Button 
+                    type="primary" 
+                    icon="key" 
+                    loading={this.state.iconLoading} 
+                    onClick={this.enterIconLoading}
+                >
                     Connexion
                 </Button>
             </Row>

@@ -1,5 +1,7 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import { createLogger } from 'redux-logger'
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 import userReducer from './reducers/user'
 import taskReducer from './reducers/task'
@@ -10,11 +12,15 @@ import usersReducer from './reducers/users'
 import workdayReducer from './reducers/workday'
 import eventReducer from './reducers/event'
 import statsReducer from './reducers/stats'
-import advancementReducer from './reducers/advancement';
+
+const persistConfig = {
+    key: 'root',
+    storage
+}
 
 const store = createStore(
     combineReducers({
-        user: userReducer,
+        user: persistReducer(persistConfig, userReducer),
         project:projectReducer,
         activity:activityReducer,
         task:taskReducer,
@@ -23,11 +29,12 @@ const store = createStore(
         workday:workdayReducer,
         event:eventReducer,
         stats:statsReducer,
-        advancement:advancementReducer,
     }),
     compose(
         applyMiddleware(createLogger())
     )
 )
+
+persistStore(store)
 
 export default store

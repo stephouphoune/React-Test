@@ -11,7 +11,7 @@ class Presentation extends Component {
                 <a href="http://isen-brest.fr"><img src="./isen.png" className="Isen"/></a>
                 <div className="Texte">
                 <Card style={{ width: 900 }}>
-                    <p><h2>Task-eat est un site web de gestion d'activités enseignantes développé dans le cadre d'un projet de fin d'année 
+                    <p><h2>Task-eat est une application web de gestion d'activités enseignantes développé dans le cadre d'un projet de fin d'année 
                         de Master 1 au sein de l'école d'ingénieur <a href="http://isen-brest.fr">ISEN Brest</a> par deux étudiants de Master 1 : <a href="https://www.linkedin.com/in/thomas-orvain/">Thomas Orvain</a> et <a href="https://www.linkedin.com/in/stephane-perreaux/">Stéphane PERREAUX</a>.
                         <br/>
                         Leur encadrant de projet, Pierre-Jean Bouvet, enseignant chercheur utilisait un logiciel de gestion de tâches (Laboxy) depuis quelque temps, 

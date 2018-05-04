@@ -1,0 +1,23 @@
+.dropdown {
+    border: 1px solid #1890ff;
+    z-index: 999;
+    background-color: white;
+    border-radius: 4px;
+    position: fixed;
+}
+
+.option {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #1890ff;
+    color:#1890ff
+}
+
+.option:last-of-type {
+    border-bottom: none;
+}
+
+.option:hover {
+    cursor: pointer;
+    color: #40a9ff;
+}

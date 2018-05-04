@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List, message, Avatar, Spin, Icon, Popconfirm } from 'antd';
 import { deleteEvent } from '../../../../appState/actions/event'
-import { getAdvancement } from '../../../../appState/actions/advancement'
 import './TaskDisplay.css';
 import 'moment/locale/fr.js';
 import moment from 'moment'
@@ -22,7 +21,6 @@ class TaskDisplay extends Component{
   confirmDeletion = (eventId, eventName) => () => {
     message.success(`"${eventName}" a bien été supprimé !`);
     this.props.deleteEvent(eventId)
-    this.props.getAdvancement(this.props.selectedDate)
   }
 
   render() {
@@ -72,7 +70,6 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
   deleteEvent: deleteEvent(dispatch),
-  getAdvancement: getAdvancement(dispatch),
 })
 
 export default connect(

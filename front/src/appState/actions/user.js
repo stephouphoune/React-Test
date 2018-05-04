@@ -4,7 +4,7 @@ const requestSignIn = () => ({
     type: types.USER_REQUEST_SIGNIN
 })
 
-const receiveSignIn = (username, firstName, lastName, token, isAdmin, signinError) => ({
+export const receiveSignIn = (username, firstName, lastName, token, isAdmin, signinError) => ({
     type: types.USER_RECEIVE_SIGNIN,
     username,
     token,

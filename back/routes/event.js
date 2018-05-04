@@ -41,7 +41,6 @@ const getMysqlDateCompare = date =>
 
 
 
-/* POST home page. */
 router.post('/api/event', (req, res) => {
     try {
         const data = req.body
@@ -81,7 +80,7 @@ router.post('/api/event', (req, res) => {
         console.log(e)
       }
     
-    });
+});
 
 router.get('/api/event', (req, res) => {
     try {

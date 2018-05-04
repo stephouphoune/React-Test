@@ -1,4 +1,5 @@
 import * as types from '../types/event'
+import * as Rtypes from '../types/reset'
 
 const initialState = {
     events: []
@@ -6,6 +7,8 @@ const initialState = {
 
 const eventReducer = (state = initialState, action) => {
     switch (action.type) {
+        case Rtypes.FORCE_RESET:
+            return initialState;
         case types.RECEIVE_POST_EVENT:
         case types.RECEIVE_GET_EVENTS:
         case types.RECEIVE_MODIFY_EVENT:

@@ -10,18 +10,20 @@ import Administration from '../administrateur/administration/Administration'
 
 class AppContent extends Component {
 
-  render() {
-    const {isAdmin, firstName, lastName} = this.props;
+  componentDidMount(){
+    const { firstName, lastName } = this.props
+    message.success('Bienvenue '+firstName+' '+lastName+' !');
+  }
 
-    const success = () => {
-      message.success('Bienvenue '+firstName+' '+lastName+' !');
-    };
+
+  render() {
+    const {isAdmin } = this.props;
 
     return (
       <Layout.Content className="AppContent">
           <Tabs type="card">
             <Tabs.TabPane tab="Gestion" key="1">
-              <HomePage />
+              <HomePage/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Analyse" key="2">
               <StatsPage />

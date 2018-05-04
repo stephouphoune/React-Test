@@ -9,7 +9,6 @@ class Agenda extends Component{
       <div className="flex-container">
         <Calendar
           defaultValue={this.props.selectedDate}
-          //value={this.props.selectedDate}
           fullscreen={false}
           onSelect={this.props.onSelect}
         />
