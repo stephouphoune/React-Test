@@ -15,11 +15,7 @@ const activityReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
-        case types.RECEIVE_GET_ACTIVITIES:
-            return {
-                ...state,
-                activities: action.activities
-            }
+        
         case types.RECEIVE_DELETE_ACTIVITY:
             return {
                 ...state,
@@ -29,8 +25,22 @@ const activityReducer = (state = initialState, action) => {
                 })
             }
         case types.RECEIVE_POST_ACTIVITY:
+        case types.RECEIVE_MODIFY_ACTIVITY:
+        case types.RECEIVE_GET_ACTIVITIES:
             return {
-                ...state
+                ...state, 
+                activities: action.activities.reduce((newActivities, activity) => {
+                    if (!activity) return newActivities;
+
+                    const existingActivityIndex = newActivities.findIndex(item => item.id === activity.id)
+                    if (existingActivityIndex === -1) { // si il est pas dedans
+                        return [...newActivities, activity] // on l'ajoute
+                    }
+                    const activities = [...newActivities]
+                    activities[existingActivityIndex] = activity;
+                    return activities;
+
+                }, state.activities)
             }
         default:
             return state

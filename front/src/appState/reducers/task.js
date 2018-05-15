@@ -28,6 +28,15 @@ const taskReducer = (state = initialState, action) => {
                     return true
                 })
             }
+        case types.RECEIVE_POST_TASK:
+            return {
+                ...state
+            }
+        case types.RECEIVE_MODIFY_TASK:
+            return {
+                ...state, 
+                tasks: action.tasks
+            }
         default:
             return state
     }

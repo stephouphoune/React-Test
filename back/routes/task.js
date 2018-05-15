@@ -57,7 +57,31 @@ router.get('/api/task', (req, res) => {
     
     });
 
-
+router.post('/api/task', (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+      res.status(401)
+      return res.end()
+  }
+  try {
+    const data = req.body
+    executeQuery(`INSERT INTO task VALUES (NULL, '${data.name}','', '${data.projectId}',0 , 1, 0)`, (err, result) => {
+        if (err) {
+            res.status(500);
+            res.end()
+            console.log(err)
+            return;
+        }
+        
+        res.send(JSON.stringify({ result }))
+        res.end()
+    })
+  }
+  catch(e) {
+    res.status(500);
+    res.end();
+    console.log(e)
+  }
+});
 
 router.delete('/api/task/:id', (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)

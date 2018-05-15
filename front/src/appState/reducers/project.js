@@ -20,6 +20,15 @@ const projectReducer = (state = initialState, action) => {
                 ...state,
                 projects:action.projects
             }
+        case types.RECEIVE_POST_PROJECT:
+            return {
+                ...state
+            }
+        case types.RECEIVE_MODIFY_PROJECT:
+            return {
+                ...state, 
+                projects: action.projects
+            }
         default:
             return state
     }

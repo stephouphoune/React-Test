@@ -75,10 +75,14 @@ router.delete('/api/activity/:id', (req, res) => {
 })
 
 router.post('/api/activity', (req, res) => {
-  try {
+    if (!req.user || !req.user.isAdmin) {
+        res.status(401)
+        return res.end()
+    }
+    try {
       const data = req.body
       console.log('----------------',data)
-      executeQuery(`INSERT INTO activity VALUES (NULL, , 0, 0)`, (err, result) => {
+      executeQuery(`INSERT INTO activity VALUES (NULL, '${data.name}' , 0, 0)`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()
@@ -96,5 +100,32 @@ router.post('/api/activity', (req, res) => {
       console.log(e)
     }
 });
+
+router.put('/api/activity/:id', (req, res) => {
+    try {
+        const data = req.body
+        const activityId = req.params.id
+        executeQuery(`UPDATE activity SET name='${data.name}' WHERE activity_id='${activityId}'`, (err, result) => {
+            if (err) {
+                res.status(500);
+                res.end()
+                console.log(err)
+                return;
+            }
+            const newActivity = {
+                name: data.name
+            }
+            
+            res.send(JSON.stringify({ activity: newActivity }))
+            res.end()
+        })
+    }
+    catch(e) {
+        res.status(500);
+        res.end();
+        console.log(e)
+      }
+    
+    });
 
 module.exports = router;

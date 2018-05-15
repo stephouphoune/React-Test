@@ -15,6 +15,16 @@ const receiveDeleteTask = (taskId) => ({
     taskId
 })
 
+const receivePostTask = (task) => ({
+    type: types.RECEIVE_POST_TASK,
+    tasks: [task]
+})
+
+const receiveModifyTask = (task) => ({
+    type: types.RECEIVE_MODIFY_TASK,
+    tasks:[task]
+})
+
 
 export const requestGetTasks = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
@@ -66,5 +76,73 @@ export const deleteTask = dispatch => (taskId) => {
     })
     .catch(() => {
         dispatch(receiveDeleteTask())
+    })
+}
+
+export const postTask = dispatch => ({name, projectId}) => {
+    const data = {
+        name,
+        projectId
+    }
+    fetch(`http://localhost:3001/api/task`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    
+    //Résultats du fetch
+    .then(response => {
+        //Résultat reponse : par défaut cela va dans le <header>
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        //Permet de traduire la réponse en format texte pour que body puisse lire
+        return response.text()
+    })
+    //Résultat <body>
+    .then(body => {
+            //Pas besoin de try catch dans les promise même avec JSON.parse()
+            const data=JSON.parse(body)
+            const { task } = data
+            dispatch(receivePostTask(task))
+    }).catch(() => {
+        //Null pour faire ensuite des tests avec des expressions ternaires
+        dispatch(receivePostTask())
+    })
+}
+
+export const modifyTask = dispatch => ({name, taskId}) => {
+
+    const data = {
+        name, 
+        taskId
+    }
+
+    fetch(`http://localhost:3001/api/activity/${taskId}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+    })
+    .then(body => {
+        const data = JSON.parse(body)
+        const { task } = data
+        dispatch(receiveModifyTask(task))
+    })
+    .catch(() => {
+        dispatch(receiveModifyTask())
     })
 }

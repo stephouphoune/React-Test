@@ -1,4 +1,5 @@
 import * as types from '../types/activity'
+import store from '../createReduxStore'
 
 const requestGetActivity = () => ({
     type: types.REQUEST_GET_ACTIVITIES
@@ -60,10 +61,14 @@ export const postActivity = dispatch => ({name}) => {
     const data = {
         name
     }
-
     fetch(`http://localhost:3001/api/activity`, {
         method: 'POST',
         body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
     })
     
     //Résultats du fetch
@@ -106,16 +111,21 @@ export const deleteActivity = dispatch => (activityId) => {
     })
 }
 
-/*export const modifyActivity = dispatch => (activity) => {
+export const modifyActivity = dispatch => ({name, activityId}) => {
 
     const data = {
-        activityId: activity.id
-
+        name, 
+        activityId
     }
 
-    fetch(`http://localhost:3001/api/event/${event.oldEvent.id}`, {
+    fetch(`http://localhost:3001/api/activity/${activityId}`, {
         method: 'PUT',
         body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
     })
     .then(response => {
         if (response.status !== 200) {
@@ -125,9 +135,10 @@ export const deleteActivity = dispatch => (activityId) => {
     })
     .then(body => {
         const data = JSON.parse(body)
-        dispatch(receiveModifyEvent(data.event))
+        const { activity } = data
+        dispatch(receiveModifyActivity(activity))
     })
     .catch(() => {
-        dispatch(receiveModifyEvent())
+        dispatch(receiveModifyActivity())
     })
-}*/
+}
