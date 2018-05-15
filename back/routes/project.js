@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
+const entityManager = require('../services/entityManager')
+const asyncHandler = require('../services/asyncHandler')
 
 const createProject = rawProject => ({
   id: rawProject.project_id,
@@ -36,7 +38,7 @@ router.get('/api/project', (req, res) => {
             res.send(responseBody)
             res.end()
             return;
-      
+
            } catch (e) {
             res.status(500)
             res.end()
@@ -48,12 +50,16 @@ router.get('/api/project', (req, res) => {
         res.status(500);
         res.end();
       }
-    
+
     });
 
-router.delete('/api/project/:id', (req, res) => {
+// faut wrapper le callback avec asynHandler pour pouvoir utiliser le mot clé async
+router.delete('/api/project/:id', asyncHandler(async (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params
-})
+  await entityManager.deleteProject(id)
+  res.end()
+
+}))
 
 module.exports = router;
