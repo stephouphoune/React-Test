@@ -27,7 +27,7 @@ const deleteProject = async (id) => {
 
     for (const task of tasks) {
 
-        await deleteEvent(task.id)
+        await deleteTask(task.id)
 
     }
 
@@ -41,7 +41,7 @@ const deleteActivity = async (id) => {
 
     for (const project of projects) {
 
-        await deleteEvent(project.id)
+        await deleteActivity(project.id)
 
     }
 
