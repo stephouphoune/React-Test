@@ -1,28 +1,89 @@
 import React, { Component } from 'react';
-import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import { Line } from 'react-chartjs-2'
 //inserer des donnees a traiter
+const colors = {
+  green: {
+    fill: '#e0eadf',
+    stroke: '#5eb84d',
+  },
+  lightBlue: {
+    stroke: '#6fccdd',
+  },
+  darkBlue: {
+    fill: '#92bed2',
+    stroke: '#3282bf',
+  },
+  purple: {
+    fill: '#8fa8c8',
+    stroke: '#75539e',
+  },
+};
 
-const data = [
-      {name: 'Janvier', Enseignement: 60, Administration: 25, Recherche: 30},
-      {name: 'Février', Enseignement: 80, Administration: 27, Recherche: 22},
-      {name: 'Mars', Enseignement: 40, Administration: 35, Recherche: 10},
-      {name: 'Avril', Enseignement: 20, Administration: 20, Recherche: 50},
-];
+const loggedIn = [26, 36, 42, 38, 40, 30, 12];
+const available = [34, 44, 33, 24, 25, 28, 25];
+const availableForExisting = [16, 13, 25, 33, 40, 33, 45];
+const unavailable = [5, 9, 10, 9, 18, 19, 20];
+const xData = [13, 14, 15, 16, 17, 18, 19];
+
+
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [{
+    label: "Unavailable",
+    fill: true,
+    backgroundColor: colors.purple.fill,
+    pointBackgroundColor: colors.purple.stroke,
+    borderColor: colors.purple.stroke,
+    pointHighlightStroke: colors.purple.stroke,
+    borderCapStyle: 'butt',
+    data: unavailable,
+
+  }, {
+    label: "Available for Existing",
+    fill: true,
+    backgroundColor: colors.darkBlue.fill,
+    pointBackgroundColor: colors.darkBlue.stroke,
+    borderColor: colors.darkBlue.stroke,
+    pointHighlightStroke: colors.darkBlue.stroke,
+    borderCapStyle: 'butt',
+    data: availableForExisting,
+  }, {
+    label: "Available",
+    fill: true,
+    backgroundColor: colors.green.fill,
+    pointBackgroundColor: colors.lightBlue.stroke,
+    borderColor: colors.lightBlue.stroke,
+    pointHighlightStroke: colors.lightBlue.stroke,
+    borderCapStyle: 'butt',
+    data: available,
+  }, {
+    label: "Logged In",
+    fill: true,
+    backgroundColor: colors.green.fill,
+    pointBackgroundColor: colors.green.stroke,
+    borderColor: colors.green.stroke,
+    pointHighlightStroke: colors.green.stroke,
+    data: loggedIn,
+  }]
+};
+const options  = {
+    scales: {
+        yAxes: [{
+            stacked: true
+        }]
+    },
+    animation: {
+      duration: 750,
+    },
+}
 //*****************************
 class AeraChart extends Component{
   
   render() {
     return (
-      <AreaChart width={700} height={350} data={data}
-            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-        <CartesianGrid strokeDasharray="3 3"/>
-        <XAxis dataKey="name"/>
-        <YAxis/>
-        <Tooltip/>
-        <Area type='monotone' dataKey='Enseignement' stackId="1" stroke='#8884d8' fill='#8884d8' />
-        <Area type='monotone' dataKey='Administration' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
-        <Area type='monotone' dataKey='Recherche' stackId="1" stroke='#ffc658' fill='#ffc658' />
-      </AreaChart>
+      <Line data={data}
+          options={options}
+      />
     );
   }
 }

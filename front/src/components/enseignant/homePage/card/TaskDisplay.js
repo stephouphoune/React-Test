@@ -25,15 +25,12 @@ class TaskDisplay extends Component{
 
   render() {
 
-
     return(
       <List
         className="TaskList"
         itemLayout="horizontal"
         dataSource={this.getCurrentEvents()}
         renderItem={event => {
-          const startDate = moment(event.startDate)
-          const endDate = moment(event.endDate)
           return (
             <List.Item
               key={event.id}

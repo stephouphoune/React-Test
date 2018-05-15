@@ -45,7 +45,6 @@ router.post('/api/event', (req, res) => {
     try {
         const data = req.body
         const now = new Date()
-        //console.log(req.body)
         executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.startDate).toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);

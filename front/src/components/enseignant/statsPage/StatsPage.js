@@ -22,18 +22,18 @@ class StatsPage extends Component{
         <div>
           <Row className='RowCardChart'>
             <Col span={12} className='PieColumn'>
-              <Card title="Comparaison entre les Tâches" 
+              <Card title="Comparaison entre les Tâches (minutes)" 
                     bordered={true}
                     style={{ width:'100%' }}
                     >
                   <div className="CardLeft">
                     {/*Ici on vérifie que le camembert est bien lancé. Si ce n'est pas le cas on met un smiley*/}
-                    {this.state.isLoaded ? <PieChart className="Pie"/> : <img src="./smiley.png" className="smiley"/>}
+                    {this.state.isLoaded ? <PieChart className="Pie"/> : <h1>Sélectionnez une activité et un projet</h1>}
                   </div>
               </Card>
             </Col>
             <Col span={12} className='XYColumn'>
-            <Card title="Évolution du temps passé par Activité"
+            <Card title="Évolution du temps passé par Activité (minutes)"
                   className='XYCard'>
                 <AeraChart/>
               </Card>

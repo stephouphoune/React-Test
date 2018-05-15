@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { receiveSignIn } from '../../../appState/actions/user'
 import { forceReset } from '../../../appState/actions/reset'
+import { requestGetTasks } from '../../../appState/actions/task'
+import { requestGetActivities } from '../../../appState/actions/activity'
+import { requestGetProjects } from '../../../appState/actions/project'
 import './SettingsPage.css';
 import {Card, Row, Col, Icon, Button, Input, Select,InputNumber} from 'antd';
 import Arborescence from './Arborescence';
@@ -58,7 +61,10 @@ const mapDispatchToProps = dispatch => ({
   disconnect: () => {
     dispatch(receiveSignIn())
     dispatch(forceReset())
-  }
+  },
+  getActivities: requestGetActivities(dispatch),
+  getProjects: requestGetProjects(dispatch),
+  getTasks: requestGetTasks(dispatch), 
 })
 
 

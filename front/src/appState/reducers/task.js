@@ -20,6 +20,14 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 tasks:action.tasks
             }
+        case types.RECEIVE_DELETE_TASK:
+            return {
+                ...state,
+                tasks: state.tasks.filter(task => {
+                    if (task.id === action.taskId) return false //on le garde pas
+                    return true
+                })
+            }
         default:
             return state
     }

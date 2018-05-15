@@ -20,6 +20,18 @@ const activityReducer = (state = initialState, action) => {
                 ...state,
                 activities: action.activities
             }
+        case types.RECEIVE_DELETE_ACTIVITY:
+            return {
+                ...state,
+                activities: state.activities.filter(activity => {
+                    if (activity.id === action.activityId) return false //on le garde pas
+                    return true
+                })
+            }
+        case types.RECEIVE_POST_ACTIVITY:
+            return {
+                ...state
+            }
         default:
             return state
     }

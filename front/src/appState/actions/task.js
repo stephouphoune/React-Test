@@ -10,6 +10,11 @@ const receiveTask = (tasks = []) => ({
     tasks
 })
 
+const receiveDeleteTask = (taskId) => ({
+    type: types.RECEIVE_DELETE_TASK,
+    taskId
+})
+
 
 export const requestGetTasks = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
@@ -42,5 +47,24 @@ export const requestGetTasks = dispatch => () => {
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveTask())
+    })
+}
+
+export const deleteTask = dispatch => (taskId) => {
+    fetch(`http://localhost:3001/api/task/${taskId}`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+        console.log(response)
+    })
+    .then(body => {
+        dispatch(receiveDeleteTask(taskId))
+    })
+    .catch(() => {
+        dispatch(receiveDeleteTask())
     })
 }

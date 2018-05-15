@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {Row,Col, Progress, Button, Popover} from 'antd';
+import {Row,Col, Progress, Button, Popover, Icon, notification} from 'antd';
 import moment from 'moment'
 import './HomePage.css';
 import Agenda from './Agenda';
@@ -9,21 +9,43 @@ import { postEvent, getEvents, modifyEvent } from '../../../appState/actions/eve
 
 class HomePage extends Component{
   state = {
-    progress: 0,//((this.props.advancement.map(adv => adv["sumduration"]))/(8*60)*100).toFixed(1),
+    progress: 0,
     selectedDate: moment(),
   }
 
-
+  openNotification = () => {
+    const key = `open${Date.now()}`;
+    const btn = (
+      <Button type="danger" size="small" onClick={() => notification.close(key)}>
+        Fermer
+      </Button>
+    );
+    notification.config({
+      placement: "bottomRight",
+    });
+    notification.open({
+      style: {
+        textAlign: "justify"
+      },
+      duration: 0,
+      message: 'Task-Eat',
+      description: 'Task-Eat est une application web de gestion d\'activités enseignantes développé dans le cadre d\'un projet de fin d\'année de Master 1 au sein de l\'école d`\'ingénieur ISEN Brest par deux étudiants de Master 1 : Stéphane Perreaux et Thomas Orvain. Leur encadrant de projet, Pierre-Jean Bouvet, enseignant chercheur, utilisait un logiciel de gestion de tâches (Laboxy) depuis quelque temps mais n\'en était pas totalement satisfait. L\'encadrant proposa donc aux étudiants de réaliser un logiciel possédant de nouvelles fonctionnalités permettant de faire gagner du temps aux utilisateurs. Le site se devait d\'être ergonomique et d\'intégrer une fonction d\'analyse d\'agenda.',
+      key,
+      btn
+    });
+  };
+  
   componentWillReceiveProps(nextProps){
     if (this.props.events !== nextProps.events || nextProps.workdays !== this.props.workdays) 
       this.getProgressFromEvents(nextProps.events, nextProps.workdays);
   }
 
   handleDateSelected = selectedDate => {
-    this.props.getEvents(selectedDate.toDate())
     this.setState({
       selectedDate,
+      progress:0
     })
+    this.props.getEvents(selectedDate.toDate())
   }
 
   handleAddEvent = (partialEvent) => {
@@ -36,20 +58,17 @@ class HomePage extends Component{
 
   postDiversEvent = () => {
     const diversTask = this.props.tasks.find(task => task.isDiverse)
-    
     if (!diversTask) {
       // afficher un message d'erreur
       return
     }
     const diversProject = this.props.projects.find(project => project.id === diversTask.projectId)
     if (!diversProject) {
-      console.log("coucou2")
       return
     }
     const diversActivity = this.props.activities.find(activity => activity.id === diversProject.activityId)
     if (!diversActivity)
     {
-      console.log("coucou3")
       return
     }
 
@@ -102,7 +121,7 @@ class HomePage extends Component{
                 selectedDate={this.state.selectedDate}
               />
             </Row>
-            <Row style={{marginTop:"2rem"}}  type="flex" align="middle">
+            <Row style={{marginTop:"2rem", marginBottom:"2rem"}}  type="flex" align="middle">
               <Col span={20}>
               <Progress 
                 style={{width:"100%"}}
@@ -112,6 +131,13 @@ class HomePage extends Component{
               <Popover content={<Button onClick={this.postDiversEvent} style={{width:"100%"}}>Oui</Button>} placement="topRight" trigger="click" title="Êtes-vous sûr de vouloir terminer la journée ?"> 
                 <Button style={{width:"100%"}} type="danger" ghost>Remplir les trous ?</Button>
               </Popover>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={1} offset={23}>
+                <Button onClick={this.openNotification} type="primary" shape="circle">
+                  <Icon type="question" />
+                </Button>
               </Col>
             </Row>
           </Col>

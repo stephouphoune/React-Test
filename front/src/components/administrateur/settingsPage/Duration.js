@@ -1,6 +1,6 @@
 import React, {Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import {Select, InputNumber, Row, Button} from 'antd';
+import {Select, InputNumber, Row, Button, message} from 'antd';
 import { getWorkdays, modifyWorkdays } from '../../../appState/actions/workday'
 
 import './Duration.css';
@@ -56,6 +56,8 @@ class Duration extends Component{
 
   enterLoading = () => {
     this.props.modifyWorkdays(this.state.selectedWorkday.id, this.state.duration)
+    message.success(`Votre demande a bien été prise en compte !`);
+
   }
 
   render(){

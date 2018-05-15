@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {Line, Bar, Pie} from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 //inserer des donnees a traiter
 
 //*****************************
@@ -99,7 +99,7 @@ class PieChart extends Component{
   render() {
     if (this.props.stats.length === 0)
     {
-      return <img src="./smiley.png" className="smiley"/>
+      return <h1>Aucune tâche à analyser...</h1>
     }
     else
     {

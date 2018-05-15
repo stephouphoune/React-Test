@@ -35,7 +35,6 @@ router.get('/api/activity', (req, res) => {
             const activities = createActivities(rawActivities);
             //Pourquoi mettre des accolades autour de activities ?
             const responseBody = JSON.stringify({activities})
-            console.log('----------------2222222222------', responseBody)
             res.status(200)
             res.send(responseBody)
             res.end()
@@ -52,13 +51,50 @@ router.get('/api/activity', (req, res) => {
         res.status(500);
         res.end();
       }
-    
-    });
+});
     
 
 router.delete('/api/activity/:id', (req, res) => {
-  //Route qui décrit un paramètre d'entrée (c'est du routing)
-  const { id } = req.params
+      const activityId = req.params.id
+      try {
+          executeQuery(`DELETE FROM activity WHERE activity_id='${activityId}'`, (err, rows) => {
+              if (err) {
+                  res.status(500);
+                  res.end()
+                  console.log(err)
+                  return;
+              } 
+              res.end()
+          })
+      }
+      catch(e) {
+          res.status(500)
+          res.end()
+          console.log(e)
+      }
 })
+
+router.post('/api/activity', (req, res) => {
+  try {
+      const data = req.body
+      console.log('----------------',data)
+      executeQuery(`INSERT INTO activity VALUES (NULL, , 0, 0)`, (err, result) => {
+          if (err) {
+              res.status(500);
+              res.end()
+              console.log(err)
+              return;
+          }
+          
+          res.send(JSON.stringify({ result }))
+          res.end()
+      })
+  }
+  catch(e) {
+      res.status(500);
+      res.end();
+      console.log(e)
+    }
+});
 
 module.exports = router;

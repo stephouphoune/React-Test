@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Tree, Button, Icon, Input} from 'antd';
+import { Tree, Button, Icon, Input, message} from 'antd';
 import DropdownMenu from './DropdownMenu'
+import { deleteActivity, postActivity } from '../../../appState/actions/activity'
+import { deleteTask } from '../../../appState/actions/task'
 import './Arborescence.css';
 
 const TreeNode = Tree.TreeNode;
@@ -13,6 +15,7 @@ const isANumber = value => {
 class Arborescence extends Component{
 
     state = {
+        selectedName:'',
         menuVisible: false,
         menuLeft: 0,
         menuTop: 0,
@@ -44,6 +47,7 @@ class Arborescence extends Component{
     handleRightClick = ({ event, node }) => {
         const clickedElement = event.target
         const { pageX } = event
+        const selectedName = node.props.title
         const key = node.props.eventKey
         const {
             activityIndex,
@@ -53,6 +57,7 @@ class Arborescence extends Component{
         const { y, height } = clickedElement.getBoundingClientRect()
 
         this.setState({
+            selectedName,
             menuVisible: true,
             menuLeft: pageX,
             menuTop: y + height,
@@ -79,26 +84,32 @@ class Arborescence extends Component{
             mode: 'delete'
         })
         if (this.getDeleteTargetEntity() === 'activity'){
-            console.log("activity delete")
+            /*const activity = this.props.activities.find(activity => activity.name === this.state.selectedName)
+            this.props.deleteActivity(activity.id)
+            message.success(`"${this.state.selectedName}" a bien été supprimé !`);*/
         }
         if (this.getDeleteTargetEntity() === 'project'){
-            console.log("project delete")
+            /*const project = this.props.projects.find(project => project.name === this.state.selectedName)
+            this.props.deleteProject(project.id)
+            message.success(`"${this.state.selectedName}" a bien été supprimé !`)*/
         }
         if (this.getDeleteTargetEntity() === 'task'){
-            console.log("task delete")
+            const task = this.props.tasks.find(task => task.name === this.state.selectedName)
+            this.props.deleteTask(task.id)
+            message.success(`"${this.state.selectedName}" a bien été supprimé !`)
         }
     }
 
     handleNodeModify = () => {
-        this.setState({ mode: 'modify' })
-
+        this.setState({
+            mode: 'modify' 
+        })
     }
 
     handleNodeAdd = () => {
         this.setState({
             mode: 'add'
         })
-        console.log('add')
     }
 
     getInfoFromTreeNodeKey = key => {
@@ -202,8 +213,6 @@ class Arborescence extends Component{
         return 'task'
     }
 
-
-
     getTargetEntity = () => {
         const {
             mode
@@ -240,7 +249,7 @@ class Arborescence extends Component{
 
     onClickButton = () => {
         if (this.state.mode==='normal'){
-            console.log("post activity")
+            this.props.postActivity({name:this.state.activityInput})
         }
         if (this.getTargetEntity() === 'project' && this.state.mode === 'add'){
             console.log("post project")
@@ -370,7 +379,17 @@ const createNodeTreeFromStore = (store) => {
 }
 
 const mapStoreToProps = (store) => ({
-    nodeTree: createNodeTreeFromStore(store)
+    nodeTree: createNodeTreeFromStore(store),
+    activities: store.activity.activities,
+    tasks: store.task.tasks,
+    projects: store.project.projects
 })
 
-export default connect(mapStoreToProps)(Arborescence);
+const mapDispatchToProps = (dispatch) => ({
+    deleteActivity: deleteActivity(dispatch),
+    //deleteProject: deleteProject(dispatch),
+    deleteTask: deleteTask(dispatch),
+    postActivity: postActivity(dispatch),
+})
+
+export default connect(mapStoreToProps, mapDispatchToProps)(Arborescence);
