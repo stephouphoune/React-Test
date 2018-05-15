@@ -113,7 +113,8 @@ router.put('/api/activity/:id', (req, res) => {
                 return;
             }
             const newActivity = {
-                name: data.name
+                id: parseInt(activityId, 10),
+                name: data.name,
             }
             
             res.send(JSON.stringify({ activity: newActivity }))

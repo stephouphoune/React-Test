@@ -9,17 +9,6 @@ const taskReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
-        case types.REQUEST_GET_TASKS:
-        //Peut être penser à mettre une variable à true pour montrer
-        //que c'est en train de charger
-            return {
-                ...state,
-            }
-        case types.RECEIVE_GET_TASKS:
-            return {
-                ...state,
-                tasks:action.tasks
-            }
         case types.RECEIVE_DELETE_TASK:
             return {
                 ...state,
@@ -29,13 +18,22 @@ const taskReducer = (state = initialState, action) => {
                 })
             }
         case types.RECEIVE_POST_TASK:
-            return {
-                ...state
-            }
         case types.RECEIVE_MODIFY_TASK:
+        case types.RECEIVE_GET_TASKS:
             return {
                 ...state, 
-                tasks: action.tasks
+                tasks: action.tasks.reduce((newActivities, task) => {
+                    if (!task) return newActivities;
+
+                    const existingTaskIndex = newActivities.findIndex(item => item.id === task.id)
+                    if (existingTaskIndex === -1) { // si il est pas dedans
+                        return [...newActivities, task] // on l'ajoute
+                    }
+                    const tasks = [...newActivities]
+                    tasks[existingTaskIndex] = task;
+                    return tasks;
+
+                }, state.tasks)
             }
         default:
             return state

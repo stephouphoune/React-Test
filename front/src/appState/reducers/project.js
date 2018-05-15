@@ -9,25 +9,23 @@ const projectReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
-        case types.REQUEST_GET_PROJECTS:
-        //Peut être penser à mettre une variable à true pour montrer
-        //que c'est en train de charger
-            return {
-                ...state,
-            }
+        case types.RECEIVE_POST_PROJECT:
+        case types.RECEIVE_MODIFY_PROJECT:
         case types.RECEIVE_GET_PROJECTS:
             return {
-                ...state,
-                projects:action.projects
-            }
-        case types.RECEIVE_POST_PROJECT:
-            return {
-                ...state
-            }
-        case types.RECEIVE_MODIFY_PROJECT:
-            return {
                 ...state, 
-                projects: action.projects
+                projects: action.projects.reduce((newActivities, project) => {
+                    if (!project) return newActivities;
+
+                    const existingProjectIndex = newActivities.findIndex(item => item.id === project.id)
+                    if (existingProjectIndex === -1) { // si il est pas dedans
+                        return [...newActivities, project] // on l'ajoute
+                    }
+                    const projects = [...newActivities]
+                    projects[existingProjectIndex] = project;
+                    return projects;
+
+                }, state.projects)
             }
         default:
             return state

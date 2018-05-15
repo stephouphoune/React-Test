@@ -83,6 +83,34 @@ router.post('/api/task', (req, res) => {
   }
 });
 
+router.put('/api/task/:id', (req, res) => {
+  try {
+      const data = req.body
+      const taskId = req.params.id
+      executeQuery(`UPDATE task SET name='${data.name}' WHERE task_id='${taskId}'`, (err, result) => {
+          if (err) {
+              res.status(500);
+              res.end()
+              console.log(err)
+              return;
+          }
+          const newTask = {
+              id: parseInt(taskId, 10),
+              name: data.name
+          }
+          
+          res.send(JSON.stringify({ task: newTask }))
+          res.end()
+      })
+  }
+  catch(e) {
+      res.status(500);
+      res.end();
+      console.log(e)
+    }
+  
+});
+
 router.delete('/api/task/:id', (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params

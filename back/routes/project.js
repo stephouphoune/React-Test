@@ -77,6 +77,34 @@ router.post('/api/project', (req, res) => {
     }
 });
 
+router.put('/api/project/:id', (req, res) => {
+  try {
+      const data = req.body
+      const projectId = req.params.id
+      executeQuery(`UPDATE project SET name='${data.name}' WHERE project_id='${projectId}'`, (err, result) => {
+          if (err) {
+              res.status(500);
+              res.end()
+              console.log(err)
+              return;
+          }
+          const newProject = {
+              id: parseInt(projectId, 10),
+              name: data.name
+          }
+          
+          res.send(JSON.stringify({ project: newProject }))
+          res.end()
+      })
+  }
+  catch(e) {
+      res.status(500);
+      res.end();
+      console.log(e)
+    }
+  
+});
+
 router.delete('/api/project/:id', (req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params

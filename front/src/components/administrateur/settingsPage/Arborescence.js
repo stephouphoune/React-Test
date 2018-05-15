@@ -279,7 +279,8 @@ class Arborescence extends Component{
         if (this.state.mode==='normal' && this.state.activityInput!==''){
             this.props.postActivity({name:this.state.activityInput})
             this.setState({
-                activityInput:''
+                activityInput:'',
+                mode:'normal'
             })
             message.success(`'${this.state.activityInput}' a bien été ajouté en tant qu'activité' !`)
         }
@@ -287,7 +288,9 @@ class Arborescence extends Component{
             const activity = this.props.activities.find(activity => activity.id === this.props.nodeTree[this.state.activityIndex].id)
             this.props.postProject({name:this.state.projectInput, activityId:activity.id})
             this.setState({
-                projectInput:''
+                activityInput:'',
+                projectInput:'',
+                mode:'normal'
             })
             message.success(`'${this.state.projectInput}' a bien été ajouté en tant que projet !`)
         }
@@ -295,7 +298,10 @@ class Arborescence extends Component{
             const project = this.props.projects.find(project => project.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].id)
             this.props.postTask({name: this.state.taskInput, projectId: project.id})
             this.setState({
-                taskInput:''
+                activityInput:'',
+                projectInput:'',
+                taskInput:'',
+                mode:'normal'
             })
             message.success(`'${this.state.taskInput}' a bien été ajouté en tant que tâche !`)
         }
@@ -303,7 +309,8 @@ class Arborescence extends Component{
             const activity = this.props.activities.find(activity => activity.id === this.props.nodeTree[this.state.activityIndex].id)
             this.props.modifyActivity({name:this.state.activityInput, activityId:activity.id})
             this.setState({
-                activityInput:''
+                activityInput:'',
+                mode:'normal'
             })
             message.success(`La modification a bien été prise en compte !`)
         }
@@ -311,18 +318,23 @@ class Arborescence extends Component{
             const project = this.props.projects.find(project => project.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].id)
             this.props.modifyProject({name:this.state.projectInput, projectId:project.id})
             this.setState({
-                projectInput:''
+                activityInput:'',
+                projectInput:'',
+                mode:'normal'
             })
             message.success(`La modification a bien été prise en compte !`)
         }
-        if (this.getTargetEntity() === 'task' && this.state.mode === 'modify' && this.state.taskInput!==''){
-            const task = this.props.tasks.fin(task => task.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].tasks[this.state.taskIndex].id)
+        /*if (this.getTargetEntity() === 'task' && this.state.mode === 'modify' && this.state.taskInput!==''){
+            const task = this.props.tasks.find(task => task.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].tasks[this.state.taskIndex].id)
             this.props.modifyTask({name: this.state.taskInput, taskId: task.id})
             this.setState({
-                taskInput:''
+                activityInput:'',
+                projectInput:'',
+                taskInput:'',
+                mode:'normal'
             })
             message.success(`La modification a bien été prise en compte !`)
-        }
+        }*/
         
     }
 
