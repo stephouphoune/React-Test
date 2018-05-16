@@ -13,6 +13,15 @@ class HomePage extends Component{
     selectedDate: moment(),
   }
 
+  componentDidMount(){
+    this.props.getEvents(this.state.selectedDate.toDate())
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props.events !== nextProps.events || nextProps.workdays !== this.props.workdays) 
+      this.getProgressFromEvents(nextProps.events, nextProps.workdays);
+  }
+
   openNotification = () => {
     const key = `open${Date.now()}`;
     const btn = (
@@ -34,11 +43,6 @@ class HomePage extends Component{
       btn
     });
   };
-  
-  componentWillReceiveProps(nextProps){
-    if (this.props.events !== nextProps.events || nextProps.workdays !== this.props.workdays) 
-      this.getProgressFromEvents(nextProps.events, nextProps.workdays);
-  }
 
   handleDateSelected = selectedDate => {
     this.setState({
@@ -59,16 +63,18 @@ class HomePage extends Component{
   postDiversEvent = () => {
     const diversTask = this.props.tasks.find(task => task.isDiverse)
     if (!diversTask) {
-      // afficher un message d'erreur
+      console.log('Pas de tache divers')
       return
     }
     const diversProject = this.props.projects.find(project => project.id === diversTask.projectId)
     if (!diversProject) {
+      console.log('Pas de projet Divers')
       return
     }
     const diversActivity = this.props.activities.find(activity => activity.id === diversProject.activityId)
     if (!diversActivity)
     {
+      console.log('Pas d\'activité Divers')
       return
     }
 
@@ -78,15 +84,18 @@ class HomePage extends Component{
     }, 0)
     const currentDayOfWeek = parseInt(this.state.selectedDate.format('e'), 10)
     const workDay = this.props.workdays.find(item => item.id === currentDayOfWeek)
-
-    this.props.postEvent({
-      activity: diversActivity, 
-      project: diversProject, 
-      task: diversTask, 
-      description: '', 
-      duration: (workDay.duration*60)-duration, 
-      date: this.state.selectedDate
-    })
+    
+    if (this.state.progress !== 100)
+    {
+      this.props.postEvent({
+        activity: diversActivity, 
+        project: diversProject, 
+        task: diversTask, 
+        description: '', 
+        duration: (workDay.duration*60)-duration, 
+        date: this.state.selectedDate
+      })
+    }
   }
 
   getProgressFromEvents = (events, workdays = this.props.workdays) => {

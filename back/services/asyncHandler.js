@@ -1,10 +1,10 @@
-const asyncHandler = handler => (req, res, next) => {
-    handler(req, res)
-        .then(() => next())
-        .catch((e) => {
-            console.log('An error occured', e)
-            res.end(500)
-        })
-}
-
+const asyncHandler = fn =>
+  (req, res, next) => {
+    Promise.resolve(fn(req, res, next))
+      .catch(e => {
+       res.status(500);
+       res.end();
+       next()
+     });
+  };
 module.exports = asyncHandler;

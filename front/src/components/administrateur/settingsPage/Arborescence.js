@@ -85,7 +85,17 @@ class Arborescence extends Component{
 
     handleNodeDelete = () => {
         this.setState({
-            mode: 'delete'
+            selectedName:'',
+            menuVisible: false,
+            menuLeft: 0,
+            menuTop: 0,
+            activityIndex: null,
+            projectIndex: null,
+            taskIndex: null,
+            mode: 'normal', 
+            activityInput:'',
+            projectInput:'',
+            taskInput:''
         })
         const activityNode = this.props.nodeTree[this.state.activityIndex]
         const projectNode = activityNode && activityNode.projects[this.state.projectIndex]
@@ -94,16 +104,20 @@ class Arborescence extends Component{
             const activity = this.props.activities.find(activity => activity.id === activityNode.id)
             this.props.deleteActivity(activity.id)
             message.success(`"${activity.name}" a bien été supprimé !`);
+
+            return
         }
         if (this.getDeleteTargetEntity() === 'project'){
             const project = this.props.projects.find(project => project.id === projectNode.id)
             this.props.deleteProject(project.id)
             message.success(`"${project.name}" a bien été supprimé !`)
+            return
         }
         if (this.getDeleteTargetEntity() === 'task'){
             const task = this.props.tasks.find(task => task.id === taskNode.id)
             this.props.deleteTask(task.id)
             message.success(`"${task.name}" a bien été supprimé !`)
+            return
         }
     }
 

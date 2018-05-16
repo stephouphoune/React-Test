@@ -62,7 +62,7 @@ router.post('/api/activity', (req, res) => {
     }
     try {
       const data = req.body
-      executeQuery(`INSERT INTO activity VALUES (NULL, '${data.name}' , 0, 0)`, (err, result) => {
+      executeQuery(`INSERT INTO activity VALUES (NULL, '${data.name}' , 1, 0)`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()

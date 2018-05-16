@@ -38,7 +38,9 @@ export const requestGetTasks = dispatch => () => {
     fetch(`http://localhost:3001/api/task`, {
         method: 'GET',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
         }
     })
     
@@ -57,9 +59,6 @@ export const requestGetTasks = dispatch => () => {
             const data=JSON.parse(body)
             const { tasks } = data
             dispatch(receiveTask(tasks))
-            /*requestGetActivities(dispatch)()
-            requestGetProjects(dispatch)()
-            getEvents(dispatch)()*/
             
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
@@ -84,12 +83,9 @@ export const deleteTask = dispatch => (taskId) => {
         console.log(response)
     })
     .then(body => {
+        console.log('------------------------------------------')
         dispatch(receiveDeleteTask(taskId))
-
-
-
-
-
+        requestGetTasks(dispatch)()
     })
     .catch(() => {
         dispatch(receiveDeleteTask())

@@ -64,6 +64,7 @@ class Manage extends Component{
     const task = this.props.tasks.find(item => item.id === event.taskId)
     const project = this.props.projects.find(item => item.id === task.projectId)
     const activity = this.props.activities.find(item => item.id === project.activityId)
+    console.log(task, activity, project)
     const duration = moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()
     this.setState({
       selectedActivity: activity,
@@ -71,14 +72,15 @@ class Manage extends Component{
       selectedTask: task,
       duration,
       description: event.description, 
-      isModifying: true,
+      isModifying: task && project && activity ? true : false,
       modifyingEvent: event
     })
   }
   
 
   handleAddEvent = () => {
-    if (this.state.isModifying) {
+    if (this.state.isModifying) 
+    {
       this.props.onEditEvent({
         oldEvent: this.state.modifyingEvent,
         activity: this.state.selectedActivity,
@@ -210,7 +212,8 @@ const mapStateToProps = store => ({
   labels: store.label.labels,
   users: store.users.users,
   isAdmin: store.user.isAdmin,
-  tasks: store.task.tasks
+  tasks: store.task.tasks, 
+  events: store.event.events
 })
 
 export default connect(

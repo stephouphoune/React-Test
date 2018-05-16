@@ -24,7 +24,6 @@ class App extends Component {
       this.props.getUsers()
       this.props.getTasks()
       this.props.getWorkdays()
-      this.props.getEvents()
     }
   }
 

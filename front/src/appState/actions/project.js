@@ -1,5 +1,6 @@
 import * as types from '../types/project'
 import store from '../createReduxStore'
+import { requestGetTasks } from './task'
 
 const requestProject = () => ({
     type: types.REQUEST_GET_PROJECTS
@@ -84,7 +85,6 @@ export const postProject = dispatch => ({name, activityId}) => {
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
-            console.log('-----------', data)
             const { project } = data
             dispatch(receivePostProject(project))
     }).catch(() => {
@@ -118,7 +118,6 @@ export const modifyProject = dispatch => ({name, projectId, activityId}) => {
     })
     .then(body => {
         const data = JSON.parse(body)
-        console.log('---------',data)
         const { project } = data
         dispatch(receiveModifyProject(project))
     })
@@ -145,6 +144,7 @@ export const deleteProject = dispatch => (projectId) => {
     })
     .then(body => {
         dispatch(receiveDeleteProject(projectId))
+        requestGetTasks(dispatch)()
     })
     .catch(() => {
         dispatch(receiveDeleteProject())
