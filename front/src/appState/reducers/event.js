@@ -9,6 +9,13 @@ const eventReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
+        case types.DELETE_EVENTS:
+            return {
+                ...state,
+                events: state.events.filter(({ id }) => 
+                    action.eventIds.indexOf(id) === -1
+                )
+            }
         case types.RECEIVE_POST_EVENT:
         case types.RECEIVE_GET_EVENTS:
         case types.RECEIVE_MODIFY_EVENT:

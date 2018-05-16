@@ -9,6 +9,13 @@ const taskReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
+        case types.DELETE_TASKS:
+            return {
+                ...state,
+                tasks: state.tasks.filter(({ id }) => 
+                    action.taskIds.indexOf(id) === -1
+                )
+            }
         case types.RECEIVE_DELETE_TASK:
             return {
                 ...state,

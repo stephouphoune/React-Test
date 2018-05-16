@@ -111,7 +111,6 @@ export const deleteActivity = dispatch => (activityId) => {
     })
     .then(body => {
         dispatch(receiveDeleteActivity(activityId))
-        requestGetActivities(dispatch)()
     })
     .catch(() => {
         dispatch(receiveDeleteActivity())

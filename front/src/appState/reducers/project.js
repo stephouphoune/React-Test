@@ -9,6 +9,13 @@ const projectReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
+        case types.DELETE_PROJECTS:
+            return {
+                ...state,
+                projects: state.projects.filter(({ id }) => 
+                    action.projectIds.indexOf(id) === -1
+                )
+            }
         case types.RECEIVE_DELETE_PROJECT:
             return {
                 ...state,

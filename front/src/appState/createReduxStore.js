@@ -13,6 +13,8 @@ import workdayReducer from './reducers/workday'
 import eventReducer from './reducers/event'
 import statsReducer from './reducers/stats'
 
+import deleteEntityMiddleware from './middleware/deleteEntity'
+
 const persistConfig = {
     key: 'root',
     storage
@@ -31,6 +33,7 @@ const store = createStore(
         stats:statsReducer,
     }),
     compose(
+        applyMiddleware(deleteEntityMiddleware),
         applyMiddleware(createLogger())
     )
 )

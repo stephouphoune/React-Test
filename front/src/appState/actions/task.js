@@ -28,6 +28,10 @@ const receiveModifyTask = (task) => ({
     tasks:[task]
 })
 
+export const deleteTasks = taskIds => ({
+    type: types.DELETE_TASKS,
+    taskIds
+})
 
 export const requestGetTasks = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
@@ -80,12 +84,9 @@ export const deleteTask = dispatch => (taskId) => {
             throw Error('')
         }
         return response.text()
-        console.log(response)
     })
     .then(body => {
-        console.log('------------------------------------------')
         dispatch(receiveDeleteTask(taskId))
-        requestGetTasks(dispatch)()
     })
     .catch(() => {
         dispatch(receiveDeleteTask())

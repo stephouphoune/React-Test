@@ -37,6 +37,10 @@ const receiveModifyEvent = (event) => ({
     events:[event]
 })
 
+export const deleteEvents = (eventIds) => ({
+    type: types.DELETE_EVENTS,
+    eventIds
+})
 
 
 export const postEvent = dispatch => ({ activity, project, task, description, duration, date }) => {

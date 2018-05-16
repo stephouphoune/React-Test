@@ -26,6 +26,11 @@ const receiveModifyProject = (project) => ({
     projects:[project]
 })
 
+export const deleteProjects = (projectIds) => ({
+    type: types.DELETE_PROJECTS,
+    projectIds
+})
+
 export const requestGetProjects = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestProject())
@@ -140,11 +145,9 @@ export const deleteProject = dispatch => (projectId) => {
             throw Error('')
         }
         return response.text()
-        console.log(response)
     })
     .then(body => {
         dispatch(receiveDeleteProject(projectId))
-        requestGetTasks(dispatch)()
     })
     .catch(() => {
         dispatch(receiveDeleteProject())
