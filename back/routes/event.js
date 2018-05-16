@@ -2,6 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
+const entityManager = require('../services/entityManager')
+const asyncHandler = require('../services/asyncHandler')
 
 const createEvent = rawEvent => ({
     id: rawEvent.event_id,
@@ -52,6 +54,7 @@ router.post('/api/event', (req, res) => {
                 console.log(err)
                 return;
             }
+            
             const newEventId = result.insertId
             const newEvent = {
                 id: newEventId,

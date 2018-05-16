@@ -22,7 +22,8 @@ class Login extends Component {
         return (
             <div className="Login">
                     <Form.Item className="LoginForm">
-                        <img src="./task-eat.png" className="TaskEat"/>
+                            <img src="./isen.png" className="Isen"/>
+                            <img src="./task-eat.png" className="TaskEat"/>
                         <Input 
                             className="InputUsername"
                             value={username}

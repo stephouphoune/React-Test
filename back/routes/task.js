@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
+const entityManager = require('../services/entityManager')
+const asyncHandler = require('../services/asyncHandler')
 
 const createTask = rawTask => ({
   id: rawTask.task_id,
@@ -71,8 +73,13 @@ router.post('/api/task', (req, res) => {
             console.log(err)
             return;
         }
-        
-        res.send(JSON.stringify({ result }))
+        const newTask = {
+          id:result.insertId,
+          name:data.name,
+          projectId:data.projectId
+        }
+      
+        res.send(JSON.stringify({ task: newTask }))
         res.end()
     })
   }
@@ -86,6 +93,7 @@ router.post('/api/task', (req, res) => {
 router.put('/api/task/:id', (req, res) => {
   try {
       const data = req.body
+      console.log('-----------', data)
       const taskId = req.params.id
       executeQuery(`UPDATE task SET name='${data.name}' WHERE task_id='${taskId}'`, (err, result) => {
           if (err) {
@@ -96,7 +104,8 @@ router.put('/api/task/:id', (req, res) => {
           }
           const newTask = {
               id: parseInt(taskId, 10),
-              name: data.name
+              name: data.name,
+              projectId: data.projectId
           }
           
           res.send(JSON.stringify({ task: newTask }))
@@ -111,9 +120,12 @@ router.put('/api/task/:id', (req, res) => {
   
 });
 
-router.delete('/api/task/:id', (req, res) => {
+router.delete('/api/task/:id', asyncHandler(async(req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params
-})
+
+  await entityManager.deleteTask(id)
+  res.end()
+}))
 
 module.exports = router;

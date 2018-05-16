@@ -22,14 +22,14 @@ const taskReducer = (state = initialState, action) => {
         case types.RECEIVE_GET_TASKS:
             return {
                 ...state, 
-                tasks: action.tasks.reduce((newActivities, task) => {
-                    if (!task) return newActivities;
+                tasks: action.tasks.reduce((newTasks, task) => {
+                    if (!task) return newTasks;
 
-                    const existingTaskIndex = newActivities.findIndex(item => item.id === task.id)
+                    const existingTaskIndex = newTasks.findIndex(item => item.id === task.id)
                     if (existingTaskIndex === -1) { // si il est pas dedans
-                        return [...newActivities, task] // on l'ajoute
+                        return [...newTasks, task] // on l'ajoute
                     }
-                    const tasks = [...newActivities]
+                    const tasks = [...newTasks]
                     tasks[existingTaskIndex] = task;
                     return tasks;
 

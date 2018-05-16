@@ -84,6 +84,7 @@ export const postActivity = dispatch => ({name}) => {
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
+            console.log('-----------', data)
             const { activity } = data
             dispatch(receivePostActivity(activity))
     }).catch(() => {
@@ -95,6 +96,11 @@ export const postActivity = dispatch => ({name}) => {
 export const deleteActivity = dispatch => (activityId) => {
     fetch(`http://localhost:3001/api/activity/${activityId}`, {
         method: 'DELETE',
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
     })
     .then(response => {
         if (response.status !== 200) {

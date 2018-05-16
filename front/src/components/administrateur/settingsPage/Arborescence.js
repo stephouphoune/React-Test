@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Tree, Button, Icon, Input, message} from 'antd';
 import DropdownMenu from './DropdownMenu'
-import { postActivity, modifyActivity } from '../../../appState/actions/activity'
-import { postProject, modifyProject } from '../../../appState/actions/project'
-import { postTask, modifyTask } from '../../../appState/actions/task'
+import { postActivity, modifyActivity, deleteActivity } from '../../../appState/actions/activity'
+import { postProject, modifyProject, deleteProject } from '../../../appState/actions/project'
+import { postTask, modifyTask, deleteTask } from '../../../appState/actions/task'
 import './Arborescence.css';
 
 const TreeNode = Tree.TreeNode;
@@ -87,57 +87,66 @@ class Arborescence extends Component{
         this.setState({
             mode: 'delete'
         })
+        const activityNode = this.props.nodeTree[this.state.activityIndex]
+        const projectNode = activityNode && activityNode.projects[this.state.projectIndex]
+        const taskNode = projectNode && projectNode.tasks[this.state.taskIndex]
         if (this.getDeleteTargetEntity() === 'activity'){
-            /*const activity = this.props.activities.find(activity => activity.name === this.state.selectedName)
+            const activity = this.props.activities.find(activity => activity.id === activityNode.id)
             this.props.deleteActivity(activity.id)
-            message.success(`"${this.state.selectedName}" a bien été supprimé !`);*/
+            message.success(`"${activity.name}" a bien été supprimé !`);
         }
         if (this.getDeleteTargetEntity() === 'project'){
-            /*const project = this.props.projects.find(project => project.name === this.state.selectedName)
+            const project = this.props.projects.find(project => project.id === projectNode.id)
             this.props.deleteProject(project.id)
-            message.success(`"${this.state.selectedName}" a bien été supprimé !`)*/
+            message.success(`"${project.name}" a bien été supprimé !`)
         }
         if (this.getDeleteTargetEntity() === 'task'){
-            /*const task = this.props.tasks.find(task => task.name === this.state.selectedName)
+            const task = this.props.tasks.find(task => task.id === taskNode.id)
             this.props.deleteTask(task.id)
-            message.success(`"${this.state.selectedName}" a bien été supprimé !`)*/
+            message.success(`"${task.name}" a bien été supprimé !`)
         }
     }
 
     handleNodeModify = () => {
+        const {
+            nodeTree
+        } = this.props
+        const {
+            activityIndex, 
+            projectIndex,
+            taskIndex
+        } = this.state
+        const activity = nodeTree[activityIndex]
+        const project = activity && activity.projects[projectIndex]
+        const task = project && project.tasks[taskIndex]
+
         this.setState({
             mode: 'modify',
-            activityInput: this.props.nodeTree[this.state.activityIndex].name,
+            activityInput: activity ? activity.name : '',
+            projectInput: project ? project.name : '',  
+            taskInput: task ? task.name : ''
         })
-        if (isANumber(this.state.projectIndex))
-        {
-            const projectInput = this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].name
-            this.setState({
-                projectInput
-            })
-        }
-        if (isANumber(this.state.taskIndex))
-        {
-            const taskInput = this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].tasks[this.state.taskIndex].name
-            this.setState({
-                taskInput
-            })
-        }
     }
 
     handleNodeAdd = () => {
+        const {
+            nodeTree
+        } = this.props
+        const {
+            activityIndex, 
+            projectIndex,
+            taskIndex
+        } = this.state
+        const activity = nodeTree[activityIndex]
+        const project = activity && activity.projects[projectIndex]
+        const task = project && project.tasks[taskIndex]
+
         this.setState({
             mode: 'add',
-            activityInput: this.props.nodeTree[this.state.activityIndex].name,
-            
+            activityInput: activity ? activity.name : '',
+            projectInput: project ? project.name : '',  
+            taskInput: task ? task.name : ''
         })
-        if (isANumber(this.state.projectIndex))
-        {
-            const projectInput = this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].name
-            this.setState({
-                projectInput
-            })
-        }
     }
 
     getInfoFromTreeNodeKey = key => {
@@ -280,62 +289,69 @@ class Arborescence extends Component{
             this.props.postActivity({name:this.state.activityInput})
             this.setState({
                 activityInput:'',
-                mode:'normal'
             })
             message.success(`'${this.state.activityInput}' a bien été ajouté en tant qu'activité' !`)
+            return;
         }
-        if (this.getTargetEntity() === 'project' && this.state.mode === 'add' && this.state.projectInput!==''){
-            const activity = this.props.activities.find(activity => activity.id === this.props.nodeTree[this.state.activityIndex].id)
-            this.props.postProject({name:this.state.projectInput, activityId:activity.id})
-            this.setState({
-                activityInput:'',
-                projectInput:'',
-                mode:'normal'
-            })
-            message.success(`'${this.state.projectInput}' a bien été ajouté en tant que projet !`)
-        }
-        if (this.getTargetEntity() === 'task' && this.state.mode === 'add' && this.state.taskInput!==''){
-            const project = this.props.projects.find(project => project.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].id)
-            this.props.postTask({name: this.state.taskInput, projectId: project.id})
-            this.setState({
-                activityInput:'',
-                projectInput:'',
-                taskInput:'',
-                mode:'normal'
-            })
-            message.success(`'${this.state.taskInput}' a bien été ajouté en tant que tâche !`)
-        }
-        if (this.getTargetEntity() === 'activity' && this.state.mode === 'modify' && this.state.activityInput!==''){
-            const activity = this.props.activities.find(activity => activity.id === this.props.nodeTree[this.state.activityIndex].id)
-            this.props.modifyActivity({name:this.state.activityInput, activityId:activity.id})
-            this.setState({
-                activityInput:'',
-                mode:'normal'
-            })
-            message.success(`La modification a bien été prise en compte !`)
-        }
-        if (this.getTargetEntity() === 'project' && this.state.mode === 'modify' && this.state.projectInput!==''){
-            const project = this.props.projects.find(project => project.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].id)
-            this.props.modifyProject({name:this.state.projectInput, projectId:project.id})
-            this.setState({
-                activityInput:'',
-                projectInput:'',
-                mode:'normal'
-            })
-            message.success(`La modification a bien été prise en compte !`)
-        }
-        /*if (this.getTargetEntity() === 'task' && this.state.mode === 'modify' && this.state.taskInput!==''){
-            const task = this.props.tasks.find(task => task.id === this.props.nodeTree[this.state.activityIndex].projects[this.state.projectIndex].tasks[this.state.taskIndex].id)
-            this.props.modifyTask({name: this.state.taskInput, taskId: task.id})
-            this.setState({
-                activityInput:'',
-                projectInput:'',
-                taskInput:'',
-                mode:'normal'
-            })
-            message.success(`La modification a bien été prise en compte !`)
-        }*/
+        if (this.state.mode === 'add' || this.state.mode === 'modify')
+        {
+            const activityNode = this.props.nodeTree[this.state.activityIndex]
+            const projectNode = activityNode && activityNode.projects[this.state.projectIndex]
+            const taskNode = projectNode && projectNode.tasks[this.state.taskIndex]
         
+            if (this.getTargetEntity() === 'project' && this.state.mode === 'add' && this.state.projectInput!==''){
+                const activity = this.props.activities.find(activity => activity.id === activityNode.id)
+                this.props.postProject({name:this.state.projectInput, activityId:activity.id})
+                this.setState({
+                    activityInput:'',
+                    mode:'normal'
+                })
+                message.success(`'${this.state.projectInput}' a bien été ajouté en tant que projet !`)
+                return
+            }
+            if (this.getTargetEntity() === 'task' && this.state.mode === 'add' && this.state.taskInput!==''){
+                const project = this.props.projects.find(project => project.id === projectNode.id)
+                this.props.postTask({name: this.state.taskInput, projectId: project.id})
+                this.setState({
+                    activityInput:'',
+                    mode:'normal'
+                })
+                message.success(`'${this.state.taskInput}' a bien été ajouté en tant que tâche !`)
+                return
+            }
+            if (this.getTargetEntity() === 'activity' && this.state.mode === 'modify' && this.state.activityInput!==''){
+                const activity = this.props.activities.find(activity => activity.id === activityNode.id)
+                this.props.modifyActivity({name:this.state.activityInput, activityId:activity.id})
+                this.setState({
+                    activityInput:'',
+                    mode:'normal'
+                })
+                message.success(`La modification a bien été prise en compte !`)
+                return
+            }
+            if (this.getTargetEntity() === 'project' && this.state.mode === 'modify' && this.state.projectInput!==''){
+                const activity = this.props.activities.find(activity => activity.id === activityNode.id)
+                const project = this.props.projects.find(project => project.id === projectNode.id)
+                this.props.modifyProject({name:this.state.projectInput, projectId:project.id, activityId:activity.id})
+                this.setState({
+                    activityInput:'',
+                    mode:'normal'
+                })
+                message.success(`La modification a bien été prise en compte !`)
+                return
+            }
+            if (this.getTargetEntity() === 'task' && this.state.mode === 'modify' && this.state.taskInput!==''){
+                const project = this.props.projects.find(project => project.id === projectNode.id)
+                const task = this.props.tasks.find(task => task.id === taskNode.id)
+                this.props.modifyTask({name: this.state.taskInput, taskId: task.id, projectId: project.id})
+                this.setState({
+                    activityInput:'',
+                    mode:'normal'
+                })
+                message.success(`La modification a bien été prise en compte !`)
+                return
+            }
+        }
     }
 
     onClickCancel = () => {
@@ -463,6 +479,9 @@ const mapDispatchToProps = (dispatch) => ({
     modifyActivity: modifyActivity(dispatch),
     modifyProject: modifyProject(dispatch),
     modifyTask: modifyTask(dispatch),
+    deleteTask: deleteTask(dispatch),
+    deleteProject: deleteProject(dispatch),
+    deleteActivity: deleteActivity(dispatch)
 })
 
 export default connect(mapStoreToProps, mapDispatchToProps)(Arborescence);

@@ -15,6 +15,11 @@ const receivePostProject = (project) => ({
     projects: [project]
 })
 
+const receiveDeleteProject = (projectId) => ({
+    type: types.RECEIVE_DELETE_PROJECT,
+    projectId
+})
+
 const receiveModifyProject = (project) => ({
     type: types.RECEIVE_MODIFY_PROJECT,
     projects:[project]
@@ -79,6 +84,7 @@ export const postProject = dispatch => ({name, activityId}) => {
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
+            console.log('-----------', data)
             const { project } = data
             dispatch(receivePostProject(project))
     }).catch(() => {
@@ -87,11 +93,12 @@ export const postProject = dispatch => ({name, activityId}) => {
     })
 }
 
-export const modifyProject = dispatch => ({name, projectId}) => {
+export const modifyProject = dispatch => ({name, projectId, activityId}) => {
 
     const data = {
         name, 
-        projectId
+        projectId, 
+        activityId
     }
 
     fetch(`http://localhost:3001/api/project/${projectId}`, {
@@ -111,10 +118,35 @@ export const modifyProject = dispatch => ({name, projectId}) => {
     })
     .then(body => {
         const data = JSON.parse(body)
+        console.log('---------',data)
         const { project } = data
         dispatch(receiveModifyProject(project))
     })
     .catch(() => {
         dispatch(receiveModifyProject())
+    })
+}
+
+export const deleteProject = dispatch => (projectId) => {
+    fetch(`http://localhost:3001/api/project/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+        console.log(response)
+    })
+    .then(body => {
+        dispatch(receiveDeleteProject(projectId))
+    })
+    .catch(() => {
+        dispatch(receiveDeleteProject())
     })
 }

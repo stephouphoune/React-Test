@@ -9,19 +9,27 @@ const projectReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
+        case types.RECEIVE_DELETE_PROJECT:
+            return {
+                ...state,
+                projects: state.projects.filter(project => {
+                    if (project.id === action.projectId) return false //on le garde pas
+                    return true
+                })
+            }
         case types.RECEIVE_POST_PROJECT:
         case types.RECEIVE_MODIFY_PROJECT:
         case types.RECEIVE_GET_PROJECTS:
             return {
                 ...state, 
-                projects: action.projects.reduce((newActivities, project) => {
-                    if (!project) return newActivities;
+                projects: action.projects.reduce((newProjects, project) => {
+                    if (!project) return newProjects;
 
-                    const existingProjectIndex = newActivities.findIndex(item => item.id === project.id)
+                    const existingProjectIndex = newProjects.findIndex(item => item.id === project.id)
                     if (existingProjectIndex === -1) { // si il est pas dedans
-                        return [...newActivities, project] // on l'ajoute
+                        return [...newProjects, project] // on l'ajoute
                     }
-                    const projects = [...newActivities]
+                    const projects = [...newProjects]
                     projects[existingProjectIndex] = project;
                     return projects;
 

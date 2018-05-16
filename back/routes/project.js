@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
+const entityManager = require('../services/entityManager')
+const asyncHandler = require('../services/asyncHandler')
 
 const createProject = rawProject => ({
   id: rawProject.project_id,
@@ -36,8 +38,7 @@ router.get('/api/project', (req, res) => {
             res.send(responseBody)
             res.end()
             return;
-      
-           } catch (e) {
+          } catch (e) {
             res.status(500)
             res.end()
             return;
@@ -48,7 +49,6 @@ router.get('/api/project', (req, res) => {
         res.status(500);
         res.end();
       }
-    
     });
 
 router.post('/api/project', (req, res) => {
@@ -65,8 +65,12 @@ router.post('/api/project', (req, res) => {
               console.log(err)
               return;
           }
-          
-          res.send(JSON.stringify({ result }))
+          const newProject = {
+            id:result.insertId,
+            name:data.name,
+            activityId: data.activityId
+          }
+          res.send(JSON.stringify({ project: newProject }))
           res.end()
       })
   }
@@ -80,6 +84,7 @@ router.post('/api/project', (req, res) => {
 router.put('/api/project/:id', (req, res) => {
   try {
       const data = req.body
+      console.log('-------------------', data)
       const projectId = req.params.id
       executeQuery(`UPDATE project SET name='${data.name}' WHERE project_id='${projectId}'`, (err, result) => {
           if (err) {
@@ -90,9 +95,10 @@ router.put('/api/project/:id', (req, res) => {
           }
           const newProject = {
               id: parseInt(projectId, 10),
-              name: data.name
+              name: data.name,
+              activityId:data.activityId
           }
-          
+          console.log('-------------',newProject)
           res.send(JSON.stringify({ project: newProject }))
           res.end()
       })
@@ -105,9 +111,12 @@ router.put('/api/project/:id', (req, res) => {
   
 });
 
-router.delete('/api/project/:id', (req, res) => {
+router.delete('/api/project/:id', asyncHandler(async(req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params
-})
+
+  await entityManager.deleteProject(id)
+  res.end()
+}))
 
 module.exports = router;

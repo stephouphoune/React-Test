@@ -1,5 +1,8 @@
 import * as types from '../types/task'
 import store from '../createReduxStore'
+import { requestGetActivities } from './activity'
+import { requestGetProjects } from './project'
+import { getEvents } from './event'
 
 const requestTask = () => ({
     type: types.REQUEST_GET_TASKS
@@ -54,6 +57,10 @@ export const requestGetTasks = dispatch => () => {
             const data=JSON.parse(body)
             const { tasks } = data
             dispatch(receiveTask(tasks))
+            /*requestGetActivities(dispatch)()
+            requestGetProjects(dispatch)()
+            getEvents(dispatch)()*/
+            
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveTask())
@@ -63,6 +70,11 @@ export const requestGetTasks = dispatch => () => {
 export const deleteTask = dispatch => (taskId) => {
     fetch(`http://localhost:3001/api/task/${taskId}`, {
         method: 'DELETE',
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
     })
     .then(response => {
         if (response.status !== 200) {
@@ -73,6 +85,11 @@ export const deleteTask = dispatch => (taskId) => {
     })
     .then(body => {
         dispatch(receiveDeleteTask(taskId))
+
+
+
+
+
     })
     .catch(() => {
         dispatch(receiveDeleteTask())
@@ -115,14 +132,15 @@ export const postTask = dispatch => ({name, projectId}) => {
     })
 }
 
-export const modifyTask = dispatch => ({name, taskId}) => {
+export const modifyTask = dispatch => ({name, taskId, projectId}) => {
 
     const data = {
         name, 
-        taskId
+        taskId,
+        projectId
     }
 
-    fetch(`http://localhost:3001/api/activity/${taskId}`, {
+    fetch(`http://localhost:3001/api/task/${taskId}`, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
