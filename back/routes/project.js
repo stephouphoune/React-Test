@@ -14,7 +14,7 @@ const createProjects = rawProjects => rawProjects.map(createProject)
 
 router.get('/api/project', (req, res) => {
     try {
-        executeQuery(`SELECT * FROM project`, (err,rows) => {
+        executeQuery(`SELECT * FROM project WHERE isDeleted='0'`, (err,rows) => {
           if (err) {
             res.status(500);
             res.end()

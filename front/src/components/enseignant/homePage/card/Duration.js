@@ -10,7 +10,7 @@ class Duration extends Component{
          size="large"
          value={this.props.duration}
          min={15}
-         max={300}
+         max={1500}
          step={15}
          onChange={this.props.onChange}
          formatter={value => `${value}min`}

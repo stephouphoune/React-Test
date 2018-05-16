@@ -14,7 +14,7 @@ const createActivities = rawActivities => rawActivities.map(createActivity)
 /* GET Activity */
 router.get('/api/activity', (req, res) => {
     try {
-        executeQuery('SELECT * FROM activity', (err,rows) => {
+        executeQuery(`SELECT * FROM activity WHERE isDeleted='0'`, (err,rows) => {
           if (err) {
             res.status(500);
             res.end()

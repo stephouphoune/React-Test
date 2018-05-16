@@ -89,7 +89,7 @@ router.get('/api/event', (req, res) => {
         const date = req.query.date
         console.log(date)
         const user = req.user
-        executeQuery(`SELECT * FROM event WHERE ${getMysqlDateCompare(new Date(date))} AND username='${user.username}'`, (err, rows) => {
+        executeQuery(`SELECT * FROM event WHERE ${getMysqlDateCompare(new Date(date))} AND username='${user.username}' AND isDeleted='0'`, (err, rows) => {
             if (err) {
                 res.status(500);
                 res.end()

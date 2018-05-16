@@ -46,7 +46,7 @@ export default store => next => action => {
   
   }
 
-  if (action.type === activityTypes.RECEIVE_DELETE_PROJECT) {
+  if (action.type === projectTypes.RECEIVE_DELETE_PROJECT) {
 
 
     taskIds = state.task.tasks
@@ -59,7 +59,7 @@ export default store => next => action => {
   
   }
 
-  if (action.type === activityTypes.RECEIVE_DELETE_TASK) {
+  if (action.type ===taskTypes.RECEIVE_DELETE_TASK) {
 
     eventIds = state.event.events
       .filter(event => action.taskId === event.taskId)

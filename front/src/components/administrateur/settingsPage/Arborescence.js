@@ -375,6 +375,45 @@ class Arborescence extends Component{
         })
     }
 
+    onCheck = (checkedKeys, info) => {
+        console.log(info.node.props.eventKey)
+
+        const key = info.node.props.eventKey
+        const {
+            activityIndex,
+            projectIndex,
+            taskIndex
+        } = this.getInfoFromTreeNodeKey(key)
+        console.log(activityIndex, projectIndex, taskIndex)
+        const activityNode = this.props.nodeTree[activityIndex]
+        const projectNode = activityNode && activityNode.projects[projectIndex]
+        const taskNode = projectNode && projectNode.tasks[taskIndex]
+
+        if (!isANumber(activityIndex)) {
+            console.log('ne rien faire')
+            return
+        }
+
+        else if (!isANumber(projectIndex)){
+            console.log('activity isVisible')
+            
+        }
+
+        else if (!isANumber(taskIndex)) {
+            console.log('project isVisible')
+        }
+
+        else console.log('task isVisible')
+
+        //return 'task'
+        this.setState({
+            activityIndex, 
+            projectIndex,
+            taskIndex
+        })
+      }
+
+
   render(){
 
     const {
@@ -394,6 +433,7 @@ class Arborescence extends Component{
                 checkable
                 className="Tree"
                 showLine
+                onCheck={this.onCheck}
                 onRightClick={this.handleRightClick}
             >
                 {nodeTree.map((activity, activityIndex) => (

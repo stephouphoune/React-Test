@@ -16,7 +16,7 @@ const createTasks = rawTasks => rawTasks.map(createTask)
 
 router.get('/api/task', (req, res) => {
     try {
-        executeQuery('SELECT * FROM task', (err,rows) => {
+        executeQuery(`SELECT * FROM task WHERE isDeleted='0'`, (err,rows) => {
           if (err) {
             console.log(err)
             res.status(500);

@@ -53,11 +53,28 @@ class HomePage extends Component{
   }
 
   handleAddEvent = (partialEvent) => {
-    this.props.postEvent({...partialEvent, date: this.state.selectedDate})
+    if (this.state.progress!==100)
+      this.props.postEvent({...partialEvent, date: this.state.selectedDate})
   }
 
   handleEditEvent = (event) => {
-    this.props.modifyEvent(event)
+    //Ici il faudrait réussir à comparer le nouveau temps saisi par l'utilisateur avec le temps restant disponible
+    //Ce temps restant doit être égal à la durée de la journée moins l'ensemble des évènements déjà présents
+
+
+
+    /*const duration = this.props.events.filter(event => moment(event.startDate).isSame(this.state.selectedDate, 'day')).reduce((acc, event) =>
+    {
+      return acc+event.duration
+    }, 0)
+    const currentDayOfWeek = parseInt(this.state.selectedDate.format('e'), 10)
+    const workDay = this.props.workdays.find(item => item.id === currentDayOfWeek)
+    const lastDuration = (workDay.duration*60)-event.duration
+    console.log(event.duration)
+    console.log(workDay.duration*60)
+    console.log(lastDuration)
+    if (event.duration <= lastDuration)*/
+      this.props.modifyEvent(event)
   }
 
   postDiversEvent = () => {
@@ -84,7 +101,7 @@ class HomePage extends Component{
     }, 0)
     const currentDayOfWeek = parseInt(this.state.selectedDate.format('e'), 10)
     const workDay = this.props.workdays.find(item => item.id === currentDayOfWeek)
-    
+    const diversDuration = (workDay.duration*60)-duration
     if (this.state.progress !== 100)
     {
       this.props.postEvent({
@@ -92,7 +109,7 @@ class HomePage extends Component{
         project: diversProject, 
         task: diversTask, 
         description: '', 
-        duration: (workDay.duration*60)-duration, 
+        duration: diversDuration, 
         date: this.state.selectedDate
       })
     }

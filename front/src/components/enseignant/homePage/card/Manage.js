@@ -64,7 +64,6 @@ class Manage extends Component{
     const task = this.props.tasks.find(item => item.id === event.taskId)
     const project = this.props.projects.find(item => item.id === task.projectId)
     const activity = this.props.activities.find(item => item.id === project.activityId)
-    console.log(task, activity, project)
     const duration = moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()
     this.setState({
       selectedActivity: activity,
