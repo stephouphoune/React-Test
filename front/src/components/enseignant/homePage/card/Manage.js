@@ -112,16 +112,20 @@ class Manage extends Component{
     })
   }
 
+  getActivities = () => {
+    return this.props.activities.filter(activity => activity.isVisible === 1)
+  }
+
   getProjectsFromActivity = () => {
     return this.props.projects.filter(project =>
       project.activityId === this.state.selectedActivity.id
-    )
+    ).filter(project => project.isVisible === 1)
   }
 
   getTasksFromProject = () => {
     return this.props.tasks.filter(task =>
       task.projectId === this.state.selectedProject.id
-    )
+    ).filter(task => task.isVisible === 1)
   }
 
 
@@ -141,7 +145,7 @@ class Manage extends Component{
           </Col>
           <Col span={16}>
               <TaskEdit
-                data={this.props.activities}
+                data={this.getActivities()}
                 dataNameKey="name"
                 placeholder="Activité"
                 selectedData={this.state.selectedActivity}

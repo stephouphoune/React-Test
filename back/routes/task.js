@@ -10,6 +10,7 @@ const createTask = rawTask => ({
   description: rawTask.description,
   projectId: rawTask.project_id,
   isDiverse: rawTask.isDiverse,
+  isVisible: rawTask.isVisible
 })
 
 const createTasks = rawTasks => rawTasks.map(createTask)
@@ -93,7 +94,6 @@ router.post('/api/task', (req, res) => {
 router.put('/api/task/:id', (req, res) => {
   try {
       const data = req.body
-      console.log('-----------', data)
       const taskId = req.params.id
       executeQuery(`UPDATE task SET name='${data.name}' WHERE task_id='${taskId}'`, (err, result) => {
           if (err) {
@@ -125,6 +125,14 @@ router.delete('/api/task/:id', asyncHandler(async(req, res) => {
   const { id } = req.params
 
   await entityManager.deleteTask(id)
+  res.end()
+}))
+
+router.patch('/api/task/:id', asyncHandler(async(req, res) => {
+  const data = req.body
+  const { id } = req.params
+
+  await entityManager.setVisibilityTask(id, data.checked)
   res.end()
 }))
 

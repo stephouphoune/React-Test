@@ -7,7 +7,8 @@ const asyncHandler = require('../services/asyncHandler')
 const createProject = rawProject => ({
   id: rawProject.project_id,
   name: rawProject.name,
-  activityId: rawProject.activity_id
+  activityId: rawProject.activity_id,
+  isVisible: rawProject.isVisible
 })
 
 const createProjects = rawProjects => rawProjects.map(createProject)
@@ -118,5 +119,13 @@ router.delete('/api/project/:id', asyncHandler(async(req, res) => {
   await entityManager.deleteProject(id)
   res.end()
 }))
+
+router.patch('/api/project/:id', asyncHandler(async(req, res) => {
+    const data = req.body
+    const { id } = req.params
+  
+    await entityManager.setVisibilityProject(id, data.checked)
+    res.end()
+  }))
 
 module.exports = router;

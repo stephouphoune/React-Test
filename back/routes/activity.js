@@ -6,7 +6,8 @@ const asyncHandler = require('../services/asyncHandler')
 
 const createActivity = rawActivity => ({
   id:rawActivity.activity_id,
-  name:rawActivity.name
+  name:rawActivity.name,
+  isVisible:rawActivity.isVisible,
 })
 
 const createActivities = rawActivities => rawActivities.map(createActivity)
@@ -113,6 +114,7 @@ router.put('/api/activity/:id', (req, res) => {
     
 });
 
+
 router.delete('/api/activity/:id', asyncHandler(async(req, res) => {
     //Route qui décrit un paramètre d'entrée (c'est du routing)
     const { id } = req.params
@@ -120,5 +122,13 @@ router.delete('/api/activity/:id', asyncHandler(async(req, res) => {
     await entityManager.deleteActivity(id)
     res.end()
 }))
+
+router.patch('/api/activity/:id', asyncHandler(async(req, res) => {
+    const data = req.body
+    const { id } = req.params
+  
+    await entityManager.setVisibilityActivity(id, data.checked)
+    res.end()
+  }))
 
 module.exports = router;

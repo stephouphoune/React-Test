@@ -26,8 +26,18 @@ const receiveModifyProject = (project) => ({
     projects:[project]
 })
 
+const receiveVisibilityProject = (project) => ({
+    type: types.RECEIVE_VISIBILITY_PROJECT,
+    projects:[project]
+})
+
 export const deleteProjects = (projectIds) => ({
     type: types.DELETE_PROJECTS,
+    projectIds
+})
+
+export const setVisibilityProjects = (projectIds) => ({
+    type: types.VISIBILITY_PROJECTS,
     projectIds
 })
 
@@ -151,5 +161,38 @@ export const deleteProject = dispatch => (projectId) => {
     })
     .catch(() => {
         dispatch(receiveDeleteProject())
+    })
+}
+
+export const setVisibilityProject = dispatch => ({projectId, checked}) => {
+    
+    const data = {
+        projectId, 
+        checked
+    }
+    fetch(`http://localhost:3001/api/project/${projectId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+    })
+    .then(body => {
+        const project= {
+            projectId, 
+            isVisible:checked
+        }
+        dispatch(receiveVisibilityProject(project))
+    })
+    .catch(() => {
+        dispatch(receiveVisibilityProject())
     })
 }

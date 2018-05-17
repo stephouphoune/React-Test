@@ -1,8 +1,5 @@
 import * as types from '../types/task'
 import store from '../createReduxStore'
-import { requestGetActivities } from './activity'
-import { requestGetProjects } from './project'
-import { getEvents } from './event'
 
 const requestTask = () => ({
     type: types.REQUEST_GET_TASKS
@@ -28,8 +25,18 @@ const receiveModifyTask = (task) => ({
     tasks:[task]
 })
 
+const receiveVisibilityTask = (task) => ({
+    type: types.RECEIVE_VISIBILITY_TASK,
+    tasks:[task]
+})
+
 export const deleteTasks = taskIds => ({
     type: types.DELETE_TASKS,
+    taskIds
+})
+
+export const setVisibilityTasks = (taskIds) => ({
+    type: types.VISIBILITY_TASKS,
     taskIds
 })
 
@@ -159,5 +166,38 @@ export const modifyTask = dispatch => ({name, taskId, projectId}) => {
     })
     .catch(() => {
         dispatch(receiveModifyTask())
+    })
+}
+
+export const setVisibilityTask = dispatch => ({taskId, checked}) => {
+    
+    const data = {
+        taskId, 
+        checked
+    }
+    fetch(`http://localhost:3001/api/task/${taskId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+    })
+    .then(body => {
+        const task= {
+            taskId, 
+            isVisible:checked
+        }
+        dispatch(receiveVisibilityTask(task))
+    })
+    .catch(() => {
+        dispatch(receiveVisibilityTask())
     })
 }

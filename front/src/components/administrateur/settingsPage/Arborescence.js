@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Tree, Button, Icon, Input, message} from 'antd';
 import DropdownMenu from './DropdownMenu'
-import { postActivity, modifyActivity, deleteActivity } from '../../../appState/actions/activity'
-import { postProject, modifyProject, deleteProject } from '../../../appState/actions/project'
-import { postTask, modifyTask, deleteTask } from '../../../appState/actions/task'
+import { postActivity, modifyActivity, deleteActivity, setVisibilityActivity } from '../../../appState/actions/activity'
+import { postProject, modifyProject, deleteProject, setVisibilityProject } from '../../../appState/actions/project'
+import { postTask, modifyTask, deleteTask, setVisibilityTask } from '../../../appState/actions/task'
 import './Arborescence.css';
 
 const TreeNode = Tree.TreeNode;
@@ -24,9 +24,9 @@ class Arborescence extends Component{
         projectIndex: null,
         taskIndex: null,
         mode: 'normal', 
-        activityInput:'',
-        projectInput:'',
-        taskInput:''
+        activityInput: '',
+        projectInput: '',
+        taskInput: '',
     }
 
     componentDidMount() {
@@ -376,43 +376,36 @@ class Arborescence extends Component{
     }
 
     onCheck = (checkedKeys, info) => {
-        console.log(info.node.props.eventKey)
+        console.log(checkedKeys, info)
+        const checked = info.checked
 
         const key = info.node.props.eventKey
+
         const {
             activityIndex,
             projectIndex,
             taskIndex
         } = this.getInfoFromTreeNodeKey(key)
-        console.log(activityIndex, projectIndex, taskIndex)
+
         const activityNode = this.props.nodeTree[activityIndex]
         const projectNode = activityNode && activityNode.projects[projectIndex]
         const taskNode = projectNode && projectNode.tasks[taskIndex]
 
-        if (!isANumber(activityIndex)) {
-            console.log('ne rien faire')
-            return
-        }
-
-        else if (!isANumber(projectIndex)){
-            console.log('activity isVisible')
-            
+        if (!isANumber(projectIndex)){
+            this.props.setVisibilityActivity({activityId:activityNode.id, checked:checked===true ? 1:0})
         }
 
         else if (!isANumber(taskIndex)) {
-            console.log('project isVisible')
+            this.props.setVisibilityProject({projectId:projectNode.id, checked:checked===true ? 1:0})
         }
 
-        else console.log('task isVisible')
-
-        //return 'task'
-        this.setState({
-            activityIndex, 
-            projectIndex,
-            taskIndex
-        })
+        else {
+            this.props.setVisibilityTask({taskId:activityNode.id, checked:checked===true ? 1:0})
+        }
       }
 
+    checkedKeys = () => {
+    }
 
   render(){
 
@@ -435,6 +428,7 @@ class Arborescence extends Component{
                 showLine
                 onCheck={this.onCheck}
                 onRightClick={this.handleRightClick}
+                //checkedKeys={this.checkedKeys}
             >
                 {nodeTree.map((activity, activityIndex) => (
                     <TreeNode
@@ -445,12 +439,13 @@ class Arborescence extends Component{
                             <TreeNode
                                 title={project.name}
                                 key={`${activityIndex}-${projectIndex}`}
-
+                                //disableCheckbox={this.disabledProjects(activityIndex)}
                             >
                                 {project.tasks.map((task, taskIndex) => (
                                     <TreeNode
                                         title={task.name}
                                         key={`${activityIndex}-${projectIndex}-${taskIndex}`}
+                                        //disableCheckbox={this.disabledTasks(activityIndex, projectIndex)}
                                     />
                                 ))}
                             </TreeNode>
@@ -535,7 +530,10 @@ const mapDispatchToProps = (dispatch) => ({
     modifyTask: modifyTask(dispatch),
     deleteTask: deleteTask(dispatch),
     deleteProject: deleteProject(dispatch),
-    deleteActivity: deleteActivity(dispatch)
+    deleteActivity: deleteActivity(dispatch), 
+    setVisibilityTask: setVisibilityTask(dispatch),
+    setVisibilityProject: setVisibilityProject(dispatch),
+    setVisibilityActivity: setVisibilityActivity(dispatch)
 })
 
 export default connect(mapStoreToProps, mapDispatchToProps)(Arborescence);

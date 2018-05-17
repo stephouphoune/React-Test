@@ -17,11 +17,16 @@ const taskReducer = (state = initialState, action) => {
                 )
             }
         case types.RECEIVE_DELETE_TASK:
+        case types.RECEIVE_VISIBILITY_TASK:
             return {
                 ...state,
-                tasks: state.tasks.filter(task => {
-                    if (task.id === action.taskId) return false //on le garde pas
-                    return true
+                tasks: state.tasks.map(task => {
+                    if (task.id === action.taskId) 
+                        return {
+                            ...task,
+                            isVisible:action.isVisible
+                        }
+                    return task
                 })
             }
         case types.RECEIVE_POST_TASK:

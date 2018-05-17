@@ -25,6 +25,11 @@ const receiveModifyActivity = (activity) => ({
     activities:[activity]
 })
 
+const receiveVisibilityActivity = (activity) => ({
+    type: types.RECEIVE_VISIBILITY_ACTIVITY,
+    activities:[activity]
+})
+
 
 export const requestGetActivities = dispatch => () => {
     //dispatch = envoi/utilisation de la méthode en argument
@@ -84,7 +89,6 @@ export const postActivity = dispatch => ({name}) => {
     .then(body => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
-            console.log('-----------', data)
             const { activity } = data
             dispatch(receivePostActivity(activity))
     }).catch(() => {
@@ -146,5 +150,39 @@ export const modifyActivity = dispatch => ({name, activityId}) => {
     })
     .catch(() => {
         dispatch(receiveModifyActivity())
+    })
+}
+
+export const setVisibilityActivity = dispatch => ({activityId, checked}) => {
+    
+    const data = {
+        activityId, 
+        checked
+    }
+    fetch(`http://localhost:3001/api/activity/${activityId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+    })
+    .then(body => {
+        const activity= {
+            activityId, 
+            isVisible:checked
+        }
+        console.log(activity)
+        dispatch(receiveVisibilityActivity(activity))
+    })
+    .catch(() => {
+        dispatch(receiveVisibilityActivity())
     })
 }

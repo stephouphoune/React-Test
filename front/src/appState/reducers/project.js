@@ -17,11 +17,17 @@ const projectReducer = (state = initialState, action) => {
                 )
             }
         case types.RECEIVE_DELETE_PROJECT:
+        case types.RECEIVE_VISIBILITY_PROJECT:
             return {
                 ...state,
-                projects: state.projects.filter(project => {
-                    if (project.id === action.projectId) return false //on le garde pas
-                    return true
+                projects: state.projects.map(project => {
+                    if (project.id === action.projectId) 
+                        return {
+                            ...project,
+                            isVisible:action.isVisible
+                        }
+                    return project
+                    
                 })
             }
         case types.RECEIVE_POST_PROJECT:

@@ -17,6 +17,19 @@ const activityReducer = (state = initialState, action) => {
                     return true
                 })
             }
+        case types.RECEIVE_VISIBILITY_ACTIVITY:
+            return {
+                ...state,
+                activities: state.activities.map(activity => {
+                    if (activity.id === action.activityId) 
+                        return {
+                            ...activity,
+                            isVisible:action.isVisible
+                        }
+                    return activity
+                    
+                })
+            }
         case types.RECEIVE_POST_ACTIVITY:
         case types.RECEIVE_MODIFY_ACTIVITY:
         case types.RECEIVE_GET_ACTIVITIES:
