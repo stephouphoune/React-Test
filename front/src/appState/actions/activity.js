@@ -25,9 +25,10 @@ const receiveModifyActivity = (activity) => ({
     activities:[activity]
 })
 
-const receiveVisibilityActivity = (activity) => ({
+const receiveVisibilityActivity = (activityIds, isVisible) => ({
     type: types.RECEIVE_VISIBILITY_ACTIVITY,
-    activities:[activity]
+    activityIds,
+    isVisible
 })
 
 
@@ -62,9 +63,10 @@ export const requestGetActivities = dispatch => () => {
     })
 }
 
-export const postActivity = dispatch => ({name}) => {
+export const postActivity = dispatch => ({name, isVisible}) => {
     const data = {
-        name
+        name, 
+        isVisible
     }
     fetch(`http://localhost:3001/api/activity`, {
         method: 'POST',
@@ -153,11 +155,11 @@ export const modifyActivity = dispatch => ({name, activityId}) => {
     })
 }
 
-export const setVisibilityActivity = dispatch => ({activityId, checked}) => {
+export const setVisibilityActivity = dispatch => ({activityId, isVisible}) => {
     
     const data = {
         activityId, 
-        checked
+        isVisible
     }
     fetch(`http://localhost:3001/api/activity/${activityId}`, {
         method: 'PATCH',
@@ -175,12 +177,7 @@ export const setVisibilityActivity = dispatch => ({activityId, checked}) => {
         return response.text()
     })
     .then(body => {
-        const activity= {
-            activityId, 
-            isVisible:checked
-        }
-        console.log(activity)
-        dispatch(receiveVisibilityActivity(activity))
+        dispatch(receiveVisibilityActivity([activityId], isVisible))
     })
     .catch(() => {
         dispatch(receiveVisibilityActivity())

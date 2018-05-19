@@ -15,7 +15,8 @@ const label = require('./routes/label');
 const task = require('./routes/task');
 const workdays = require('./routes/workdays')
 const event = require('./routes/event')
-const stats = require('./routes/stats')
+const statsTasks = require('./routes/statsTasks')
+const statsProjects = require('./routes/statsProjects')
 const advancement = require('./routes/advancement')
 
 const cors = require('cors');
@@ -73,7 +74,8 @@ app.use('/', users)
 app.use('/', task)
 app.use('/', workdays)
 app.use('/', event)
-app.use('/', stats)
+app.use('/', statsTasks)
+app.use('/', statsProjects)
 app.use('/', advancement)
 app.use('/', workdays)
 //app.use('/users', users);

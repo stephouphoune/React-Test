@@ -21,13 +21,12 @@ const activityReducer = (state = initialState, action) => {
             return {
                 ...state,
                 activities: state.activities.map(activity => {
-                    if (activity.id === action.activityId) 
+                    if (action.activityIds.find(id => id === activity.id)) 
                         return {
                             ...activity,
                             isVisible:action.isVisible
                         }
                     return activity
-                    
                 })
             }
         case types.RECEIVE_POST_ACTIVITY:

@@ -3,7 +3,7 @@ const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 
 /* GET Stats */
-router.get('/api/stats', (req, res) => {
+router.get('/api/statsTasks', (req, res) => {
 
   const projectId = req.query.projectId
   const user = req.user
@@ -55,7 +55,8 @@ router.get('/api/stats', (req, res) => {
                   ...acc,
                   {
                     taskId: event.task_id,
-                    duration: event.duration
+                    duration: event.duration,
+                    choice: 'task'
                   }
                 ]
               }
@@ -64,7 +65,8 @@ router.get('/api/stats', (req, res) => {
               const newStats = [...acc]
               newStats[statTaskIndex] = {
                 ...currentStat,
-                duration: currentStat.duration + event.duration
+                duration: currentStat.duration + event.duration,
+                choice: 'task'
               }
 
               return newStats

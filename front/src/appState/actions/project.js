@@ -26,9 +26,10 @@ const receiveModifyProject = (project) => ({
     projects:[project]
 })
 
-const receiveVisibilityProject = (project) => ({
+const receiveVisibilityProject = (projectIds, isVisible) => ({
     type: types.RECEIVE_VISIBILITY_PROJECT,
-    projects:[project]
+    projectIds,
+    isVisible
 })
 
 export const deleteProjects = (projectIds) => ({
@@ -36,9 +37,10 @@ export const deleteProjects = (projectIds) => ({
     projectIds
 })
 
-export const setVisibilityProjects = (projectIds) => ({
+export const setVisibilityProjects = (projectIds, isVisible) => ({
     type: types.VISIBILITY_PROJECTS,
-    projectIds
+    projectIds, 
+    isVisible
 })
 
 export const requestGetProjects = dispatch => () => {
@@ -72,10 +74,11 @@ export const requestGetProjects = dispatch => () => {
     })
 }
 
-export const postProject = dispatch => ({name, activityId}) => {
+export const postProject = dispatch => ({name, activityId, isVisible}) => {
     const data = {
         name, 
-        activityId
+        activityId,
+        isVisible
     }
     fetch(`http://localhost:3001/api/project`, {
         method: 'POST',
@@ -164,11 +167,11 @@ export const deleteProject = dispatch => (projectId) => {
     })
 }
 
-export const setVisibilityProject = dispatch => ({projectId, checked}) => {
+export const setVisibilityProject = dispatch => ({projectId, isVisible}) => {
     
     const data = {
         projectId, 
-        checked
+        isVisible
     }
     fetch(`http://localhost:3001/api/project/${projectId}`, {
         method: 'PATCH',
@@ -186,11 +189,7 @@ export const setVisibilityProject = dispatch => ({projectId, checked}) => {
         return response.text()
     })
     .then(body => {
-        const project= {
-            projectId, 
-            isVisible:checked
-        }
-        dispatch(receiveVisibilityProject(project))
+        dispatch(receiveVisibilityProject([projectId], isVisible))
     })
     .catch(() => {
         dispatch(receiveVisibilityProject())

@@ -23,13 +23,14 @@ export default store => next => action => {
   const state = store.getState()
   let projectIds = null;
   let taskIds = null;
+  let isVisible = null;
 
   // si on viens de supprimer une activité
   if (action.type === activityTypes.RECEIVE_VISIBILITY_ACTIVITY) {
 
     // on prend les ids des projets qui corresponde à l'activité
     projectIds = state.project.projects
-      .filter(project => project.activityId === action.activityId)
+      .filter(project => action.activityIds.indexOf(project.activityId) !== -1)
       .map(project => project.id)
 
     // on prend les ids des taches qui correspondent aux projet plus hait
@@ -37,17 +38,21 @@ export default store => next => action => {
       .filter(task => projectIds.indexOf(task.projectId) !== -1)
       .map(task => task.id)
 
+    isVisible = action.isVisible
+
   }
 
   if (action.type === projectTypes.RECEIVE_VISIBILITY_PROJECT) {
 
     taskIds = state.task.tasks
-      .filter(task => task.projectId === action.projectId)
+      .filter(task => action.projectIds.indexOf(task.projectId) !== -1)
       .map(task => task.id)
+
+    isVisible = action.isVisible
   
   }
 
   // on envoie des actions dans les reducers
-  if (projectIds) next(setVisibilityProjects(projectIds))
-  if (taskIds) next(setVisibilityTasks(taskIds))
+  if (projectIds) next(setVisibilityProjects(projectIds, isVisible))
+  if (taskIds) next(setVisibilityTasks(taskIds, isVisible))
 }

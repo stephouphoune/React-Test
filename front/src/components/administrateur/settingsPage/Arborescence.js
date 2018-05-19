@@ -27,11 +27,13 @@ class Arborescence extends Component{
         activityInput: '',
         projectInput: '',
         taskInput: '',
+        checkedKeys:[]
     }
 
     componentDidMount() {
         window.addEventListener('scroll', this.hideDropdownMenu)
         window.addEventListener('click', this.hideDropdownMenu)
+
     }
 
     componentWillUnmount() {
@@ -300,7 +302,7 @@ class Arborescence extends Component{
 
     onClickButton = () => {
         if (this.state.mode==='normal' && this.state.activityInput!==''){
-            this.props.postActivity({name:this.state.activityInput})
+            this.props.postActivity({name:this.state.activityInput, isVisible:1})
             this.setState({
                 activityInput:'',
             })
@@ -315,7 +317,7 @@ class Arborescence extends Component{
         
             if (this.getTargetEntity() === 'project' && this.state.mode === 'add' && this.state.projectInput!==''){
                 const activity = this.props.activities.find(activity => activity.id === activityNode.id)
-                this.props.postProject({name:this.state.projectInput, activityId:activity.id})
+                this.props.postProject({name:this.state.projectInput, activityId:activity.id, isVisible:1})
                 this.setState({
                     activityInput:'',
                     mode:'normal'
@@ -325,7 +327,7 @@ class Arborescence extends Component{
             }
             if (this.getTargetEntity() === 'task' && this.state.mode === 'add' && this.state.taskInput!==''){
                 const project = this.props.projects.find(project => project.id === projectNode.id)
-                this.props.postTask({name: this.state.taskInput, projectId: project.id})
+                this.props.postTask({name: this.state.taskInput, projectId: project.id, isVisible:1})
                 this.setState({
                     activityInput:'',
                     mode:'normal'
@@ -376,6 +378,8 @@ class Arborescence extends Component{
     }
 
     onCheck = (checkedKeys, info) => {
+        
+        
         console.log(checkedKeys, info)
         const checked = info.checked
 
@@ -392,25 +396,44 @@ class Arborescence extends Component{
         const taskNode = projectNode && projectNode.tasks[taskIndex]
 
         if (!isANumber(projectIndex)){
-            this.props.setVisibilityActivity({activityId:activityNode.id, checked:checked===true ? 1:0})
+            this.props.setVisibilityActivity({activityId:activityNode.id, isVisible:checked===true ? 1:0})
         }
 
         else if (!isANumber(taskIndex)) {
-            this.props.setVisibilityProject({projectId:projectNode.id, checked:checked===true ? 1:0})
+            this.props.setVisibilityProject({projectId:projectNode.id, isVisible:checked===true ? 1:0})
         }
 
         else {
-            this.props.setVisibilityTask({taskId:activityNode.id, checked:checked===true ? 1:0})
+            this.props.setVisibilityTask({taskId:taskNode.id, isVisible:checked===true ? 1:0})
         }
+        this.setState({
+            checkedKeys
+        })
       }
 
     checkedKeys = () => {
     }
 
+    disabledProjects = (activityIndex) => {
+        if (this.props.nodeTree[activityIndex].isVisible === 0)
+            return true
+        return false
+    }
+
+    disabledTasks = (activityIndex, projectIndex) => {
+        if (this.props.nodeTree[activityIndex].projects[projectIndex].isVisible === 0)
+            return true
+        return false
+    }
+
+
+    
+
   render(){
 
     const {
-        nodeTree
+        nodeTree,
+        checkedKeys
     } = this.props
 
     const menuOptions = this.getMenuOptionsFromState()
@@ -426,8 +449,10 @@ class Arborescence extends Component{
                 checkable
                 className="Tree"
                 showLine
+                checkedKeys={checkedKeys}
                 onCheck={this.onCheck}
                 onRightClick={this.handleRightClick}
+                checkStrictly
                 //checkedKeys={this.checkedKeys}
             >
                 {nodeTree.map((activity, activityIndex) => (
@@ -439,13 +464,13 @@ class Arborescence extends Component{
                             <TreeNode
                                 title={project.name}
                                 key={`${activityIndex}-${projectIndex}`}
-                                //disableCheckbox={this.disabledProjects(activityIndex)}
+                                disableCheckbox={this.disabledProjects(activityIndex)}
                             >
                                 {project.tasks.map((task, taskIndex) => (
                                     <TreeNode
                                         title={task.name}
                                         key={`${activityIndex}-${projectIndex}-${taskIndex}`}
-                                        //disableCheckbox={this.disabledTasks(activityIndex, projectIndex)}
+                                        disableCheckbox={this.disabledTasks(activityIndex, projectIndex)}
                                     />
                                 ))}
                             </TreeNode>
@@ -491,7 +516,7 @@ const createNodeTreeFromStore = (store) => {
     const { tasks } = store.task
 
     const nodeTree = activities.map(activity => {
-
+        
         const activityProjects = projects
             .filter(project => project.activityId === activity.id)
             .map(project => {
@@ -514,8 +539,39 @@ const createNodeTreeFromStore = (store) => {
     return nodeTree
 }
 
+const checkedKeysFromStore = (store) => {
+    const { activities } = store.activity
+    const { projects } = store.project
+    const { tasks } = store.task
+    
+    let checkedKeys = []
+
+    activities.map((activity, activityIndex) => {
+        
+        if (activity.isVisible === 1)
+            checkedKeys.push(`${activityIndex}`)
+            projects.filter(project => project.activityId === activity.id)
+        .map((project, projectIndex) => {
+            
+            if (activity.isVisible === 1 && project.isVisible === 1)
+                checkedKeys.push(`${activityIndex}-${projectIndex}`)
+                tasks.filter(task => task.projectId === project.id)
+            .map((task, taskIndex) => {
+                
+                if (activity.isVisible === 1 && project.isVisible === 1 && task.isVisible === 1)
+                    
+                    checkedKeys.push(`${activityIndex}-${projectIndex}-${taskIndex}`)
+            })
+
+
+        })
+    })
+    return checkedKeys
+}
+
 const mapStoreToProps = (store) => ({
     nodeTree: createNodeTreeFromStore(store),
+    checkedKeys: checkedKeysFromStore(store),
     activities: store.activity.activities,
     tasks: store.task.tasks,
     projects: store.project.projects

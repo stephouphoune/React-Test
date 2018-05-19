@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Steps, Button, message, Row, Icon} from 'antd';
 import TaskEdit from '../homePage/card/TaskEdit';
-import { getStats } from '../../../appState/actions/stats'
+import { getStatsTasks, getStatsProjects } from '../../../appState/actions/stats'
 import './Select.css'
 
 const Step = Steps.Step;
@@ -43,7 +43,6 @@ class Select extends Component {
   }
 
   handleActivitySelect = selectedActivity => {
-    console.log('selectedActivity', selectedActivity)
     this.setState({
       selectedActivity,
       selectedProject: null,
@@ -60,12 +59,19 @@ class Select extends Component {
 
   handleGetStats = () => {
     this.next();
-    this.props.getStats(this.state.selectedProject)
+    if (this.state.selectedProject)
+    {
+      this.props.getStatsTasks(this.state.selectedProject)
+    }
+    if (!this.state.selectedProject)
+    {
+      this.props.getStatsProjects(this.state.selectedActivity)
+    }
     this.props.isLoaded(true)
   }
 
   getProjectFromActivity = () => this.props.projects
-    .filter(project => project.activityId === this.state.selectedActivity.id)
+    .filter(project => project.activityId === this.state.selectedActivity.id && project.isVisible === 1)
 
   render() {
     const { current } = this.state;
@@ -79,7 +85,7 @@ class Select extends Component {
             placeholder="Actvité"
             selectedData={this.state.selectedActivity}
             onSelect={this.handleActivitySelect}
-            data={this.props.activities}
+            data={this.props.activities.filter(activity => activity.isVisible === 1)}
             dataNameKey="name"
           /> 
           {current >= 1 && 
@@ -92,7 +98,7 @@ class Select extends Component {
             /> 
           }
           <div style={{marginLeft:8}}>
-            {current >=1 && this.state.selectedProject && 
+            {current >=1 && 
               <Button type="primary" onClick={this.handleGetStats}>
                 Terminer
               </Button>
@@ -110,7 +116,8 @@ const mapStateToProps = store => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getStats: getStats(dispatch),
+  getStatsTasks: getStatsTasks(dispatch),
+  getStatsProjects: getStatsProjects(dispatch)
 })
 
 export default connect(

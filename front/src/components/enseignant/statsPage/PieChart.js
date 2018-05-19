@@ -86,6 +86,7 @@ class PieChart extends Component{
     legendPosition : 'right'
   }
 
+  
 
   getChartData = () => {
     return {
@@ -124,7 +125,6 @@ class PieChart extends Component{
 
 const getProperStats = store => {
   const { stats } = store.stats
-  
     return stats.map(stat => {
       const task = store.task.tasks.find(task => task.id === stat.taskId)
 

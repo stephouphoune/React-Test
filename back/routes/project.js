@@ -69,7 +69,8 @@ router.post('/api/project', (req, res) => {
           const newProject = {
             id:result.insertId,
             name:data.name,
-            activityId: data.activityId
+            activityId: data.activityId,
+            isVisible: data.isVisible
           }
           res.send(JSON.stringify({ project: newProject }))
           res.end()
@@ -124,7 +125,7 @@ router.patch('/api/project/:id', asyncHandler(async(req, res) => {
     const data = req.body
     const { id } = req.params
   
-    await entityManager.setVisibilityProject(id, data.checked)
+    await entityManager.setVisibilityProject(id, data.isVisible)
     res.end()
   }))
 

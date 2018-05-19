@@ -1,22 +1,22 @@
 import * as types from '../types/stats'
 import store from '../createReduxStore'
 
-const requestStats = () => ({
-    type: types.REQUEST_GET_STATS
-})
-
-const receiveStats = (stats = []) => ({
-    type: types.RECEIVE_GET_STATS,
+const receiveStatsTasks = (stats = []) => ({
+    type: types.RECEIVE_GET_STATS_TASKS,
     stats
 })
 
-export const getStats = dispatch => (project) => {
+const receiveStatsProjects = (stats =[]) => ({
+    type: types.RECEIVE_GET_STATS_PROJECTS,
+    stats
+})
+
+export const getStatsTasks = dispatch => (project) => {
     //dispatch = envoi/utilisation de la méthode en argument
-    dispatch(requestStats())
     
     //Un fetch se décompose en header/body/footer si on le souhaite. 
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
-    fetch(`http://localhost:3001/api/stats?projectId=${project.id}`, {
+    fetch(`http://localhost:3001/api/statsTasks?projectId=${project.id}`, {
         method: 'GET',
         headers: {
             'X-AUTH-TOKEN': store.getState().user.token,
@@ -39,9 +39,46 @@ export const getStats = dispatch => (project) => {
             //Pas besoin de try catch dans les promise même avec JSON.parse()
             const data=JSON.parse(body)
             const { stats } = data
-            dispatch(receiveStats(stats))
+            
+            dispatch(receiveStatsTasks(stats))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveStats())
+        dispatch(receiveStatsTasks())
+    })
+}
+
+export const getStatsProjects = dispatch => (activity) => {
+    //dispatch = envoi/utilisation de la méthode en argument
+    
+    //Un fetch se décompose en header/body/footer si on le souhaite. 
+    //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
+    fetch(`http://localhost:3001/api/statsProjects?activityId=${activity.id}`, {
+        method: 'GET',
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    
+    //Résultats du fetch
+    .then(response => {
+        //Résultat reponse : par défaut cela va dans le <header>
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        //Permet de traduire la réponse en format texte pour que body puisse lire
+        return response.text()
+    })
+    //Résultat <body>
+    .then(body => {
+            //Pas besoin de try catch dans les promise même avec JSON.parse()
+            const data=JSON.parse(body)
+            const { stats } = data
+            console.log(data)
+            dispatch(receiveStatsProjects(stats))
+    }).catch(() => {
+        //Null pour faire ensuite des tests avec des expressions ternaires
+        dispatch(receiveStatsProjects())
     })
 }

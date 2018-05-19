@@ -25,9 +25,10 @@ const receiveModifyTask = (task) => ({
     tasks:[task]
 })
 
-const receiveVisibilityTask = (task) => ({
+const receiveVisibilityTask = (taskIds, isVisible) => ({
     type: types.RECEIVE_VISIBILITY_TASK,
-    tasks:[task]
+    taskIds,
+    isVisible
 })
 
 export const deleteTasks = taskIds => ({
@@ -35,9 +36,10 @@ export const deleteTasks = taskIds => ({
     taskIds
 })
 
-export const setVisibilityTasks = (taskIds) => ({
+export const setVisibilityTasks = (taskIds, isVisible) => ({
     type: types.VISIBILITY_TASKS,
-    taskIds
+    taskIds, 
+    isVisible
 })
 
 export const requestGetTasks = dispatch => () => {
@@ -100,10 +102,11 @@ export const deleteTask = dispatch => (taskId) => {
     })
 }
 
-export const postTask = dispatch => ({name, projectId}) => {
+export const postTask = dispatch => ({name, projectId, isVisible}) => {
     const data = {
         name,
-        projectId
+        projectId, 
+        isVisible
     }
     fetch(`http://localhost:3001/api/task`, {
         method: 'POST',
@@ -169,11 +172,11 @@ export const modifyTask = dispatch => ({name, taskId, projectId}) => {
     })
 }
 
-export const setVisibilityTask = dispatch => ({taskId, checked}) => {
+export const setVisibilityTask = dispatch => ({taskId, isVisible}) => {
     
     const data = {
         taskId, 
-        checked
+        isVisible
     }
     fetch(`http://localhost:3001/api/task/${taskId}`, {
         method: 'PATCH',
@@ -191,11 +194,7 @@ export const setVisibilityTask = dispatch => ({taskId, checked}) => {
         return response.text()
     })
     .then(body => {
-        const task= {
-            taskId, 
-            isVisible:checked
-        }
-        dispatch(receiveVisibilityTask(task))
+        dispatch(receiveVisibilityTask([taskId], isVisible))
     })
     .catch(() => {
         dispatch(receiveVisibilityTask())

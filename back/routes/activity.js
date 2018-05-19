@@ -71,8 +71,9 @@ router.post('/api/activity', (req, res) => {
               return;
           }
           const newActivity = {
-              name:data.name,
-              id:result.insertId
+              name: data.name,
+              id: result.insertId, 
+              isVisible: data.isVisible 
           }
           
           res.send(JSON.stringify({ activity: newActivity }))
@@ -127,7 +128,7 @@ router.patch('/api/activity/:id', asyncHandler(async(req, res) => {
     const data = req.body
     const { id } = req.params
   
-    await entityManager.setVisibilityActivity(id, data.checked)
+    await entityManager.setVisibilityActivity(id, data.isVisible)
     res.end()
   }))
 

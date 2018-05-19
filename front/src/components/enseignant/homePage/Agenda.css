@@ -17,3 +17,7 @@
   flex-direction: column;
   align-items: center;
 }
+
+.Color{
+  border:0.2rem solid blueviolet;
+}

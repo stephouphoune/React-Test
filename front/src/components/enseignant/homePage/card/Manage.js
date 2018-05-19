@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment'
-import {Card, Row, Col, Icon, Button, Input} from 'antd';
+import {Card, Row, Col, Icon, Button, Input, message} from 'antd';
 import './Manage.css';
 import Duration from './Duration';
 import TaskEdit from './TaskEdit';
@@ -78,7 +78,7 @@ class Manage extends Component{
   
 
   handleAddEvent = () => {
-    if (this.state.isModifying) 
+    if (this.state.isModifying && this.state.selectedActivity && this.state.selectedProject && this.state.selectedTask) 
     {
       this.props.onEditEvent({
         oldEvent: this.state.modifyingEvent,
@@ -97,6 +97,16 @@ class Manage extends Component{
         duration: this.state.duration,
         description: this.state.description,
       })
+      return
+    }
+    else if (!this.state.selectedActivity){
+      message.warning('Sélectionnez une activité disponible', 3)
+    }
+    else if (!this.state.selectedProject){
+      message.warning('Sélectionnez un projet disponible', 3)
+    }
+    else if (!this.state.selectedTask){
+      message.warning('Sélectionnez une tâche disponible', 3)
     }
     this.resetState()
   }
@@ -118,14 +128,12 @@ class Manage extends Component{
 
   getProjectsFromActivity = () => {
     return this.props.projects.filter(project =>
-      project.activityId === this.state.selectedActivity.id
-    ).filter(project => project.isVisible === 1)
+      project.activityId === this.state.selectedActivity.id && project.isVisible === 1)
   }
 
   getTasksFromProject = () => {
     return this.props.tasks.filter(task =>
-      task.projectId === this.state.selectedProject.id
-    ).filter(task => task.isVisible === 1)
+      task.projectId === this.state.selectedProject.id && task.isVisible === 1)
   }
 
 

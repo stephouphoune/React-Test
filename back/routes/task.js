@@ -75,9 +75,10 @@ router.post('/api/task', (req, res) => {
             return;
         }
         const newTask = {
-          id:result.insertId,
-          name:data.name,
-          projectId:data.projectId
+          id: result.insertId,
+          name: data.name,
+          projectId: data.projectId, 
+          isVisible: data.isVisible
         }
       
         res.send(JSON.stringify({ task: newTask }))
@@ -132,7 +133,7 @@ router.patch('/api/task/:id', asyncHandler(async(req, res) => {
   const data = req.body
   const { id } = req.params
 
-  await entityManager.setVisibilityTask(id, data.checked)
+  await entityManager.setVisibilityTask(id, data.isVisible)
   res.end()
 }))
 

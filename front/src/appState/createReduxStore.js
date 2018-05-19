@@ -14,6 +14,7 @@ import eventReducer from './reducers/event'
 import statsReducer from './reducers/stats'
 
 import deleteEntityMiddleware from './middleware/deleteEntity'
+import setVisibilityEntity from './middleware/setVisibilityEntity'
 
 const persistConfig = {
     key: 'root',
@@ -34,6 +35,7 @@ const store = createStore(
     }),
     compose(
         applyMiddleware(deleteEntityMiddleware),
+        applyMiddleware(setVisibilityEntity),
         applyMiddleware(createLogger())
     )
 )

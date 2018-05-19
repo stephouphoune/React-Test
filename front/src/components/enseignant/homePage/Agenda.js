@@ -11,6 +11,7 @@ class Agenda extends Component{
           defaultValue={this.props.selectedDate}
           fullscreen={false}
           onSelect={this.props.onSelect}
+          className="Color"
         />
         <Button
             className = "BoutonActualiser"
