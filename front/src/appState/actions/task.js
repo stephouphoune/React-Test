@@ -139,12 +139,13 @@ export const postTask = dispatch => ({name, projectId, isVisible}) => {
     })
 }
 
-export const modifyTask = dispatch => ({name, taskId, projectId}) => {
+export const modifyTask = dispatch => ({name, taskId, projectId, isVisible}) => {
 
     const data = {
         name, 
         taskId,
-        projectId
+        projectId, 
+        isVisible
     }
 
     fetch(`http://localhost:3001/api/task/${taskId}`, {

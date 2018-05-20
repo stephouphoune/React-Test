@@ -4,6 +4,7 @@ const initialState = {
     username: null,
     firstName:null,
     lastName:null,
+    url:null,
     token: null,
     signinError: false,
     signinLoading: false,
@@ -26,9 +27,14 @@ const userReducer = (state = initialState, action) => {
                 lastName:action.lastName,
                 token: action.token,
                 isAdmin:action.isAdmin,
+                url:action.url,
                 signinError: action.signinError,    
             }
-
+        case types.RECEIVE_URL_CALENDAR:
+            return {
+                ...state, 
+                url: action.url
+            }
         default:
             return state
     }

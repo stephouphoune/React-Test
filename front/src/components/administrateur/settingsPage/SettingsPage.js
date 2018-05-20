@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { receiveSignIn } from '../../../appState/actions/user'
+import { receiveSignIn, modifyUrlCalendar } from '../../../appState/actions/user'
 import { forceReset } from '../../../appState/actions/reset'
 import { requestGetTasks } from '../../../appState/actions/task'
 import { requestGetActivities } from '../../../appState/actions/activity'
@@ -13,6 +13,19 @@ import Duration from './Duration';
 
 class SettingsPage extends Component{
   
+  state = {
+    urlCalendarValue:this.props.url
+  }
+
+  onChangeUrl = (event) => {
+    this.setState({
+      urlCalendarValue:event.target.value
+    })
+  } 
+
+  saveUrlCalendar = () => {
+    this.props.modifyUrlCalendar(this.state.urlCalendarValue)
+  }
 
   render() {
     return (
@@ -34,6 +47,8 @@ class SettingsPage extends Component{
                             <div className="URL">
                               <Input 
                                 placeholder="Adresse web de l'agenda"
+                                value={this.state.urlCalendarValue}
+                                onChange={this.onChangeUrl}
                               />
                             </div>
                         </div>
@@ -48,7 +63,7 @@ class SettingsPage extends Component{
                               </Select>
                             </div>
                         </div>
-                        <Duration/>
+                        <Duration saveUrlCalendar={this.saveUrlCalendar}/>
                     </Card>
                   </Col>
                 </Row>
@@ -56,6 +71,10 @@ class SettingsPage extends Component{
     );
   }
 }
+
+const mapStateToProps = store => ({
+  url: store.user.url,
+});
 
 const mapDispatchToProps = dispatch => ({
   disconnect: () => {
@@ -65,7 +84,8 @@ const mapDispatchToProps = dispatch => ({
   getActivities: requestGetActivities(dispatch),
   getProjects: requestGetProjects(dispatch),
   getTasks: requestGetTasks(dispatch), 
+  modifyUrlCalendar: modifyUrlCalendar(dispatch)
 })
 
 
-export default connect(null, mapDispatchToProps)(SettingsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);

@@ -111,12 +111,13 @@ export const postProject = dispatch => ({name, activityId, isVisible}) => {
     })
 }
 
-export const modifyProject = dispatch => ({name, projectId, activityId}) => {
+export const modifyProject = dispatch => ({name, projectId, activityId, isVisible}) => {
 
     const data = {
         name, 
         projectId, 
-        activityId
+        activityId, 
+        isVisible
     }
 
     fetch(`http://localhost:3001/api/project/${projectId}`, {

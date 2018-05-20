@@ -11,8 +11,8 @@ import Administration from '../administrateur/administration/Administration'
 class AppContent extends Component {
 
   componentDidMount(){
-    const { firstName, lastName } = this.props
-    message.success('Bienvenue '+firstName+' '+lastName+' !');
+    const { firstName } = this.props
+    message.success('Bienvenue '+firstName+' !');
   }
 
 
@@ -46,7 +46,6 @@ class AppContent extends Component {
 const mapStateToProps = store => ({
   isAdmin: store.user.isAdmin,
   firstName: store.user.firstName,
-  lastName: store.user.lastName,
 });
   
 export default connect(mapStateToProps)(AppContent);

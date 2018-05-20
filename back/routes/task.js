@@ -106,7 +106,8 @@ router.put('/api/task/:id', (req, res) => {
           const newTask = {
               id: parseInt(taskId, 10),
               name: data.name,
-              projectId: data.projectId
+              projectId: data.projectId,
+              isVisible:data.isVisible
           }
           
           res.send(JSON.stringify({ task: newTask }))

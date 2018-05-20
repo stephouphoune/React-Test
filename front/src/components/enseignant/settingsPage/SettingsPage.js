@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './SettingsPage.css';
 import { connect } from 'react-redux';
-import { receiveSignIn } from '../../../appState/actions/user'
+import { receiveSignIn, modifyUrlCalendar } from '../../../appState/actions/user'
 import { forceReset } from '../../../appState/actions/reset'
-import {Card, Row, Col, Icon, Button, Input, Select} from 'antd';
+import {Card, Row, Col, Icon, Button, Input, Select, message} from 'antd';
 import Login from '../../login/Login'
 function handleChange(value) {
   console.log(`selected ${value}`);
@@ -12,14 +12,19 @@ function handleChange(value) {
 class SettingsPage extends Component{
 
   state = {
-    loading: false,
-    iconLoading: false,
+    urlCalendarValue:this.props.url
   }
   
   enterLoading = () => {
-    this.setState({ loading: true });
+    this.props.modifyUrlCalendar(this.state.urlCalendarValue)
+    message.success(`Votre demande a bien été prise en compte !`);
   }
   
+  onChangeUrl = (event) => {
+    this.setState({
+      urlCalendarValue:event.target.value
+    })
+  } 
 
   render() {
     return (
@@ -33,6 +38,8 @@ class SettingsPage extends Component{
                         <div className="URL">
                           <Input 
                             placeholder="Adresse web de l'agenda"
+                            value={this.state.urlCalendarValue}
+                            onChange={this.onChangeUrl}
                           />
                         </div>
                     </div>
@@ -55,7 +62,7 @@ class SettingsPage extends Component{
                 </div>
 
                 <Row type="flex" justify="center">
-                  <Button style={{marginTop:"3rem"}} type="primary" ghost loading={this.state.loading} onClick={this.enterLoading}>
+                  <Button style={{marginTop:"3rem"}} type="primary" ghost onClick={this.enterLoading}>
                     Enregistrer les modifications
                   </Button>
                 </Row>
@@ -64,12 +71,16 @@ class SettingsPage extends Component{
   }
 }
 
+const mapStateToProps = store => ({
+  url: store.user.url,
+});
+
 const mapDispatchToProps = dispatch => ({
   disconnect: () => {
     dispatch(receiveSignIn())
     dispatch(forceReset())
-  }
+  },
+  modifyUrlCalendar:modifyUrlCalendar(dispatch)
 })
 
-
-export default connect(null, mapDispatchToProps)(SettingsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Form, Icon, Input, Button, Checkbox} from 'antd';
 import { createSignIn } from '../../appState/actions/user'
-import { Calendar } from 'antd';
+import { Calendar, message } from 'antd';
 import './Login.css'
 
 class Login extends Component {
@@ -55,8 +55,7 @@ class Login extends Component {
                             htmlType="submit"
                             icon="key">
                         Connexion
-                        </Button>
-                        <b>{signinError ? 'Identifiants incorrects' : ''}</b>    
+                        </Button>   
                     </Form.Item>   
             </div>
         );

@@ -56,8 +56,8 @@ class Duration extends Component{
 
   enterLoading = () => {
     this.props.modifyWorkdays(this.state.selectedWorkday.id, this.state.duration)
+    this.props.saveUrlCalendar()
     message.success(`Votre demande a bien été prise en compte !`);
-
   }
 
   render(){

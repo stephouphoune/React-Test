@@ -98,7 +98,8 @@ router.put('/api/project/:id', (req, res) => {
           const newProject = {
               id: parseInt(projectId, 10),
               name: data.name,
-              activityId:data.activityId
+              activityId:data.activityId,
+              isVisible:data.isVisible
           }
           console.log('-------------',newProject)
           res.send(JSON.stringify({ project: newProject }))

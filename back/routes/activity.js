@@ -72,8 +72,7 @@ router.post('/api/activity', (req, res) => {
           }
           const newActivity = {
               name: data.name,
-              id: result.insertId, 
-              isVisible: data.isVisible 
+              id: result.insertId,
           }
           
           res.send(JSON.stringify({ activity: newActivity }))
@@ -101,6 +100,7 @@ router.put('/api/activity/:id', (req, res) => {
             const newActivity = {
                 id: parseInt(activityId, 10),
                 name: data.name,
+                isVisible:data.isVisible
             }
             
             res.send(JSON.stringify({ activity: newActivity }))

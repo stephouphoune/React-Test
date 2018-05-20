@@ -337,7 +337,7 @@ class Arborescence extends Component{
             }
             if (this.getTargetEntity() === 'activity' && this.state.mode === 'modify' && this.state.activityInput!==''){
                 const activity = this.props.activities.find(activity => activity.id === activityNode.id)
-                this.props.modifyActivity({name:this.state.activityInput, activityId:activity.id})
+                this.props.modifyActivity({name:this.state.activityInput, activityId:activity.id, isVisible:activity.isVisible})
                 this.setState({
                     activityInput:'',
                     mode:'normal'
@@ -348,7 +348,7 @@ class Arborescence extends Component{
             if (this.getTargetEntity() === 'project' && this.state.mode === 'modify' && this.state.projectInput!==''){
                 const activity = this.props.activities.find(activity => activity.id === activityNode.id)
                 const project = this.props.projects.find(project => project.id === projectNode.id)
-                this.props.modifyProject({name:this.state.projectInput, projectId:project.id, activityId:activity.id})
+                this.props.modifyProject({name:this.state.projectInput, projectId:project.id, activityId:activity.id, isVisible:project.isVisible})
                 this.setState({
                     activityInput:'',
                     mode:'normal'
@@ -359,7 +359,7 @@ class Arborescence extends Component{
             if (this.getTargetEntity() === 'task' && this.state.mode === 'modify' && this.state.taskInput!==''){
                 const project = this.props.projects.find(project => project.id === projectNode.id)
                 const task = this.props.tasks.find(task => task.id === taskNode.id)
-                this.props.modifyTask({name: this.state.taskInput, taskId: task.id, projectId: project.id})
+                this.props.modifyTask({name: this.state.taskInput, taskId: task.id, projectId: project.id, isVisible:task.isVisible})
                 this.setState({
                     activityInput:'',
                     mode:'normal'

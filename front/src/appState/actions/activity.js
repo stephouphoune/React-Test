@@ -123,11 +123,12 @@ export const deleteActivity = dispatch => (activityId) => {
     })
 }
 
-export const modifyActivity = dispatch => ({name, activityId}) => {
+export const modifyActivity = dispatch => ({name, activityId, isVisible}) => {
 
     const data = {
         name, 
-        activityId
+        activityId, 
+        isVisible
     }
 
     fetch(`http://localhost:3001/api/activity/${activityId}`, {

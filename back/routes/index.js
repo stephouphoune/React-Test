@@ -11,7 +11,7 @@ router.get('/api/user', (req, res) => {
   const { username, password } = req.query
 
   try {
-    executeQuery('SELECT username, firstName, lastName, password, isAdmin FROM user WHERE username='+'"'+username+'"', (err,rows) => {
+    executeQuery('SELECT username, firstName, lastName, password, url_calendar, isAdmin FROM user WHERE username='+'"'+username+'"', (err,rows) => {
       if (err) {
         res.status(500);
         res.end()
@@ -26,20 +26,22 @@ router.get('/api/user', (req, res) => {
       
       // JSON.parse peut engendrer un crash (donc try / catch)
       try {
-        //Constante contenant le résultat de la requête. J'ai mis [0] parce qu'il n'y a que
-        //le premier élément du tableau qui nous intéresse
+        console.log(rows)
         const user = JSON.parse(JSON.stringify(rows))[0];
         if (user.password===password) {
             const isAdmin = user.isAdmin ? true : false;
             const token = jwt.sign({ username, password, isAdmin }, 'monsupermotdepasseincracable');
             const firstName=user.firstName
             const lastName=user.lastName
+            const url = user.url_calendar
+            console.log('------------', url)
             const responseBody = JSON.stringify({
               token,
               username, 
               isAdmin, 
               firstName, 
-              lastName
+              lastName,
+              url
             })
             res.status(200)
             res.send(responseBody)
@@ -59,6 +61,28 @@ router.get('/api/user', (req, res) => {
     res.end();
   }
 
+});
+
+router.put('/api/user', (req, res) => {
+  try {
+      const data = req.body
+      console.log(data)
+      executeQuery(`UPDATE user SET url_calendar='${data.url}' WHERE username='${req.user.username}'`, (err, result) => {
+          if (err) {
+              res.status(500);
+              res.end()
+              console.log(err)
+              return;
+          }
+          res.send(JSON.stringify({ url: data.url }))
+          res.end()
+      })
+  }
+  catch(e) {
+      res.status(500);
+      res.end();
+      console.log(e)
+    }
 });
 
 module.exports = router;
