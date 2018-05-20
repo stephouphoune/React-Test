@@ -17,6 +17,7 @@ const workdays = require('./routes/workdays')
 const event = require('./routes/event')
 const statsTasks = require('./routes/statsTasks')
 const statsProjects = require('./routes/statsProjects')
+const statsCsv = require('./routes/statsCsv')
 const advancement = require('./routes/advancement')
 
 const cors = require('cors');
@@ -76,6 +77,7 @@ app.use('/', workdays)
 app.use('/', event)
 app.use('/', statsTasks)
 app.use('/', statsProjects)
+app.use('/', statsCsv)
 app.use('/', advancement)
 app.use('/', workdays)
 //app.use('/users', users);

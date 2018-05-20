@@ -6,15 +6,17 @@ import './Agenda.css';
 class Agenda extends Component{
   render(){
     return(
-      <div className="flex-container">
-        <Calendar
-          defaultValue={this.props.selectedDate}
-          fullscreen={false}
-          onSelect={this.props.onSelect}
-          className="Color"
-        />
+      <div className="Agenda">
+        <div className="flex-container">
+          <Calendar
+            defaultValue={this.props.selectedDate}
+            fullscreen={false}
+            onSelect={this.props.onSelect}
+          />
+        </div>
+      
         <Button
-            className = "BoutonActualiser"
+            className="BoutonActualiser"
             type="primary"
             icon="sync"
         >Actualiser mon agenda

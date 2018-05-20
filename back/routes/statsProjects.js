@@ -26,6 +26,7 @@ router.get('/api/statsProjects', (req, res) => {
     try {
       const projectIds = JSON.parse(JSON.stringify(rows))
       const sqlProjectIds = projectIds.map(item => item.project_id).join(', ')
+      console.log(sqlProjectIds)
       executeQuery(`SELECT task_id, project_id FROM task WHERE project_id in (${sqlProjectIds})`, (err2, rows2) => {
         if (err2) {
           res.status(500);
@@ -44,7 +45,7 @@ router.get('/api/statsProjects', (req, res) => {
           const tasks = JSON.parse(JSON.stringify(rows2))
           // JSON.parse peut engendrer un crash (donc try / catch)
           const sqlTaskIds = tasks.map(item => item.task_id).join(', ')
-          executeQuery(`SELECT * FROM event WHERE task_id in (${sqlTaskIds}) AND username='${user.username}'`, (err3, rows3) => {
+          executeQuery(`SELECT * FROM event WHERE task_id in (${sqlTaskIds}) AND username='${user.username}' AND isDeleted=0`, (err3, rows3) => {
 
             if (err3) {
               res.status(500);

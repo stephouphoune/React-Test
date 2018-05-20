@@ -16,8 +16,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border:2px solid #D400FF;
 }
 
-.Color{
-  border:0.2rem solid blueviolet;
+.BoutonActualiser{
+  margin-top: 1rem
+}
+
+.Agenda{
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
+.ant-card-head{
+  background-color: #FFDA8C
 }

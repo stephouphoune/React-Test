@@ -29,7 +29,7 @@ router.get('/api/statsTasks', (req, res) => {
         // JSON.parse peut engendrer un crash (donc try / catch)
         const sqlTaskIds = taskIds.map(item => item.task_id).join(', ')
 
-        executeQuery(`SELECT * FROM event WHERE task_id in (${sqlTaskIds}) AND username='${user.username}'`, (err2, rows2) => {
+        executeQuery(`SELECT * FROM event WHERE task_id in (${sqlTaskIds}) AND username='${user.username}' AND isDeleted=0`, (err2, rows2) => {
 
           if (err2) {
             res.status(500);

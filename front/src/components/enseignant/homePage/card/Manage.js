@@ -100,13 +100,13 @@ class Manage extends Component{
       return
     }
     else if (!this.state.selectedActivity){
-      message.warning('Sélectionnez une activité disponible', 3)
+      message.warning('Sélectionnez une activité disponible avant de pouvoir ajouter un évènement', 3)
     }
     else if (!this.state.selectedProject){
-      message.warning('Sélectionnez un projet disponible', 3)
+      message.warning('Sélectionnez un projet disponible avant de pouvoir ajouter un évènement', 3)
     }
     else if (!this.state.selectedTask){
-      message.warning('Sélectionnez une tâche disponible', 3)
+      message.warning('Sélectionnez une tâche disponible avant de pouvoir ajouter un évènement', 3)
     }
     this.resetState()
   }
@@ -140,7 +140,7 @@ class Manage extends Component{
   render(){
     return(
       <Card title="Gestion des tâches du jour"
-            style={{ width: '100%'}}>
+            className="CardGestion">
         <Row type="flex" align="middle" style={{marginBottom:15}}>
           <Col span={2}>
             <Button 
@@ -190,7 +190,6 @@ class Manage extends Component{
         {this.state.selectedTask &&
           <Input 
             placeholder="Description" 
-            //defaultValue={this.state.selectedTask["description"]}
             value={this.state.description}
             onChange={this.handleDescriptionChange}
           />

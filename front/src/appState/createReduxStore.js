@@ -12,6 +12,7 @@ import usersReducer from './reducers/users'
 import workdayReducer from './reducers/workday'
 import eventReducer from './reducers/event'
 import statsReducer from './reducers/stats'
+import statsCsvReducer from './reducers/statsCsv'
 
 import deleteEntityMiddleware from './middleware/deleteEntity'
 import setVisibilityEntity from './middleware/setVisibilityEntity'
@@ -32,6 +33,7 @@ const store = createStore(
         workday:workdayReducer,
         event:eventReducer,
         stats:statsReducer,
+        statsCsv:statsCsvReducer
     }),
     compose(
         applyMiddleware(deleteEntityMiddleware),

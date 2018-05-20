@@ -161,13 +161,13 @@ class HomePage extends Component{
                 selectedDate={this.state.selectedDate}
               />
             </Row>
-            <Row style={{marginTop:"2rem", marginBottom:"2rem"}}  type="flex" align="middle">
-              <Col span={20}>
+            <Row style={{marginTop:"1rem", marginBottom:"2rem"}}  type="flex" align="middle">
+              <Col span={19}>
               <Progress 
-                style={{width:"100%"}}
+                className="Progress"
                 percent={this.state.progress}/>
               </Col>
-              <Col span={4}>
+              <Col span={4} offset={1}>
               <Popover 
                   visible={this.state.visiblePopover}
                   content={<Button 
@@ -179,7 +179,7 @@ class HomePage extends Component{
                   title="Êtes-vous sûr de vouloir terminer la journée ?"
                   onVisibleChange={this.handleVisibleChangePopover}
               > 
-                <Button style={{width:"100%"}} type="danger" ghost>Remplir les trous ?</Button>
+                <Button className="EndDay" type="danger">Journée terminée ?</Button>
               </Popover>
               </Col>
             </Row>
