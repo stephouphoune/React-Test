@@ -1,5 +1,7 @@
 const executeQuery2 = require('./executeQuery2')
 
+//-----------------------------------Delete----------------------------------------------------------------------------------
+
 const deleteEvent = async (id) => {
     await executeQuery2(`UPDATE event SET isDeleted='1' WHERE task_id='${id}'`)
 }
@@ -31,6 +33,8 @@ const deleteActivity = async (id) => {
     }
 }
 
+//-----------------------------------Visibility----------------------------------------------------------------------------------
+
 const setVisibilityTask = async (id, checked) => {
     await executeQuery2(`UPDATE task SET isVisible='${checked}' WHERE task_id='${id}'`)
 }
@@ -52,6 +56,8 @@ const setVisibilityActivity = async (id, checked) => {
         await setVisibilityProject(project.project_id, checked)
     }
 }
+
+//-----------------------------------StatsCSV----------------------------------------------------------------------------------
 
 const getTaskIdAndDurationFromEvents = async(username) => {
     const rawRows = await executeQuery2(`SELECT task_id, duration FROM event WHERE username='${user.username}' AND isDeleted=0`)
@@ -87,6 +93,10 @@ const getActivityNameFromActivity = async(activityId, projectName, taskName, dur
     }
     return statsCsv
 }
+
+//-----------------------------------StatsActivity----------------------------------------------------------------------------------
+
+
 
 module.exports = {
     setVisibilityActivity, 
