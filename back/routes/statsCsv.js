@@ -10,14 +10,22 @@ router.get('/api/statsCsv', asyncHandler(async(req, res) => {
   
   try{
     const user = req.user
-    await entityManager.getTaskIdAndDurationFromEvents(user.username)
+    const statsCsvTemp = await entityManager.getEventsCsv(user.username)
+    const statsCsv = []
+    for (let i=0;i<statsCsvTemp.length;i++)
+    {
+      statsCsv.push([statsCsvTemp[i][1][1][1][0], statsCsvTemp[i][1][1][0], statsCsvTemp[i][1][0], statsCsvTemp[i][0]])
+    }
+    console.log(statsCsv)
+    res.send(statsCsv)
     res.end()
+
   }
   catch(e){
-            console.log(e)
-            res.status(500)
-            res.end()
-            return;
+    console.log(e)
+    res.status(500)
+    res.end()
+    return;
   }
 }))
 

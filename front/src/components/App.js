@@ -7,6 +7,7 @@ import { requestGetUsers } from '../appState/actions/users'
 import { requestGetTasks } from '../appState/actions/task'
 import { getWorkdays } from '../appState/actions/workday'
 import { getEvents } from '../appState/actions/event'
+import { getStatsCsv } from '../appState/actions/statsCsv'
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
@@ -64,6 +65,7 @@ const mapDispatchtoProps = dispatch => ({
   getTasks: requestGetTasks(dispatch), 
   getWorkdays: getWorkdays(dispatch),
   getEvents: getEvents(dispatch),
+  getStatsCsv: getStatsCsv(dispatch)
 })
 
 export default connect(

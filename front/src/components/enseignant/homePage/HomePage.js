@@ -82,20 +82,23 @@ class HomePage extends Component{
   }
 
   postDiversEvent = () => {
+    this.setState({
+      visiblePopover:false
+    })
     const diversTask = this.props.tasks.find(task => task.isDiverse)
     if (!diversTask) {
-      console.log('Pas de tache divers')
+      message.warning('Pas de tâche "Divers" disponible')
       return
     }
     const diversProject = this.props.projects.find(project => project.id === diversTask.projectId)
     if (!diversProject) {
-      console.log('Pas de projet Divers')
+      message.warning('Pas de tâche "Divers" disponible')
       return
     }
     const diversActivity = this.props.activities.find(activity => activity.id === diversProject.activityId)
     if (!diversActivity)
     {
-      console.log('Pas d\'activité Divers')
+      message.warning('Pas de tâche "Divers" disponible')
       return
     }
 
@@ -117,10 +120,6 @@ class HomePage extends Component{
         date: this.state.selectedDate
       })
     }
-    console.log(this.state.selectedDate)
-    this.setState({
-      visiblePopover:false
-    })
   }
 
   getProgressFromEvents = (events, workdays = this.props.workdays) => {

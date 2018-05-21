@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import {Card, Row, Col, Icon, Button} from 'antd';
+import { connect } from 'react-redux'
 import './StatsPage.css';
 import AeraChart from './AeraChart';
 import PieChart from './PieChart';
 import Select from './Select';
+import { getStatsActivities } from '../../../appState/actions/statsActivities'
 import DownloadButton from './DownloadButton';
 
 class StatsPage extends Component{
+
+  componentDidMount = () => {
+    this.props.getStatsActivities()
+  }
 
   state = {
     isLoaded:false
@@ -50,4 +56,16 @@ class StatsPage extends Component{
   }
 }
 
-export default StatsPage
+const mapStateToProps = store => ({
+  statsActivities: store.statsActivities.statsActivities,
+  events: store.event.events
+})
+
+const mapDispatchToProps = dispatch => ({
+  getStatsActivities: getStatsActivities(dispatch),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatsPage);

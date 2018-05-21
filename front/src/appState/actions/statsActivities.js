@@ -1,13 +1,13 @@
-import * as types from '../types/statsCsv'
+import * as types from '../types/statsActivities'
 import store from '../createReduxStore'
 
-const receiveStatsCsv = (statsCsv = []) => ({
-    type: types.RECEIVE_GET_STATS_CSV,
-    statsCsv
+const receiveStatsActivities = (statsActivities = []) => ({
+    type: types.RECEIVE_GET_STATS_ACTIVITIES,
+    statsActivities
 })
 
-export const getStatsCsv = dispatch => () => {
-    fetch(`http://localhost:3001/api/statsCsv`, {
+export const getStatsActivities = dispatch => () => {
+    fetch(`http://localhost:3001/api/statsActivities`, {
         method: 'GET',
         headers: {
             'X-AUTH-TOKEN': store.getState().user.token,
@@ -24,9 +24,9 @@ export const getStatsCsv = dispatch => () => {
     .then(body => {
             const data=JSON.parse(body)
             console.log(data)
-            dispatch(receiveStatsCsv(data))
+            dispatch(receiveStatsActivities(data))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveStatsCsv())
+        dispatch(receiveStatsActivities())
     })
 }

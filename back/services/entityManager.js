@@ -59,39 +59,92 @@ const setVisibilityActivity = async (id, checked) => {
 
 //-----------------------------------StatsCSV----------------------------------------------------------------------------------
 
-const getTaskIdAndDurationFromEvents = async(username) => {
-    const rawRows = await executeQuery2(`SELECT task_id, duration FROM event WHERE username='${user.username}' AND isDeleted=0`)
+const getEventsCsv = async(username) => {
+    const rawRows = await executeQuery2(`SELECT duration, task_id FROM event WHERE username='${username}' AND isDeleted=0`)
     const events = JSON.parse(JSON.stringify(rawRows))
+    const arrayDurationsTasksProjectsActivities = []
     for (const event of events) {
-        console.log(event)
-        await getTaskNameFromTasks(event.task_id, event.duration)
+        arrayDurationsTasksProjectsActivities.push([event.duration, await getTasksCsv(event.task_id)])
     }
+    return arrayDurationsTasksProjectsActivities
 }
 
-const getTaskNameFromTasks = async (taskId, duration) => {
+const getTasksCsv = async (taskId) => {
     const rawRows = await executeQuery2(`SELECT name, project_id FROM task WHERE task_id=${taskId}`)
     const tasks = JSON.parse(JSON.stringify(rawRows))
+    const arrayTasksProjectsActivities = []
     for (const task of tasks) {
-        await getProjectNameFromProjects(task.project_id, task.name, duration)
+        arrayTasksProjectsActivities.push(task.name, await getProjectsCsv(task.project_id))
     }
+    return arrayTasksProjectsActivities
 }
 
-const getProjectNameFromProjects = async(projectId, taskName, duration) => {
-    const rawRows = await executeQuery2(`SELECT activity_id, name FROM project WHERE project_id=${projectId}`)
+const getProjectsCsv = async(projectId) => {
+    const rawRows = await executeQuery2(`SELECT name, activity_id FROM project WHERE project_id=${projectId}`)
     const projects = JSON.parse(JSON.stringify(rawRows))
+    const arrayProjectsActivities = []
     for (const project of projects) {
-        await getActivityNameFromActivity(project.activity_id, project.name, taskName, duration)
+        arrayProjectsActivities.push(project.name, await getActivitiesCsv(project.activity_id))
     }
+    return arrayProjectsActivities
 }
 
-const getActivityNameFromActivity = async(activityId, projectName, taskName, duration) => {
+const getActivitiesCsv = async(activityId) => {
     const rawRows = await executeQuery2(`SELECT name FROM activity WHERE activity_id=${activityId}`)
     const activities = JSON.parse(JSON.stringify(rawRows))
-    const statsCsv = []
+    const arrayActivities = []
     for (const activity of activities) {
-        statsCsv.push([`'${activity.name}', '${projectName}', '${taskName}', '${duration}'`])
+        arrayActivities.push(activity.name)
     }
-    return statsCsv
+    return arrayActivities
+}
+
+//-----------------------------------StatsActivities----------------------------------------------------------------------------------
+
+const getEventsStatsActivities = async(username) => {
+    const rawRows = await executeQuery2(`SELECT duration, task_id FROM event WHERE username='${username}' AND isDeleted=0`)
+    const events = JSON.parse(JSON.stringify(rawRows))
+    let tasks = null
+    for (const event of events) {
+        tasks = await getTasksStatsActivities(event.task_id, events)
+    }
+    return tasks
+}
+
+const getTasksStatsActivities = async (taskId, events) => {
+    const rawRows = await executeQuery2(`SELECT name, project_id FROM task WHERE task_id=${taskId}`)
+    const tasks = JSON.parse(JSON.stringify(rawRows))
+    let projects = null
+    for (const task of tasks) {
+        projects = await getProjectsStatsActivities(task.project_id, events)
+    }
+    return projects
+}
+
+const getProjectsStatsActivities = async(projectId, events) => {
+    const rawRows = await executeQuery2(`SELECT name, activity_id FROM project WHERE project_id=${projectId}`)
+    const projects = JSON.parse(JSON.stringify(rawRows))
+    let activities = []
+    for (const project of projects) {
+        activities = await getActivitiesStatsActivities(project.activity_id, events)
+    }
+    return activities
+}
+
+const getActivitiesStatsActivities = async(activityId, events) => {
+    const rawRows = await executeQuery2(`SELECT name FROM activity WHERE activity_id=${activityId}`)
+    const activities = JSON.parse(JSON.stringify(rawRows))
+    const arrayActivities = []
+    let durationActivity = 0
+    for (const activity of activities) {
+        for (event of events)
+        {
+            durationActivity=durationActivity+event.duration
+        }
+        arrayActivities.push(activity.name, durationActivity)
+    }
+    console.log('-----------------',arrayActivities)
+    return arrayActivities
 }
 
 //-----------------------------------StatsActivity----------------------------------------------------------------------------------
@@ -106,8 +159,12 @@ module.exports = {
     deleteTask,
     deleteProject,
     deleteActivity, 
-    getActivityNameFromActivity,
-    getProjectNameFromProjects, 
-    getTaskIdAndDurationFromEvents, 
-    getTaskNameFromTasks
+    getActivitiesCsv, 
+    getProjectsCsv, 
+    getTasksCsv, 
+    getEventsCsv, 
+    getActivitiesStatsActivities,
+    getEventsStatsActivities,
+    getProjectsStatsActivities,
+    getTasksStatsActivities
 }

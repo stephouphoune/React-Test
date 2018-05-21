@@ -20,4 +20,8 @@ const fetchIcal = (url, date) => new Promise((resolve, reject) => {
 
 });
 
+<<<<<<< HEAD
 module.exports = fetchIcal;
+=======
+module.exports = fetchIcal;
+>>>>>>> try to do statsActivities
