@@ -1,71 +1,35 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Line } from 'react-chartjs-2'
 //inserer des donnees a traiter
-const colors = {
-  green: {
-    fill: '#e0eadf',
-    stroke: '#5eb84d',
-  },
-  lightBlue: {
-    stroke: '#6fccdd',
-  },
-  darkBlue: {
-    fill: '#92bed2',
-    stroke: '#3282bf',
-  },
-  purple: {
-    fill: '#8fa8c8',
-    stroke: '#75539e',
-  },
-};
+function rainbow(numOfSteps, step) {
+  // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
+  // Adam Cole, 2011-Sept-14
+  // HSV to RBG adapted from: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+  var r, g, b;
+  var h = step / numOfSteps;
+  var i = ~~(h * 6);
+  var f = h * 6 - i;
+  var q = 1 - f;
+  switch(i % 6){
+      case 0: r = 1; g = f; b = 0; break;
+      case 1: r = q; g = 1; b = 0; break;
+      case 2: r = 0; g = 1; b = f; break;
+      case 3: r = 0; g = q; b = 1; break;
+      case 4: r = f; g = 0; b = 1; break;
+      case 5: r = 1; g = 0; b = q; break;
+  }
+  var c = "#" + ("44" + (~ ~(r * 255)).toString(16)).slice(-2) + ("44" + (~ ~(g * 255)).toString(16)).slice(-2) + ("44" + (~ ~(b * 255)).toString(16)).slice(-2);
+  return (c);
+}
 
-const loggedIn = [26, 36, 42, 38, 40, 30, 12];
-const available = [34, 44, 33, 24, 25, 28, 25];
-const availableForExisting = [16, 13, 25, 33, 40, 33, 45];
-const unavailable = [5, 9, 10, 9, 18, 19, 20];
-const xData = [13, 14, 15, 16, 17, 18, 19];
-
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [{
-    label: "Unavailable",
-    fill: true,
-    backgroundColor: colors.purple.fill,
-    pointBackgroundColor: colors.purple.stroke,
-    borderColor: colors.purple.stroke,
-    pointHighlightStroke: colors.purple.stroke,
-    borderCapStyle: 'butt',
-    data: unavailable,
-
-  }, {
-    label: "Available for Existing",
-    fill: true,
-    backgroundColor: colors.darkBlue.fill,
-    pointBackgroundColor: colors.darkBlue.stroke,
-    borderColor: colors.darkBlue.stroke,
-    pointHighlightStroke: colors.darkBlue.stroke,
-    borderCapStyle: 'butt',
-    data: availableForExisting,
-  }, {
-    label: "Available",
-    fill: true,
-    backgroundColor: colors.green.fill,
-    pointBackgroundColor: colors.lightBlue.stroke,
-    borderColor: colors.lightBlue.stroke,
-    pointHighlightStroke: colors.lightBlue.stroke,
-    borderCapStyle: 'butt',
-    data: available,
-  }, {
-    label: "Logged In",
-    fill: true,
-    backgroundColor: colors.green.fill,
-    pointBackgroundColor: colors.green.stroke,
-    borderColor: colors.green.stroke,
-    pointHighlightStroke: colors.green.stroke,
-    data: loggedIn,
-  }]
-};
+function getRandomColors(count) {
+  const colors = []
+  for (let i=0;i<count;i++)
+    colors.push(rainbow(count, i))
+    
+  return colors;
+}
 const options  = {
     scales: {
         yAxes: [{
@@ -76,16 +40,53 @@ const options  = {
       duration: 750,
     },
 }
+
+
 //*****************************
 class AeraChart extends Component{
   
+  /*getChartData = () => {
+    return {
+      labels: ['Janvier', 'Février'],
+      datasets: [this.props.statsActivities.map(activity => 
+        {
+          label: activity.activityName,
+          backgroundColor: this.getRandomColors(),
+          data: activity.duration
+        }
+      )]
+    }
+  }*/
+
   render() {
+    console.log(this.props.statsActivities)
     return (
-      <Line data={data}
+      <Line 
           options={options}
       />
     );
   }
 }
 
-export default AeraChart;
+const getProperStats = store => {
+  const { statsActivities } = store.statsActivities
+    return statsActivities.map(stat => {
+      const activity = store.activity.activities.find(activity => activity.id === stat.activityId)
+
+      return {
+        activityName: activity ? activity.name : 'tache inconnue',
+        activityId: stat.activityId,
+        duration: stat.duration, 
+      }
+    })
+}
+
+
+
+const mapStateToProps = store => ({
+  statsActivities: getProperStats(store)
+})
+
+export default connect(
+  mapStateToProps
+)(AeraChart);

@@ -1,22 +1,5 @@
 .EndDay{
     width: 100%;
-    background-color: #8FCF3C;
-    color: white;
-}
-
-.EndDay:hover{
-    background-color: #8FCF3C;
-    border-color:#8FCF3C
-}
-
-.EndDay:focus{
-    background-color: #8FCF3C;
-    border-color:#8FCF3C
-}
-
-.EndDay:active{
-    background-color: #8FCF3C;
-    border-color:#8FCF3C
 }
 
 .Progress{

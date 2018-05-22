@@ -1,3 +1,4 @@
+const moment = require('moment')
 const executeQuery2 = require('./executeQuery2')
 
 //-----------------------------------Delete----------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ const getEventsCsv = async(username) => {
 }
 
 const getTasksCsv = async (taskId) => {
-    const rawRows = await executeQuery2(`SELECT name, project_id FROM task WHERE task_id=${taskId}`)
+    const rawRows = await executeQuery2(`SELECT name, project_id FROM task WHERE task_id='${taskId}'`)
     const tasks = JSON.parse(JSON.stringify(rawRows))
     const arrayTasksProjectsActivities = []
     for (const task of tasks) {
@@ -80,7 +81,7 @@ const getTasksCsv = async (taskId) => {
 }
 
 const getProjectsCsv = async(projectId) => {
-    const rawRows = await executeQuery2(`SELECT name, activity_id FROM project WHERE project_id=${projectId}`)
+    const rawRows = await executeQuery2(`SELECT name, activity_id FROM project WHERE project_id='${projectId}'`)
     const projects = JSON.parse(JSON.stringify(rawRows))
     const arrayProjectsActivities = []
     for (const project of projects) {
@@ -90,7 +91,7 @@ const getProjectsCsv = async(projectId) => {
 }
 
 const getActivitiesCsv = async(activityId) => {
-    const rawRows = await executeQuery2(`SELECT name FROM activity WHERE activity_id=${activityId}`)
+    const rawRows = await executeQuery2(`SELECT name FROM activity WHERE activity_id='${activityId}'`)
     const activities = JSON.parse(JSON.stringify(rawRows))
     const arrayActivities = []
     for (const activity of activities) {
@@ -102,52 +103,83 @@ const getActivitiesCsv = async(activityId) => {
 //-----------------------------------StatsActivities----------------------------------------------------------------------------------
 
 const getEventsStatsActivities = async(username) => {
-    const rawRows = await executeQuery2(`SELECT duration, task_id FROM event WHERE username='${username}' AND isDeleted=0`)
+    const rawRows = await executeQuery2(`SELECT MONTH(startDate), duration, task_id FROM event WHERE username='${username}' AND isDeleted=0 AND MONTH(startDate) between (MONTH(startDate)-6) AND '${moment(now, "M")}'`)
     const events = JSON.parse(JSON.stringify(rawRows))
-    let tasks = null
+    
+    const activitiesStats = []
+    // { activityId, name, duration }
     for (const event of events) {
-        tasks = await getTasksStatsActivities(event.task_id, events)
-    }
-    return tasks
-}
-
-const getTasksStatsActivities = async (taskId, events) => {
-    const rawRows = await executeQuery2(`SELECT name, project_id FROM task WHERE task_id=${taskId}`)
-    const tasks = JSON.parse(JSON.stringify(rawRows))
-    let projects = null
-    for (const task of tasks) {
-        projects = await getProjectsStatsActivities(task.project_id, events)
-    }
-    return projects
-}
-
-const getProjectsStatsActivities = async(projectId, events) => {
-    const rawRows = await executeQuery2(`SELECT name, activity_id FROM project WHERE project_id=${projectId}`)
-    const projects = JSON.parse(JSON.stringify(rawRows))
-    let activities = []
-    for (const project of projects) {
-        activities = await getActivitiesStatsActivities(project.activity_id, events)
-    }
-    return activities
-}
-
-const getActivitiesStatsActivities = async(activityId, events) => {
-    const rawRows = await executeQuery2(`SELECT name FROM activity WHERE activity_id=${activityId}`)
-    const activities = JSON.parse(JSON.stringify(rawRows))
-    const arrayActivities = []
-    let durationActivity = 0
-    for (const activity of activities) {
-        for (event of events)
-        {
-            durationActivity=durationActivity+event.duration
+        const activity = await getActivityFromTaskId(event.task_id)
+        if (activitiesStats.findIndex(stat => stat.activityId === activity.activity_id) === -1) { // si y'a pas de stat pour l'instant pour l'activityId
+            activitiesStats.push({
+                activityId: activity.activity_id,
+                name: activity.name,
+                duration: event.duration
+            })
         }
-        arrayActivities.push(activity.name, durationActivity)
+        else {
+            const stat = activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id)]
+            const newStat = {
+                ...stat,
+                duration: stat.duration + event.duration
+            }
+            activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id)] = newStat
+        }
     }
-    console.log('-----------------',arrayActivities)
-    return arrayActivities
+    return activitiesStats
 }
 
-//-----------------------------------StatsActivity----------------------------------------------------------------------------------
+const getActivityFromTaskId = async(taskId) => {
+    const rawRows = await executeQuery2(`SELECT * from task WHERE task_id='${taskId}'`)
+    const tasks = JSON.parse(JSON.stringify(rawRows))
+    const task = tasks[0]
+    if (!task) return null;
+
+    const projectId = task.project_id
+    const rawRows2 = await executeQuery2(`SELECT * from project WHERE project_id='${projectId}'`)
+    const projects = JSON.parse(JSON.stringify(rawRows2))
+    const project = projects[0]
+    if (!project) return null;
+
+    const activityId = project.activity_id
+    const rawRows3 = await executeQuery2(`SELECT * from activity WHERE activity_id='${activityId}'`)
+    const activities = JSON.parse(JSON.stringify(rawRows3))
+    const activity = activities[0]
+    if (!activity) return null;
+
+    return activity
+}
+
+//-----------------------------------StatsProjects----------------------------------------------------------------------------------
+
+getProjectsFromActivityId = async(username, activityId) => {
+    const rawRows = await executeQuery2(`SELECT project_id FROM project WHERE activity_id='${activityId}'`)
+    const projects = JSON.parse(JSON.stringify(rawRows))
+    let durationProject = 0
+    const projectsStats = []
+    for (const project of projects)
+    {
+        const durations = await getEventsStatsProjects(username, project.project_id)
+        
+        for (duration of durations)
+        {
+            durationProject+=duration.duration
+        }
+        projectsStats.push({projectId:project.project_id, duration:durationProject})
+        durationProject=0
+    }
+    return projectsStats
+}
+
+const getEventsStatsProjects = async(username, projectId) => {
+    const rawRows = await executeQuery2(`SELECT task_id FROM task WHERE project_id='${projectId}'`)
+    const taskIds = JSON.parse(JSON.stringify(rawRows))
+    const sqlTaskIds = taskIds.map(item => item.task_id).join(', ')
+    const rawRows2 = await executeQuery2(`SELECT duration FROM event WHERE task_id in (${sqlTaskIds})`)
+    const duration = JSON.parse(JSON.stringify(rawRows2))
+    
+    return duration
+}
 
 
 
@@ -163,8 +195,8 @@ module.exports = {
     getProjectsCsv, 
     getTasksCsv, 
     getEventsCsv, 
-    getActivitiesStatsActivities,
     getEventsStatsActivities,
-    getProjectsStatsActivities,
-    getTasksStatsActivities
+    getActivityFromTaskId, 
+    getProjectsFromActivityId, 
+    getEventsStatsProjects
 }

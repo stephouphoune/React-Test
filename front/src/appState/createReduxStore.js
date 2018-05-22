@@ -11,10 +11,10 @@ import labelReducer from './reducers/label'
 import usersReducer from './reducers/users'
 import workdayReducer from './reducers/workday'
 import eventReducer from './reducers/event'
-import statsReducer from './reducers/stats'
+import statsTasksReducer from './reducers/statsTasks'
 import statsCsvReducer from './reducers/statsCsv'
 import statsActivitiesReducer from './reducers/statsActivities';
-
+import statsProjectsReducer from './reducers/statsProjects'
 import deleteEntityMiddleware from './middleware/deleteEntity'
 import setVisibilityEntity from './middleware/setVisibilityEntity'
 
@@ -33,7 +33,8 @@ const store = createStore(
         users:usersReducer,
         workday:workdayReducer,
         event:eventReducer,
-        stats:statsReducer,
+        statsTasks:statsTasksReducer,
+        statsProjects:statsProjectsReducer,
         statsCsv:statsCsvReducer,
         statsActivities:statsActivitiesReducer
     }),

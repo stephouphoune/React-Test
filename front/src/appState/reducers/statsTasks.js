@@ -1,11 +1,11 @@
-import * as types from '../types/stats'
+import * as types from '../types/statsTasks'
 import * as Rtypes from '../types/reset'
 
 const initialState = {
-    stats:[]
+    statsTasks:[]
 }
 
-const statsReducer = (state = initialState, action) => {
+const statsTasksReducer = (state = initialState, action) => {
     switch (action.type) {
         case Rtypes.FORCE_RESET:
             return initialState;
@@ -13,14 +13,13 @@ const statsReducer = (state = initialState, action) => {
                 ...state,
             }
         case types.RECEIVE_GET_STATS_TASKS:
-        case types.RECEIVE_GET_STATS_PROJECTS:
             return {
                 ...state,
-                stats:action.stats
+                statsTasks:action.statsTasks
             }
         default:
             return state
     }
 }
 
-export default statsReducer
+export default statsTasksReducer

@@ -1,5 +1,6 @@
 import * as types from '../types/event'
 import store from '../createReduxStore'
+import { notification } from 'antd'
 import moment from 'moment'
 const requestPostEvent = () => ({
     type: types.REQUEST_POST_EVENT
@@ -37,11 +38,39 @@ const receiveModifyEvent = (event) => ({
     events:[event]
 })
 
+const receiveGetSyncEvents = (events = []) => ({
+    type: types.RECEIVE_GET_SYNC_EVENTS,
+    events
+})
+
 export const deleteEvents = (eventIds) => ({
     type: types.DELETE_EVENTS,
     eventIds
 })
 
+export const getSyncEvents = dispatch => (url) => {
+    fetch(`http://localhost:3001/api/sync?url=${url}`, {
+        method: 'GET',
+        headers: {
+            'X-AUTH-TOKEN': store.getState().user.token,
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.status !== 200) {
+            throw Error('')
+        }
+        return response.text()
+    })
+    .then(body => {
+        const data = JSON.parse(body)
+        const {events} = data
+        dispatch(receiveGetSyncEvents(events))
+    }).catch(() => {
+        dispatch(receiveGetSyncEvents())
+    })
+}
 
 export const postEvent = dispatch => ({ activity, project, task, description, duration, date }) => {
     //dispatch = envoi/utilisation de la méthode en argument
@@ -180,5 +209,6 @@ export const modifyEvent = dispatch => (event) => {
     })
     .catch(() => {
         dispatch(receiveModifyEvent())
+        notification.warning('problème')
     })
 }

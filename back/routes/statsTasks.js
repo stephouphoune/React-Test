@@ -56,7 +56,6 @@ router.get('/api/statsTasks', (req, res) => {
                   {
                     taskId: event.task_id,
                     duration: event.duration,
-                    choice: 'task'
                   }
                 ]
               }
@@ -66,7 +65,6 @@ router.get('/api/statsTasks', (req, res) => {
               newStats[statTaskIndex] = {
                 ...currentStat,
                 duration: currentStat.duration + event.duration,
-                choice: 'task'
               }
 
               return newStats

@@ -66,6 +66,7 @@ router.post('/api/project', (req, res) => {
               console.log(err)
               return;
           }
+          console.log('----------------',result)
           const newProject = {
             id:result.insertId,
             name:data.name,

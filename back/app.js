@@ -20,6 +20,7 @@ const statsProjects = require('./routes/statsProjects')
 const statsActivities = require('./routes/statsActivities')
 const statsCsv = require('./routes/statsCsv')
 const advancement = require('./routes/advancement')
+const sync = require('./routes/sync')
 
 const cors = require('cors');
 
@@ -82,6 +83,7 @@ app.use('/', statsCsv)
 app.use('/', statsActivities)
 app.use('/', advancement)
 app.use('/', workdays)
+app.use('/', sync)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

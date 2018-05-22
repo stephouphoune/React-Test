@@ -86,19 +86,30 @@ class PieChart extends Component{
     legendPosition : 'right'
   }
 
-  
-
   getChartData = () => {
-    return {
-      labels: this.props.stats.map(stat => stat.taskName),
-      datasets: [{
-        backgroundColor: getRandomColors(this.props.stats.length),
-        data: this.props.stats.map(stat => stat.duration)
-      }]
+    if (this.props.choice === 'project')
+    {
+      return {
+        labels: this.props.statsProjects.map(stat => stat.projectName),
+        datasets: [{
+          backgroundColor: getRandomColors(this.props.statsProjects.length),
+          data: this.props.statsProjects.map(stat => stat.duration)
+        }]
+      }
+    }
+    if (this.props.choice === 'task')
+    {
+      return {
+        labels: this.props.statsTasks.map(stat => stat.taskName),
+        datasets: [{
+          backgroundColor: getRandomColors(this.props.statsTasks.length),
+          data: this.props.statsTasks.map(stat => stat.duration)
+        }]
+      }
     }
   }
   render() {
-    if (this.props.stats.length === 0)
+    if ((!this.props.statsProjects && this.props.choice==='project') || (!this.props.statsTasks && this.props.choice==='task'))
     {
       return <h1>Aucune tâche à analyser...</h1>
     }
@@ -123,9 +134,9 @@ class PieChart extends Component{
   }
 }
 
-const getProperStats = store => {
-  const { stats } = store.stats
-    return stats.map(stat => {
+const getProperStatsTasks = store => {
+  const { statsTasks } = store.statsTasks
+    return statsTasks.map(stat => {
       const task = store.task.tasks.find(task => task.id === stat.taskId)
 
       return {
@@ -136,8 +147,21 @@ const getProperStats = store => {
     })
 }
 
+const getProperStatsProjects = store => {
+  const { statsProjects } = store.statsProjects
+    return statsProjects.map(stat => {
+      const project = store.project.projects.find(project => project.id === stat.projectId)
+      return {
+        projectName: project ? project.name : 'projet inconnu',
+        projectId: stat.projectId,
+        duration: stat.duration, 
+      }
+    })
+}
+
 const mapStateToProps = store => ({
-  stats: getProperStats(store)
+  statsTasks: getProperStatsTasks(store),
+  statsProjects: getProperStatsProjects(store)
 })
 
 export default connect(

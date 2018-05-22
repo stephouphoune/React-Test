@@ -53,11 +53,6 @@ router.get('/api/users', (req, res) => {
       }
     
     });
-    
-
-router.delete('/api/users/:id', (req, res) => {
-  //Route qui décrit un paramètre d'entrée (c'est du routing)
-  const { id } = req.params
-})
+  
 
 module.exports = router;

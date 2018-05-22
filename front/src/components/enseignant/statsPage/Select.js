@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Steps, Button, message, Row, Icon} from 'antd';
 import TaskEdit from '../homePage/card/TaskEdit';
-import { getStatsTasks, getStatsProjects } from '../../../appState/actions/stats'
+import { getStatsTasks } from '../../../appState/actions/statsTasks'
+import { getStatsProjects } from '../../../appState/actions/statsProjects'
 import './Select.css'
 
 const Step = Steps.Step;
@@ -62,10 +63,12 @@ class Select extends Component {
     if (this.state.selectedProject)
     {
       this.props.getStatsTasks(this.state.selectedProject)
+      this.props.choice('task')
     }
     if (!this.state.selectedProject)
     {
       this.props.getStatsProjects(this.state.selectedActivity)
+      this.props.choice('project')
     }
     this.props.isLoaded(true)
   }

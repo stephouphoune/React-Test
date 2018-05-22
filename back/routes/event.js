@@ -47,7 +47,8 @@ router.post('/api/event', (req, res) => {
     try {
         const data = req.body
         const now = new Date()
-        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.startDate).toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
+        console.log(new Date(data.startDate).toMysqlFormat(), new Date(data.endDate).toMysqlFormat())
+        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
@@ -115,7 +116,7 @@ router.put('/api/event/:id', (req, res) => {
         const eventId = req.params.id
         const user = req.user
         //console.log(req.body)
-        executeQuery(`UPDATE event SET description='${data.description}', isModified=${data.isModified}, isDeleted=${data.isDeleted}, lastUpdateDate='${now.toMysqlFormat()}', startDate='${new Date(data.startDate).toMysqlFormat()}', endDate='${new Date(data.endDate).toMysqlFormat()}', name='${data.name}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
+        executeQuery(`UPDATE event SET description='${data.description}', isModified=1, isDeleted=${data.isDeleted}, lastUpdateDate='${now.toMysqlFormat()}', startDate='${new Date(data.startDate).toMysqlFormat()}', endDate='${new Date(data.endDate).toMysqlFormat()}', name='${data.name}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
@@ -126,7 +127,7 @@ router.put('/api/event/:id', (req, res) => {
                 id: parseInt(eventId, 10),
                 name: data.name,
                 description: data.description,
-                isModified: data.isModified,
+                isModified: true,
                 isDeleted: data.isDeleted,
                 creationDate: data.creationDate,
                 lastUpdateDate: now,
@@ -155,7 +156,7 @@ router.delete('/api/event/:id', (req, res) => {
     const eventId = req.params.id
     const username = req.user.username
     try {
-        executeQuery(`DELETE FROM event WHERE event_id=${eventId} AND username='${username}'`, (err, rows) => {
+        executeQuery(`UPDATE event SET isDeleted='1' WHERE event_id=${eventId} AND username='${username}'`, (err, rows) => {
             if (err) {
                 res.status(500);
                 res.end()

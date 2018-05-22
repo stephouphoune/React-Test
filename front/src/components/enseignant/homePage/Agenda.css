@@ -16,7 +16,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border:2px solid #D400FF;
 }
 
 .BoutonActualiser{
@@ -27,8 +26,4 @@
   display: flex;
   flex-direction: column;
   align-items: center
-}
-
-.ant-card-head{
-  background-color: #FFDA8C
 }

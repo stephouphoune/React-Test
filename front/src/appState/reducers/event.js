@@ -16,6 +16,10 @@ const eventReducer = (state = initialState, action) => {
                     action.eventIds.indexOf(id) === -1
                 )
             }
+        case types.RECEIVE_GET_SYNC_EVENTS:
+            return {
+                ...state
+            }
         case types.RECEIVE_POST_EVENT:
         case types.RECEIVE_GET_EVENTS:
         case types.RECEIVE_MODIFY_EVENT:

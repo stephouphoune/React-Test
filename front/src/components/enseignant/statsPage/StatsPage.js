@@ -15,12 +15,19 @@ class StatsPage extends Component{
   }
 
   state = {
-    isLoaded:false
+    isLoaded:false,
+    choice:null
   }
 
   isLoaded = (isLoaded) =>
   {
     this.setState({isLoaded})
+  }
+
+  choice = (choice) => {
+    this.setState({
+      choice
+    })
   }
 
   render(){
@@ -34,7 +41,7 @@ class StatsPage extends Component{
                     >
                   <div className="CardLeft">
                     {/*Ici on vérifie que le camembert est bien lancé. Si ce n'est pas le cas on met un smiley*/}
-                    {this.state.isLoaded ? <PieChart className="Pie"/> : <h1>Sélectionnez une activité et un projet</h1>}
+                    {this.state.isLoaded ? <PieChart choice={this.state.choice} className="Pie"/> : <h1>Sélectionnez une activité et un projet</h1>}
                   </div>
               </Card>
             </Col>
@@ -42,11 +49,12 @@ class StatsPage extends Component{
             <Card title="Évolution du temps passé par Activité (minutes)"
                   className='XYCard'>
                 <AeraChart/>
+                
               </Card>
             </Col>
           </Row>
           <Row className='RowCardSelect'>
-            <Select isLoaded={this.isLoaded}/>
+            <Select choice={this.choice} isLoaded={this.isLoaded}/>
           </Row>
           <Row className='BoutonDownload'>
             <DownloadButton/>
