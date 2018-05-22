@@ -50,7 +50,10 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   const date1 = new Date()
 
   const username=req.user.username
-  const ical = await fetchIcal(req.query.url)
+  const rowUrl = await executeQuery2(`SELECT url_calendar FROM user WHERE username='${username}'`)
+  const url = (JSON.parse(JSON.stringify(rowUrl)).map(url => url.url_calendar))[0]
+  console.log(url)
+  const ical = await fetchIcal(url)
   const icalKeys = Object.keys(ical)
   const eventKeys = icalKeys.filter(icalKey => icalKey.indexOf('Aurion-') === 0)
   console.log("Avant")
@@ -109,7 +112,6 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   for (event of events) {
     await getCurrentEvent(event, username)
     
-
   }
 
   const date2 = new Date()
@@ -118,7 +120,7 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
 }))
 
 const getCurrentEvent = async(event, username) => {
-  const rawRows = await executeQuery2(`SELECT * FROM event WHERE isen_id='${event.isenId}'`)
+  const rawRows = await executeQuery2(`SELECT * FROM event WHERE isen_id='${event.isenId}' AND username='${username}'`)
   const currentEvent = JSON.parse(JSON.stringify(rawRows))
   if (currentEvent.length === 0)
   {
@@ -139,15 +141,15 @@ const createEvent = async(event, username) => {
     await createActivity(event.activityName)
   activityId = await getActivityId(event.activityName)
 
-  let projectId = await getProjectId(event.projectName, activityId)
+  let projectId = await getProjectId(event.projectName, activityId[0])
   if (projectId.length === 0)
-    await createProject(event.projectName, activityId)
-  projectId = await getProjectId(event.projectName, activityId)
+    await createProject(event.projectName, activityId[0])
+  projectId = await getProjectId(event.projectName, activityId[0])
 
-  let taskId = await getTaskId(event.taskName, projectId)
+  let taskId = await getTaskId(event.taskName, projectId[0])
   if (taskId.length === 0)
-    await createTask(event.taskName, projectId)
-  taskId = await getTaskId(event.taskName, projectId)
+    await createTask(event.taskName, projectId[0])
+  taskId = await getTaskId(event.taskName, projectId[0])
   //Créer evenement 
   //const duration = 
   //await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(startDate).toMysqlFormat()}', '${new Date(endDate).toMysqlFormat()}', '${isenId}', '${activityName} - ${projectName} - ${taskName}', '${taskId}', '${req.user.username}', '${duration}')`)
@@ -160,31 +162,34 @@ const updateEvent = async(event, username) => {
 
 const createActivity = async(activityName) => {
   await executeQuery2(`INSERT INTO activity VALUES (NULL, '${activityName}', 0, 0)`)
+  return
 }
 
 const createProject = async(projectName, activityId) => {
   await executeQuery2(`INSERT INTO project VALUES (NULL, '${projectName}', '${activityId}', 0, 0)`)
+  return
 }
 
 const createTask = async(taskName, projectId) => {
   await executeQuery2(`INSERT INTO task VALUES (NULL, '${taskName}', '', '${projectId}', 0, 0, 0)`)
+  return
 }
 
 const getTaskId = async(taskName, projectId) => {
   const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName}' AND project_id='${projectId}'`)
-  const taskId = JSON.parse(JSON.stringify(rows))
+  const taskId = (JSON.parse(JSON.stringify(rows)).map(task => task.task_id))
   return taskId
 }
 
 const getProjectId = async(projectName, activityId) => {
   const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName}' AND activity_id='${activityId}'`)
-  const projectId = JSON.parse(JSON.stringify(rows))
+  const projectId = (JSON.parse(JSON.stringify(rows)).map(project => project.project_id))
   return projectId
 }
 
 const getActivityId = async(activityName) => {
   const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName}'`)
-  const activityId = JSON.parse(JSON.stringify(rows))
+  const activityId = (JSON.parse(JSON.stringify(rows)).map(activity => activity.activity_id))
   return activityId
 }
 

@@ -48,8 +48,8 @@ export const deleteEvents = (eventIds) => ({
     eventIds
 })
 
-export const getSyncEvents = dispatch => (url) => {
-    fetch(`http://localhost:3001/api/sync?url=${url}`, {
+export const getSyncEvents = dispatch => () => {
+    fetch(`http://localhost:3001/api/sync`, {
         method: 'GET',
         headers: {
             'X-AUTH-TOKEN': store.getState().user.token,
