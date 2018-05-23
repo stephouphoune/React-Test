@@ -47,8 +47,8 @@ const getMysqlDateCompare = date =>
 router.post('/api/event', (req, res) => {
     try {
         const data = req.body
-        console.log("---------------------", data)
         const now = moment()
+        console.log('-------------------',now.unix(1318781876))
         executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.add(data.duration, 'minutes').format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
@@ -62,8 +62,8 @@ router.post('/api/event', (req, res) => {
                 id: newEventId,
                 name: data.name,
                 description: data.description,
-                isModified: data.isModified,
-                isDeleted: data.isDeleted,
+                isModified: 0,
+                isDeleted: 0,
                 creationDate: now,
                 lastUpdateDate: now,
                 startDate: data.startDate,

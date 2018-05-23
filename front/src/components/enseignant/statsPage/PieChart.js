@@ -43,8 +43,7 @@ class PieChart extends Component{
   }
 
   getChartData = () => {
-    console.log(this.props.choice)
-    if (this.props.choice === 'project')
+    if (this.props.choice === 'Projets')
     {
       return {
         labels: this.props.statsProjects.map(stat => stat.projectName),
@@ -54,7 +53,7 @@ class PieChart extends Component{
         }]
       }
     }
-    else if (this.props.choice === 'task')
+    else if (this.props.choice === 'Tâches')
     {
       return {
         labels: this.props.statsTasks.map(stat => stat.taskName),
@@ -95,13 +94,12 @@ const getProperStatsTasks = store => {
   
   const { statsTasks } = store.statsTasks
     return statsTasks.map(stat => {
-      console.log(stat)
       const task = store.task.tasks.find(task => task.id === stat.taskId)
       
       return {
         taskName: task ? task.name : 'tache inconnue',
         taskId: stat.taskId,
-        duration: stat.duration, 
+        duration: stat.duration/60, 
       }
     })
 }
@@ -109,13 +107,12 @@ const getProperStatsTasks = store => {
 const getProperStatsProjects = store => {
   const { statsProjects } = store.statsProjects
     return statsProjects.map(stat => {
-      console.log(stat)
       const project = store.project.projects.find(project => project.id === stat.projectId)
       
       return {
         projectName: project ? project.name : 'projet inconnu',
         projectId: stat.projectId,
-        duration: stat.duration, 
+        duration: stat.duration/60, 
       }
     })
 }

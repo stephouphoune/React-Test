@@ -23,7 +23,6 @@ export const getStatsCsv = dispatch => () => {
     })
     .then(body => {
             const data=JSON.parse(body)
-            console.log(data)
             dispatch(receiveStatsCsv(data))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires

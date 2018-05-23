@@ -6,12 +6,21 @@ import AeraChart from './AeraChart';
 import PieChart from './PieChart';
 import Select from './Select';
 import { getStatsActivities } from '../../../appState/actions/statsActivities'
+import { getStatsCsv } from '../../../appState/actions/statsCsv'
 import DownloadButton from './DownloadButton';
 
 class StatsPage extends Component{
 
   componentDidMount = () => {
     this.props.getStatsActivities()
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.events != nextProps.events)
+    {  
+      //nextProps.getStatsActivities()
+      //nextProps.getStatsCsv()
+    }
   }
 
   state = {
@@ -35,18 +44,18 @@ class StatsPage extends Component{
         <div>
           <Row className='RowCardChart'>
             <Col span={12} className='PieColumn'>
-              <Card title="Comparaison entre les Tâches (minutes)" 
+              <Card title={this.state.choice ? 'Comparaison entre les '+this.state.choice+' en heures' : ''}
                     bordered={true}
                     style={{ width:'100%' }}
                     >
                   <div className="CardLeft">
                     {/*Ici on vérifie que le camembert est bien lancé. Si ce n'est pas le cas on met un smiley*/}
-                    {this.state.isLoaded ? <PieChart choice={this.state.choice} className="Pie"/> : <h1>Sélectionnez une activité et un projet</h1>}
+                    {this.state.isLoaded ? <PieChart choice={this.state.choice} className="Pie"/> : <h1>Pour lancer l'analyse du diagramme circulaire, <br/> faites un choix d'activité ou de projet</h1>}
                   </div>
               </Card>
             </Col>
             <Col span={12} className='XYColumn'>
-            <Card title="Évolution du temps passé par Activité (minutes)"
+            <Card title="Évolution du temps passé par Activité en heures"
                   className='XYCard'>
                 <AeraChart/>
                 
@@ -71,6 +80,7 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = dispatch => ({
   getStatsActivities: getStatsActivities(dispatch),
+  getStatsCsv: getStatsCsv(dispatch)
 })
 
 export default connect(

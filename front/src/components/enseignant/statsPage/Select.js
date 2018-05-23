@@ -63,12 +63,12 @@ class Select extends Component {
     if (this.state.selectedProject)
     {
       this.props.getStatsTasks(this.state.selectedProject)
-      this.props.choice('task')
+      this.props.choice('Tâches')
     }
     if (!this.state.selectedProject)
     {
       this.props.getStatsProjects(this.state.selectedActivity)
-      this.props.choice('project')
+      this.props.choice('Projets')
     }
     this.props.isLoaded(true)
   }

@@ -2,6 +2,7 @@ import * as types from '../types/event'
 import store from '../createReduxStore'
 import { notification } from 'antd'
 import moment from 'moment'
+import { fullReload } from './fullReload';
 const requestPostEvent = () => ({
     type: types.REQUEST_POST_EVENT
 })
@@ -38,9 +39,8 @@ const receiveModifyEvent = (event) => ({
     events:[event]
 })
 
-const receiveGetSyncEvents = (events = []) => ({
+const receiveGetSyncEvents = () => ({
     type: types.RECEIVE_GET_SYNC_EVENTS,
-    events
 })
 
 export const deleteEvents = (eventIds) => ({
@@ -49,6 +49,13 @@ export const deleteEvents = (eventIds) => ({
 })
 
 export const getSyncEvents = dispatch => () => {
+    notification['info']({
+        placement: "bottomLeft",
+        duration: 0,
+        message: 'Synchronisation en cours, veuillez patienter...',
+        description:'Task Eat',
+        key:1
+    });
     fetch(`http://localhost:3001/api/sync`, {
         method: 'GET',
         headers: {
@@ -64,9 +71,11 @@ export const getSyncEvents = dispatch => () => {
         return response.text()
     })
     .then(body => {
-        const data = JSON.parse(body)
-        const {events} = data
-        dispatch(receiveGetSyncEvents(events))
+        //const data = JSON.parse(body)
+        //const {events} = data
+        notification.close(1)
+        dispatch(receiveGetSyncEvents())
+        fullReload(dispatch)()
     }).catch(() => {
         dispatch(receiveGetSyncEvents())
     })
@@ -79,14 +88,16 @@ export const postEvent = dispatch => ({ activity, project, task, description, du
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     //const noon = moment().hour(12).minute(0).second(0).toDate()
     //const endDate = moment().hour(12).minute(0).second(0).add(duration, 'minutes').toDate()
-
+    
     const data = {
         taskId: task.id,
         description,
         name: `${activity.name} - ${project.name} - ${task.name}`,
-        duration
+        duration,
+        date
     }
 
+    console.log(data.date)
     fetch(`http://localhost:3001/api/event`, {
         method: 'POST',
         body: JSON.stringify(data),

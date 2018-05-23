@@ -14,9 +14,8 @@ router.get('/api/statsCsv', asyncHandler(async(req, res) => {
     const statsCsv = []
     for (let i=0;i<statsCsvTemp.length;i++)
     {
-      statsCsv.push([statsCsvTemp[i][1][1][1][0], statsCsvTemp[i][1][1][0], statsCsvTemp[i][1][0], statsCsvTemp[i][0]])
+      statsCsv.push([statsCsvTemp[i][1][1][1][0], statsCsvTemp[i][1][1][0], statsCsvTemp[i][1][0], ((statsCsvTemp[i][0])/60).toString().replace(/[.]/, ",")])
     }
-    console.log(statsCsv)
     res.send(statsCsv)
     res.end()
 

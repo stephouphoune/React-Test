@@ -7,18 +7,10 @@ import './DownloadButton.css';
 
 class DownloadButton extends Component {
   
-  /*componentDidMount = () => {
-    this.props.getStatsCsv()
-  }
-
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.events != nextProps.events)
-      nextProps.getStatsCsv()
-  }*/
 
   render(){
 
-    const data = [['Activité', 'Projet', 'Tâche', 'Durée']]
+    const data = [['Activité', 'Projet', 'Tâche', 'Durée (heures)']]
     for (let i=0;i<this.props.statsCsv.length;i++)
     {
       data.push(this.props.statsCsv[i])
