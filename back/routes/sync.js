@@ -110,8 +110,17 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   .filter(event => event !== null)
   
   for (event of events) {
-    await getCurrentEvent(event, username)
+    const storedEvent = await getCurrentEvent(event, username)
     
+    if (!storedEvent) {
+      await createEvent(event, username)
+      return
+    }
+    
+    if (!storedEvent.isModified) {
+      //await updateEvent(event, username)
+      return
+    }
   }
 
   const date2 = new Date()
@@ -122,17 +131,7 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
 const getCurrentEvent = async(event, username) => {
   const rawRows = await executeQuery2(`SELECT * FROM event WHERE isen_id='${event.isenId}' AND username='${username}'`)
   const currentEvent = JSON.parse(JSON.stringify(rawRows))
-  if (currentEvent.length === 0)
-  {
-    await createEvent(event, username)
-    return
-  }
-  const isModifiedEvent = currentEvent.map(event => event.isModified)
-  if (isModifiedEvent[0] === 0)
-  {
-    //updateEvent(event, username)
-    return
-  }
+  return currentEvent[0]
 }
 
 const createEvent = async(event, username) => {
