@@ -115,10 +115,16 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   .filter(event => event !== null)
   
   for (event of events) {
-    const now = moment()
-    //VERIFICATION DE LA JOURNEE EN COURS POUR LA SYNCHRONISATION
-    if (now.format('YYYY-MM-DD') === new Date(event.startDate).toMysqlFormatDay())
-      await getCurrentEvent(event, username)
+    const storedEvent = await getCurrentEvent(event, username)
+    if (!storedEvent) {
+      await createEvent(event, username)
+      return
+    }
+  
+    if (!storedEvent.isModified) {
+      // await updateEvent(event, username)
+      return
+    }
   }
 
   const date2 = new Date()
@@ -129,42 +135,27 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
 const getCurrentEvent = async(event, username) => {
   const rawRows = await executeQuery2(`SELECT * FROM event WHERE isen_id='${event.isenId}' AND username='${username}'`)
   const currentEvent = JSON.parse(JSON.stringify(rawRows))
-  if (currentEvent.length === 0)
-  {
-    await createEvent(event, username)
-    return
-  }
-  const isModifiedEvent = currentEvent.map(event => event.isModified)
-  
-  if (isModifiedEvent[0] === 0)
-  {
-    updateEvent(event, username)
-    return
-  }
+  return currentEvent[0]
 }
 
 const createEvent = async(event, username) => {
   let activityId = await getActivityId(event.activityName)
-  if (activityId.length === 0)
-    await createActivity(event.activityName)
-  activityId = await getActivityId(event.activityName)
+  if (activityId === -1)
+    activityId = await createActivity(event.activityName)
 
-  let projectId = await getProjectId(event.projectName, activityId[0])
-  if (projectId.length === 0)
-    await createProject(event.projectName, activityId[0])
-  projectId = await getProjectId(event.projectName, activityId[0])
+  let projectId = await getProjectId(event.projectName, activityId)
+  if (projectId === -1)
+    projectId = await createProject(event.projectName, activityId)
 
-  let taskId = await getTaskId(event.taskName, projectId[0])
-  if (taskId.length === 0)
-    await createTask(event.taskName, projectId[0])
-  taskId = await getTaskId(event.taskName, projectId[0])
+  let taskId = await getTaskId(event.taskName, projectId)
+  if (taskId === -1)
+    taskId = await createTask(event.taskName, projectId)
   
-
   const now = moment()
   const startDate = moment(new Date(event.startDate).toMysqlFormat())
   const endDate = moment(new Date(event.endDate).toMysqlFormat())
   const duration = endDate.diff(startDate, "minutes")
-  await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${new Date(event.startDate).toMysqlFormat()}', '${new Date(event.endDate).toMysqlFormat()}', '${event.isenId}', '${event.activityName} - ${event.projectName} - ${event.taskName}', '${taskId[0]}', '${username}', '${duration}')`)
+  await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${new Date(event.startDate).toMysqlFormat()}', '${new Date(event.endDate).toMysqlFormat()}', '${event.isenId}', '${event.activityName} - ${event.projectName} - ${event.taskName}', '${taskId}', '${username}', '${duration}')`)
 }
 
 const updateEvent = async(event, username) => {
@@ -192,20 +183,20 @@ const createTask = async(taskName, projectId) => {
 
 const getTaskId = async(taskName, projectId) => {
   const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName}' AND project_id='${projectId}' AND isDeleted='0'`)
-  const taskId = (JSON.parse(JSON.stringify(rows)).map(task => task.task_id))
-  return taskId
+  const taskId = JSON.parse(JSON.stringify(rows)).map(task => task.task_id)
+  return taskId[0] || -1
 }
 
 const getProjectId = async(projectName, activityId) => {
   const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName}' AND activity_id='${activityId}' AND isDeleted='0'`)
-  const projectId = (JSON.parse(JSON.stringify(rows)).map(project => project.project_id))
-  return projectId
+  const projectId = JSON.parse(JSON.stringify(rows)).map(project => project.project_id)
+  return projectId[0] || -1
 }
 
 const getActivityId = async(activityName) => {
   const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName}' AND isDeleted='0'`)
-  const activityId = (JSON.parse(JSON.stringify(rows)).map(activity => activity.activity_id))
-  return activityId
+  const activityId = JSON.parse(JSON.stringify(rows)).map(activity => activity.activity_id)
+  return activityId[0] || -1
 }
 
 module.exports = router;
