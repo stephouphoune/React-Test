@@ -4,6 +4,7 @@ const router = express.Router();
 const executeQuery = require('../services/executeQuery')
 const entityManager = require('../services/entityManager')
 const asyncHandler = require('../services/asyncHandler')
+const moment = require('moment')
 
 const createEvent = rawEvent => ({
     id: rawEvent.event_id,
@@ -31,7 +32,7 @@ function twoDigits(d) {
 }
 
 Date.prototype.toMysqlFormat = function() {
-    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
 Date.prototype.toMysqlFormatDay = function() {
@@ -46,9 +47,9 @@ const getMysqlDateCompare = date =>
 router.post('/api/event', (req, res) => {
     try {
         const data = req.body
-        const now = new Date()
-        console.log(new Date(data.startDate).toMysqlFormat(), new Date(data.endDate).toMysqlFormat())
-        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', ${data.isModified}, ${data.isDeleted}, '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(data.endDate).toMysqlFormat()}', ${data.isenId ? data.isenId : 'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
+        console.log("---------------------", data)
+        const now = moment()
+        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.add(data.duration, 'minutes').format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()

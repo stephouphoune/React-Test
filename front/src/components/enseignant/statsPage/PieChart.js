@@ -34,50 +34,6 @@ function getRandomColors(count) {
   return colors;
 }
 
-/*function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-const getRandomColor = rotation => {
-  console.log('color', rotation)
-  let red = 0
-  let green = 0
-  let blue = 0
-  const redRotation = rotation + Math.PI / 3
-  const greenRotation = rotation + 2 * Math.PI / 3
-  const blueRotation = rotation + 4 * Math.PI / 3
-  red = redRotation < 2 * (Math.PI / 3)
-    ? 127 + ((redRotation - (Math.PI / 3)) / (Math.PI / 3)) * 127
-    : 0
-  green = greenRotation < 4 * (Math.PI / 3)
-    ? 127 + ((redRotation - 5 * Math.PI / 3) / (Math.PI / 3)) * 127
-    : 0
-  blue = blueRotation < 2 * Math.PI
-    ? 127 + ((blueRotation - 7 * Math.PI / 3) / (Math.PI / 3)) * 127
-    : 0
-  
-  return rgbToHex(red, green, blue)
-}
-
-const getRandomColors = count => {
-  let rotation = 0
-  const colors = []
-  for (let i=0; i<count; i++) {
-    colors.push(getRandomColor(rotation))
-    rotation = rotation + (2 * Math.PI / 3) + (Math.PI / 3) * Math.random()
-    if (rotation >= 2 * Math.PI) {
-      rotation = rotation - 2 * Math.PI
-    }
-  }
-  console.log('colors', colors)
-  return colors
-}
-*/
 class PieChart extends Component{
 
   static defaultProps = {//proprietes par default du composant graphique
@@ -87,6 +43,7 @@ class PieChart extends Component{
   }
 
   getChartData = () => {
+    console.log(this.props.choice)
     if (this.props.choice === 'project')
     {
       return {
@@ -97,7 +54,7 @@ class PieChart extends Component{
         }]
       }
     }
-    if (this.props.choice === 'task')
+    else if (this.props.choice === 'task')
     {
       return {
         labels: this.props.statsTasks.map(stat => stat.taskName),
@@ -109,7 +66,7 @@ class PieChart extends Component{
     }
   }
   render() {
-    if ((!this.props.statsProjects && this.props.choice==='project') || (!this.props.statsTasks && this.props.choice==='task'))
+    if (this.getChartData().datasets[0].data.length === 0)
     {
       return <h1>Aucune tâche à analyser...</h1>
     }
@@ -135,10 +92,12 @@ class PieChart extends Component{
 }
 
 const getProperStatsTasks = store => {
+  
   const { statsTasks } = store.statsTasks
     return statsTasks.map(stat => {
+      console.log(stat)
       const task = store.task.tasks.find(task => task.id === stat.taskId)
-
+      
       return {
         taskName: task ? task.name : 'tache inconnue',
         taskId: stat.taskId,
@@ -150,7 +109,9 @@ const getProperStatsTasks = store => {
 const getProperStatsProjects = store => {
   const { statsProjects } = store.statsProjects
     return statsProjects.map(stat => {
+      console.log(stat)
       const project = store.project.projects.find(project => project.id === stat.projectId)
+      
       return {
         projectName: project ? project.name : 'projet inconnu',
         projectId: stat.projectId,

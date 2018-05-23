@@ -81,16 +81,9 @@ export const postEvent = dispatch => ({ activity, project, task, description, du
     //const endDate = moment().hour(12).minute(0).second(0).add(duration, 'minutes').toDate()
 
     const data = {
-        activityId: activity.id,
-        projectId: project.id,
         taskId: task.id,
         description,
-        startDate: date.toDate(),
-        endDate: date.add(duration, 'minutes').toDate(),
-        isModified: false,
-        isDeleted: false,
         name: `${activity.name} - ${project.name} - ${task.name}`,
-        isenId:null,
         duration
     }
 

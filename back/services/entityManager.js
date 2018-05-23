@@ -165,7 +165,10 @@ getProjectsFromActivityId = async(username, activityId) => {
         {
             durationProject+=duration.duration
         }
-        projectsStats.push({projectId:project.project_id, duration:durationProject})
+        if (durationProject > 0)
+        {
+            projectsStats.push({projectId:project.project_id, duration:durationProject})
+        }
         durationProject=0
     }
     return projectsStats
@@ -175,7 +178,7 @@ const getEventsStatsProjects = async(username, projectId) => {
     const rawRows = await executeQuery2(`SELECT task_id FROM task WHERE project_id='${projectId}'`)
     const taskIds = JSON.parse(JSON.stringify(rawRows))
     const sqlTaskIds = taskIds.map(item => item.task_id).join(', ')
-    const rawRows2 = await executeQuery2(`SELECT duration FROM event WHERE task_id in (${sqlTaskIds})`)
+    const rawRows2 = await executeQuery2(`SELECT duration FROM event WHERE task_id in (${sqlTaskIds}) AND isDeleted='0'`)
     const duration = JSON.parse(JSON.stringify(rawRows2))
     
     return duration

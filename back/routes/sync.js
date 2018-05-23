@@ -5,11 +5,15 @@ const entityManager = require('../services/entityManager')
 const asyncHandler = require('../services/asyncHandler')
 const fetchIcal = require('../services/fetchIcal')
 const executeQuery2 = require('../services/executeQuery2')
-
+const moment = require('moment')
 
 Date.prototype.toMysqlFormat = function() {
-  return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+  return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
+
+Date.prototype.toMysqlFormatDay = function() {
+  return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate());
+}
 
 function twoDigits(d) {
   if(0 <= d && d < 10) return "0" + d.toString();
@@ -57,6 +61,7 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   const icalKeys = Object.keys(ical)
   const eventKeys = icalKeys.filter(icalKey => icalKey.indexOf('Aurion-') === 0)
   console.log("Avant")
+
   const events = eventKeys.map(eventKey => {
     const rawEvent = ical[eventKey]
     const description = getEventDetailsFromDescription(rawEvent.description)
@@ -110,8 +115,10 @@ router.get('/api/sync', asyncHandler(async(req, res) => {
   .filter(event => event !== null)
   
   for (event of events) {
-    await getCurrentEvent(event, username)
-    
+    const now = moment()
+    //VERIFICATION DE LA JOURNEE EN COURS POUR LA SYNCHRONISATION
+    if (now.format('YYYY-MM-DD') === new Date(event.startDate).toMysqlFormatDay())
+      await getCurrentEvent(event, username)
   }
 
   const date2 = new Date()
@@ -128,9 +135,10 @@ const getCurrentEvent = async(event, username) => {
     return
   }
   const isModifiedEvent = currentEvent.map(event => event.isModified)
+  
   if (isModifiedEvent[0] === 0)
   {
-    //updateEvent(event, username)
+    updateEvent(event, username)
     return
   }
 }
@@ -150,14 +158,21 @@ const createEvent = async(event, username) => {
   if (taskId.length === 0)
     await createTask(event.taskName, projectId[0])
   taskId = await getTaskId(event.taskName, projectId[0])
-  //Créer evenement 
-  //const duration = 
-  //await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.toMysqlFormat()}', '${now.toMysqlFormat()}', '${new Date(startDate).toMysqlFormat()}', '${new Date(endDate).toMysqlFormat()}', '${isenId}', '${activityName} - ${projectName} - ${taskName}', '${taskId}', '${req.user.username}', '${duration}')`)
+  
+
+  const now = moment()
+  const startDate = moment(new Date(event.startDate).toMysqlFormat())
+  const endDate = moment(new Date(event.endDate).toMysqlFormat())
+  const duration = endDate.diff(startDate, "minutes")
+  await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${new Date(event.startDate).toMysqlFormat()}', '${new Date(event.endDate).toMysqlFormat()}', '${event.isenId}', '${event.activityName} - ${event.projectName} - ${event.taskName}', '${taskId[0]}', '${username}', '${duration}')`)
 }
 
 const updateEvent = async(event, username) => {
-  //const duration = 
-  await executeQuery2(`UPDATE event SET isModified='1', startDate='${event.startDate}', endDate='${event.endDate}, lastUpdateDate='${now.toMysqlFormat()}', name='${event.activityName} - ${event.projectName} - ${event.taskName}', duration='${duration}' WHERE isen_id='${event.isenId}' AND username='${username}'`)
+  const now = moment()
+  const startDate = moment(new Date(event.startDate).toMysqlFormat())
+  const endDate = moment(new Date(event.endDate).toMysqlFormat())
+  const duration = endDate.diff(startDate, "minutes")
+  await executeQuery2(`UPDATE event SET startDate='${new Date(event.startDate).toMysqlFormat()}', endDate='${new Date(event.endDate).toMysqlFormat()}', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${event.activityName} - ${event.projectName} - ${event.taskName}', description='${event.description}', duration='${duration}' WHERE isen_id='${event.isenId}' AND username='${username}'`)
 }
 
 const createActivity = async(activityName) => {
@@ -176,19 +191,19 @@ const createTask = async(taskName, projectId) => {
 }
 
 const getTaskId = async(taskName, projectId) => {
-  const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName}' AND project_id='${projectId}'`)
+  const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName}' AND project_id='${projectId}' AND isDeleted='0'`)
   const taskId = (JSON.parse(JSON.stringify(rows)).map(task => task.task_id))
   return taskId
 }
 
 const getProjectId = async(projectName, activityId) => {
-  const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName}' AND activity_id='${activityId}'`)
+  const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName}' AND activity_id='${activityId}' AND isDeleted='0'`)
   const projectId = (JSON.parse(JSON.stringify(rows)).map(project => project.project_id))
   return projectId
 }
 
 const getActivityId = async(activityName) => {
-  const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName}'`)
+  const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName}' AND isDeleted='0'`)
   const activityId = (JSON.parse(JSON.stringify(rows)).map(activity => activity.activity_id))
   return activityId
 }
