@@ -49,17 +49,47 @@ const options  = {
 //*****************************
 class AeraChart extends Component{
   
+
   getChartData = () => {
-    return {
-      labels: this.props.statsActivities.map(activity => activity.month),
-      datasets: this.props.statsActivities.map(activity => 
-        [{
-          label: activity.activityName,
-          backgroundColor: getRandomColors(),
-          data: activity.duration,
-        }]
-      )
+    const monthTab = []
+    const aeraChartData = []
+    const aeraChartDataName = []
+    for (let i=5;i>=0;i--)
+    {
+        monthTab.push(moment().subtract(i,'months').format("MMMM"))
     }
+    for (const month of monthTab)
+    {
+      for (const activity of this.props.statsActivities)
+      {
+        if (aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName) !== -1)
+        {
+          continue
+        }
+        else if (activity.month === month)
+        {
+          aeraChartData.push({name:activity.activityName, duration:activity.duration, month:month})
+        }
+        else {
+          aeraChartData.push({name:activity.activityName, duration:0, month:month})
+        }
+      }
+    }
+    for (const data of aeraChartData)
+    {
+      if (aeraChartDataName.includes(data.name))
+        continue
+      else aeraChartDataName.push(data.name)
+    }
+
+    /*return {
+      labels: monthTab,
+      datasets: [aeraChartDataName.map(data => {
+          label: data,
+          backgroundColor: getRandomColors(aeraChartDataName.length)[aeraChartDataName.findIndex(data2 => data2 === "Evaluation")],
+          data: activity.duration,
+        })]}
+    }*/
   }
 
   render() {
@@ -90,7 +120,8 @@ const getProperStats = store => {
 
 
 const mapStateToProps = store => ({
-  statsActivities: getProperStats(store)
+  statsActivities: getProperStats(store),
+  activities:store.activity.activities
 })
 
 export default connect(

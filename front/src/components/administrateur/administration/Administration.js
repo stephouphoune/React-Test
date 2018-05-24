@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Row, Col, Select, Button} from 'antd';
 import { connect } from 'react-redux'
 import { requestGetUsers } from '../../../appState/actions/users'
-//import { connectionAdmin } from 
+import { connectionAdmin } from '../../../appState/actions/admin'
 import './Administration.css';
 
 
@@ -20,7 +20,7 @@ class Administration extends Component{
     }
 
     connection = () => {
-        //this.props.connectionAdmin(this.state.username)
+        this.props.connectionAdmin(this.state.username)
     }
 
     handleChange = (username) => {
@@ -71,7 +71,7 @@ const mapStateToProps = store => ({
   
   const mapDispatchtoProps = dispatch => ({
     requestGetUsers: requestGetUsers(dispatch),
-    //connectionAdmin: connectionAdmin(dispatch)
+    connectionAdmin: connectionAdmin(dispatch)
   })
   
   export default connect(

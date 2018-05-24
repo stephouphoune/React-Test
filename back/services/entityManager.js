@@ -115,7 +115,7 @@ const getEventsStatsActivities = async(username) => {
 
     const rawRows = await executeQuery2(`SELECT MONTH(startDate) as month, YEAR(startDate) as year, duration, task_id FROM event WHERE username='${username}' AND isDeleted=0 AND MONTH(startDate) in (${monthTab}) AND YEAR(startDate) in (${yearTab})`)
     const events = JSON.parse(JSON.stringify(rawRows))
-    return
+    
     const activitiesStats = []
     // { activityId, name, duration }
     for (const event of events) {

@@ -21,6 +21,7 @@ const statsActivities = require('./routes/statsActivities')
 const statsCsv = require('./routes/statsCsv')
 const advancement = require('./routes/advancement')
 const sync = require('./routes/sync')
+const admin = require('./routes/admin')
 
 const cors = require('cors');
 
@@ -84,6 +85,7 @@ app.use('/', statsActivities)
 app.use('/', advancement)
 app.use('/', workdays)
 app.use('/', sync)
+app.use('/', admin)
 //app.use('/users', users);
 //-------------------------------Appel des ressources
 

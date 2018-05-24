@@ -17,6 +17,7 @@ import statsActivitiesReducer from './reducers/statsActivities';
 import statsProjectsReducer from './reducers/statsProjects'
 import deleteEntityMiddleware from './middleware/deleteEntity'
 import setVisibilityEntity from './middleware/setVisibilityEntity'
+import adminReducer from './reducers/admin'
 
 const persistConfig = {
     key: 'root',
@@ -36,7 +37,8 @@ const store = createStore(
         statsTasks:statsTasksReducer,
         statsProjects:statsProjectsReducer,
         statsCsv:statsCsvReducer,
-        statsActivities:statsActivitiesReducer
+        statsActivities:statsActivitiesReducer,
+        admin:adminReducer
     }),
     compose(
         applyMiddleware(deleteEntityMiddleware),
