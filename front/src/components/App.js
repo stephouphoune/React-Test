@@ -8,7 +8,7 @@ import { requestGetTasks } from '../appState/actions/task'
 import { getWorkdays } from '../appState/actions/workday'
 import { getEvents } from '../appState/actions/event'
 import { getStatsCsv } from '../appState/actions/statsCsv'
-import { getStatsActivities } from '../appState/actions/statsActivities'
+
 import './App.css';
 import AppContent from './login/AppContent';
 import Login from './login/Login';
@@ -23,7 +23,6 @@ class App extends Component {
       this.props.getActivities()
       this.props.getProjects()
       this.props.getLabels()
-      this.props.getUsers()
       this.props.getTasks()
       this.props.getWorkdays()
       this.props.getStatsCsv()
@@ -37,7 +36,6 @@ class App extends Component {
       nextProps.getActivities()
       nextProps.getProjects()
       nextProps.getLabels()
-      nextProps.getUsers()
       nextProps.getTasks()
       nextProps.getWorkdays()
       nextProps.getEvents()
@@ -69,7 +67,6 @@ const mapDispatchtoProps = dispatch => ({
   getWorkdays: getWorkdays(dispatch),
   getEvents: getEvents(dispatch),
   getStatsCsv: getStatsCsv(dispatch),
-  getStatsActivities: getStatsActivities(dispatch)
 })
 
 export default connect(

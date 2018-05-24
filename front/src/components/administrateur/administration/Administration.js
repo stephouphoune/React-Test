@@ -1,38 +1,37 @@
 import React, { Component } from 'react';
 import {Row, Col, Select, Button} from 'antd';
+import { connect } from 'react-redux'
+import { requestGetUsers } from '../../../appState/actions/users'
+//import { connectionAdmin } from 
 import './Administration.css';
 
 
-function handleChange(value) {
-    console.log(`selected ${value}`);
-}
-
-function handleBlur() {
-    console.log('blur');
-}
-
-function handleFocus() {
-    console.log('focus');
-}
 
 class Administration extends Component{
+
+    componentDidMount = () => {
+        this.props.requestGetUsers()
+    }
 
     state = {
         loading: false,
         iconLoading: false,
+        username:null
     }
 
-    enterLoading = () => {
-        this.setState({ loading: true });
+    connection = () => {
+        //this.props.connectionAdmin(this.state.username)
     }
 
-    enterIconLoading = () => {
-        this.setState({ iconLoading: true });
+    handleChange = (username) => {
+        this.setState({
+            username
+        })
     }
-
 
   render() {
     return (
+
         <div className="Administration">
             <Row type="flex" justify="center" className="Titre">
                 <h1>Choix du compte Enseignant</h1>
@@ -40,25 +39,22 @@ class Administration extends Component{
             <Row type="flex" justify="center">
                 <Select
                     showSearch
+                    onChange={this.handleChange}
                     style={{ width: 220 }}
                     placeholder="Sélectionnez un enseignant"
                     optionFilterProp="children"
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
-                    <Select.Option value="pbouve19">Pierre-Jean Bouvet</Select.Option>
-                    <Select.Option value="mcabon19">Mickaël Cabon</Select.Option>
-                    <Select.Option value="tnapol19">Thibault Napoléon</Select.Option>
+                    {this.props.users.map(user => 
+                        <Select.Option value={user.username}>{user.firstName+" "+user.lastName}</Select.Option>
+                    )}
                 </Select>
             </Row>
             <Row type="flex" justify="center" className="Connexion">
                 <Button 
+                    onClick={this.connection}
                     type="primary" 
                     icon="key" 
-                    loading={this.state.iconLoading} 
-                    onClick={this.enterIconLoading}
                 >
                     Connexion
                 </Button>
@@ -68,4 +64,17 @@ class Administration extends Component{
   }
 }
 
-export default Administration;
+
+const mapStateToProps = store => ({
+    users: store.users.users,
+  });
+  
+  const mapDispatchtoProps = dispatch => ({
+    requestGetUsers: requestGetUsers(dispatch),
+    //connectionAdmin: connectionAdmin(dispatch)
+  })
+  
+  export default connect(
+    mapStateToProps, 
+    mapDispatchtoProps
+  )(Administration);

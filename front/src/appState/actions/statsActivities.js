@@ -1,5 +1,6 @@
 import * as types from '../types/statsActivities'
 import store from '../createReduxStore'
+import moment from 'moment'
 
 const receiveStatsActivities = (statsActivities = []) => ({
     type: types.RECEIVE_GET_STATS_ACTIVITIES,

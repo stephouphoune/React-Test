@@ -1,6 +1,7 @@
 const moment = require('moment')
 const executeQuery2 = require('./executeQuery2')
 
+
 //-----------------------------------Delete----------------------------------------------------------------------------------
 
 const deleteEvent = async (id) => {
@@ -103,22 +104,34 @@ const getActivitiesCsv = async(activityId) => {
 //-----------------------------------StatsActivities----------------------------------------------------------------------------------
 
 const getEventsStatsActivities = async(username) => {
-    const rawRows = await executeQuery2(`SELECT MONTH(startDate), duration, task_id FROM event WHERE username='${username}' AND isDeleted=0 AND MONTH(startDate) between (MONTH(startDate)-6) AND '${moment(now, "M")}'`)
+
+    const monthTab = []
+    const yearTab = []
+    for (i=0;i<=5;i++)
+    {
+        monthTab.push(moment().subtract(i,'months').format("M"))
+        yearTab.push(moment().subtract(i, 'months').format("YYYY"))
+    }
+
+    const rawRows = await executeQuery2(`SELECT MONTH(startDate) as month, YEAR(startDate) as year, duration, task_id FROM event WHERE username='${username}' AND isDeleted=0 AND MONTH(startDate) in (${monthTab}) AND YEAR(startDate) in (${yearTab})`)
     const events = JSON.parse(JSON.stringify(rawRows))
-    
+    return
     const activitiesStats = []
     // { activityId, name, duration }
     for (const event of events) {
+        
         const activity = await getActivityFromTaskId(event.task_id)
-        if (activitiesStats.findIndex(stat => stat.activityId === activity.activity_id) === -1) { // si y'a pas de stat pour l'instant pour l'activityId
+        if (activitiesStats.findIndex(stat => stat.activityId === activity.activity_id && stat.month === event.month) === -1) { // si y'a pas de stat pour l'instant pour l'activityId
             activitiesStats.push({
                 activityId: activity.activity_id,
                 name: activity.name,
-                duration: event.duration
+                duration: event.duration,
+                month: event.month,
+                year: event.year
             })
         }
         else {
-            const stat = activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id)]
+            const stat = activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id && stat.month === event.month)]
             const newStat = {
                 ...stat,
                 duration: stat.duration + event.duration

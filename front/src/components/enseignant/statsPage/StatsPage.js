@@ -8,6 +8,8 @@ import Select from './Select';
 import { getStatsActivities } from '../../../appState/actions/statsActivities'
 import { getStatsCsv } from '../../../appState/actions/statsCsv'
 import DownloadButton from './DownloadButton';
+import moment from 'moment'
+
 
 class StatsPage extends Component{
 
@@ -74,7 +76,6 @@ class StatsPage extends Component{
 }
 
 const mapStateToProps = store => ({
-  statsActivities: store.statsActivities.statsActivities,
   events: store.event.events
 })
 

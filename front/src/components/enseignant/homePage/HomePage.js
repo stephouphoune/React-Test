@@ -77,7 +77,7 @@ class HomePage extends Component{
     if (event.duration - event.oldEvent.duration <= lastDuration)
       this.props.modifyEvent(event)
     else if (this.state.progress !== 100 && event.duration - event.oldEvent.duration > lastDuration)
-      message.warning(`'La durée de votre évènement ne peut pas dépasser ${event.oldEvent.duration + lastDuration} minutes'`)
+      message.warning(`'La durée de cet évènement ne peut pas dépasser ${event.oldEvent.duration + lastDuration} minutes'`)
     else message.warning('La journée est déjà terminée, vous ne pouvez pas donc augmenter la durée d\'un évènement')
   }
 

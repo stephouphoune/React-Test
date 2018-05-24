@@ -88,16 +88,18 @@ export const postEvent = dispatch => ({ activity, project, task, description, du
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     //const noon = moment().hour(12).minute(0).second(0).toDate()
     //const endDate = moment().hour(12).minute(0).second(0).add(duration, 'minutes').toDate()
-    
+    const timestamp = moment().format('X')
+    date = date.format('X')
+
     const data = {
         taskId: task.id,
         description,
         name: `${activity.name} - ${project.name} - ${task.name}`,
         duration,
-        date
+        date, 
+        timestamp
     }
 
-    console.log(data.date)
     fetch(`http://localhost:3001/api/event`, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -180,16 +182,14 @@ export const deleteEvent = dispatch => (eventId) => {
 
 export const modifyEvent = dispatch => (event) => {
     dispatch(requestModifyEvent())
-    const endDate = moment(event.oldEvent.startDate).clone().add(event.duration, 'minutes')
+    const timestamp = moment().format('X')
     const data = {
         ...event.oldEvent,
-        activityId: event.activity.id,
-        projectId: event.project.id,
         taskId: event.task.id,
         description: event.description,
-        endDate,
         name: `${event.activity.name} - ${event.project.name} - ${event.task.name}`,
-        duration: event.duration
+        duration: event.duration,
+        timestamp
     }
 
     fetch(`http://localhost:3001/api/event/${event.oldEvent.id}`, {

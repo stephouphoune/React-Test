@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
+const executeQuery2 = require('../services/executeQuery2')
 
 const createUser = rawUser => ({
   firstName:rawUser.firstName,
@@ -13,7 +14,8 @@ const createUsers = rawUsers => rawUsers.map(createUser)
 /* GET Activity */
 router.get('/api/users', (req, res) => {
     try {
-        executeQuery('SELECT username, firstName, lastName FROM user', (err,rows) => {
+        
+        executeQuery(`SELECT username, firstName, lastName FROM user WHERE isAdmin='0'`, (err,rows) => {
           if (err) {
             res.status(500);
             res.end()

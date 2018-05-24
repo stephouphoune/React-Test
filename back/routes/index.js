@@ -30,7 +30,7 @@ router.get('/api/user', (req, res) => {
         const user = JSON.parse(JSON.stringify(rows))[0];
         if (user.password===password) {
             const isAdmin = user.isAdmin ? true : false;
-            const token = jwt.sign({ username, password, isAdmin }, 'monsupermotdepasseincracable');
+            const token = jwt.sign({ username, password }, 'monsupermotdepasseincracable');
             const firstName=user.firstName
             const lastName=user.lastName
             const url = user.url_calendar

@@ -47,9 +47,12 @@ const getMysqlDateCompare = date =>
 router.post('/api/event', (req, res) => {
     try {
         const data = req.body
-        const now = moment()
-        console.log('-------------------',now.unix(1318781876))
-        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.add(data.duration, 'minutes').format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
+        const now = moment.unix(data.timestamp)
+        const startDate = moment.unix(data.date)
+        const endDate = moment.unix(data.date)
+        endDate.add(data.duration, 'minutes')
+        
+        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${startDate.format('YYYY-MM-DD HH:mm:ss')}', '${endDate.format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
@@ -66,8 +69,8 @@ router.post('/api/event', (req, res) => {
                 isDeleted: 0,
                 creationDate: now,
                 lastUpdateDate: now,
-                startDate: data.startDate,
-                endDate: data.endDate,
+                startDate: startDate,
+                endDate: endDate,
                 isenId: null,
                 taskId: data.taskId,
                 username: data.username,
@@ -112,23 +115,26 @@ router.get('/api/event', (req, res) => {
 
 router.put('/api/event/:id', (req, res) => {
     try {
+        //2018-05-23 14:59:00   2018-05-23 12:59:35   2018-05-24 13:19:50 2018-05-24 14:04:50
+        //2018-05-23 14:59:00 2018-05-23 14:59:00 2018-05-24 14:49:50 2018-05-24 15:04:50
         const data = req.body
-        const now = new Date()
+        const now = moment.unix(data.timestamp)
         const eventId = req.params.id
         const user = req.user
         //console.log(req.body)
-        executeQuery(`UPDATE event SET description='${data.description}', isModified=1, isDeleted=${data.isDeleted}, lastUpdateDate='${now.toMysqlFormat()}', startDate='${new Date(data.startDate).toMysqlFormat()}', endDate='${new Date(data.endDate).toMysqlFormat()}', name='${data.name}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
+        executeQuery(`UPDATE event SET description='${data.description}', isModified='1', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${data.name}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
                 console.log(err)
                 return;
             }
+            console.log('---------------------',data)
             const newEvent = {
                 id: parseInt(eventId, 10),
                 name: data.name,
                 description: data.description,
-                isModified: true,
+                isModified: 1,
                 isDeleted: data.isDeleted,
                 creationDate: data.creationDate,
                 lastUpdateDate: now,

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Line } from 'react-chartjs-2'
+import moment from 'moment'
+
 //inserer des donnees a traiter
 function rainbow(numOfSteps, step) {
   // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
@@ -30,6 +32,8 @@ function getRandomColors(count) {
     
   return colors;
 }
+
+
 const options  = {
     scales: {
         yAxes: [{
@@ -45,28 +49,29 @@ const options  = {
 //*****************************
 class AeraChart extends Component{
   
-  /*getChartData = () => {
+  getChartData = () => {
     return {
-      labels: ['Janvier', 'Février'],
-      datasets: [this.props.statsActivities.map(activity => 
-        {
+      labels: this.props.statsActivities.map(activity => activity.month),
+      datasets: this.props.statsActivities.map(activity => 
+        [{
           label: activity.activityName,
-          backgroundColor: this.getRandomColors(),
-          data: activity.duration
-        }
-      )]
+          backgroundColor: getRandomColors(),
+          data: activity.duration,
+        }]
+      )
     }
-  }*/
+  }
 
   render() {
-    console.log(this.props.statsActivities)
     return (
       <Line 
           options={options}
+          data={this.getChartData()}
       />
     );
   }
 }
+
 
 const getProperStats = store => {
   const { statsActivities } = store.statsActivities
@@ -77,6 +82,7 @@ const getProperStats = store => {
         activityName: activity ? activity.name : 'tache inconnue',
         activityId: stat.activityId,
         duration: stat.duration, 
+        month: moment.months(stat.month-1)
       }
     })
 }

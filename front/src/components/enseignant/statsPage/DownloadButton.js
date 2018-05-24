@@ -7,6 +7,21 @@ import './DownloadButton.css';
 
 class DownloadButton extends Component {
   
+  state = ({
+    visible:false
+  })
+
+  onClickXls = () => {
+    this.setState({
+      visible:false
+    })
+  }
+
+  onClickDownload = () => {
+    this.setState({
+      visible:true
+    })
+  }
 
   render(){
 
@@ -22,8 +37,8 @@ class DownloadButton extends Component {
       </div>
     );
     return(
-      <Popover content={content} placement="topLeft" trigger="click" title="Exportation de l'analyse">
-        <Button type="primary" icon="download" shape="circle" size={'large'} ></Button>
+      <Popover visible={this.state.visible} content={content} placement="topLeft" trigger="click" title="Exportation de l'analyse">
+        <Button onClick={this.onClickDownload} type="primary" icon="download" shape="circle" size={'large'} ></Button>
       </Popover>
     )
   }

@@ -9,9 +9,9 @@ router.get('/api/statsActivities', asyncHandler(async(req, res) => {
     
   try{
     const user = req.user
-    //const statsActivities = await entityManager.getEventsStatsActivities(user.username)
-    //console.log(statsActivities)
-    //res.send(statsActivities)
+    const statsActivities = await entityManager.getEventsStatsActivities(user.username)
+    console.log(statsActivities)
+    res.send(statsActivities)
     res.end()
 
   }
