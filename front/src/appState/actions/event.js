@@ -3,6 +3,10 @@ import store from '../createReduxStore'
 import { notification } from 'antd'
 import moment from 'moment'
 import { fullReload } from './fullReload';
+import { receiveSignIn } from '../actions/user'
+import { forceReset } from '../actions/reset'
+import getCurrentToken from '../reducers/admin'
+
 const requestPostEvent = () => ({
     type: types.REQUEST_POST_EVENT
 })
@@ -48,18 +52,21 @@ export const deleteEvents = (eventIds) => ({
     eventIds
 })
 
-export const getSyncEvents = dispatch => () => {
+export const getSyncEvents = dispatch => (date) => {
     notification['info']({
         placement: "bottomLeft",
         duration: 0,
         message: 'Synchronisation en cours, veuillez patienter...',
-        description:'Task Eat',
+        description:'Information Task-Eat',
+        style:{
+            textAlign:'left'
+        },
         key:1
     });
     fetch(`http://localhost:3001/api/sync`, {
         method: 'GET',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
@@ -75,15 +82,27 @@ export const getSyncEvents = dispatch => () => {
         //const {events} = data
         notification.close(1)
         dispatch(receiveGetSyncEvents())
-        fullReload(dispatch)()
+        fullReload(dispatch)(date)
     }).catch(() => {
         dispatch(receiveGetSyncEvents())
+        notification.close(1)
+        notification['info']({
+            placement: "bottomLeft",
+            duration: 5,
+            message: 'La synchronisation de votre agenda n\'a pas pu être effectuée, veuillez vérifier l\'adresse enregistrée',
+            description:'Information Task-Eat',
+            style:{
+                textAlign:'left'
+            },
+            key:2
+        })
     })
 }
 
 export const postEvent = dispatch => ({ activity, project, task, description, duration, date }) => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestPostEvent())
+    
     //Un fetch se décompose en header/body/footer si on le souhaite. 
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     //const noon = moment().hour(12).minute(0).second(0).toDate()
@@ -136,7 +155,7 @@ export const getEvents = dispatch => (date = new Date()) => {
     fetch(`http://localhost:3001/api/event?date=${date.toISOString()}`, {
         method: 'GET',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
@@ -213,6 +232,6 @@ export const modifyEvent = dispatch => (event) => {
     })
     .catch(() => {
         dispatch(receiveModifyEvent())
-        notification.warning('problème')
+        
     })
 }

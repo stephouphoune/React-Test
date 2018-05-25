@@ -16,16 +16,19 @@ class Administration extends Component{
     state = {
         loading: false,
         iconLoading: false,
-        username:null
+        username:null,
+        userSelected:false
     }
 
     connection = () => {
-        this.props.connectionAdmin(this.state.username)
+        if (this.state.userSelected)
+            this.props.connectionAdmin(this.state.username)
     }
 
     handleChange = (username) => {
         this.setState({
-            username
+            username,
+            userSelected:true
         })
     }
 

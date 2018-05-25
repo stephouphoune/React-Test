@@ -53,6 +53,10 @@ router.get('/api/project', (req, res) => {
     });
 
 router.post('/api/project', (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+}
     if (!req.user || !req.user.isAdmin) {
         res.status(401)
         return res.end()
@@ -85,6 +89,10 @@ router.post('/api/project', (req, res) => {
 });
 
 router.put('/api/project/:id', (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+}
   try {
       const data = req.body
       console.log('-------------------', data)
@@ -117,6 +125,10 @@ router.put('/api/project/:id', (req, res) => {
 
 router.delete('/api/project/:id', asyncHandler(async(req, res) => {
   //Route qui décrit un paramètre d'entrée (c'est du routing)
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+  }
   const { id } = req.params
 
   await entityManager.deleteProject(id)
@@ -124,6 +136,10 @@ router.delete('/api/project/:id', asyncHandler(async(req, res) => {
 }))
 
 router.patch('/api/project/:id', asyncHandler(async(req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+      res.status(401)
+      return res.end()
+  }
     const data = req.body
     const { id } = req.params
   

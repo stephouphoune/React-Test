@@ -5,8 +5,17 @@ const initialState = {
     firstName:null,
     lastName:null,
     url:null,
+    token:null,
+    isAdmin:null,
     signinError: false,
     signinLoading: false,
+}
+
+export const getCurrentToken = state => {
+	const adminToken = state.admin.token
+	const userToken = state.user.token
+	if (adminToken) return adminToken
+	return userToken
 }
 
 const adminReducer = (state = initialState, action) => {
@@ -17,6 +26,7 @@ const adminReducer = (state = initialState, action) => {
                 signinLoading: true
             }
         case types.ADMIN_RECEIVE_SIGNIN:
+            
             return {
                 ...state,
                 signinLoading: false,
@@ -24,6 +34,8 @@ const adminReducer = (state = initialState, action) => {
                 firstName:action.firstName,
                 lastName:action.lastName,
                 url:action.url,
+                isAdmin:action.isAdmin,
+                token:action.token,
                 signinError: action.signinError,    
             }
         default:

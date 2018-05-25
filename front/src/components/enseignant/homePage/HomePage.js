@@ -11,7 +11,8 @@ class HomePage extends Component{
   state = {
     progress: 0,
     selectedDate: moment(),
-    visiblePopover:false
+    visiblePopover:false,
+    notification:false
   }
 
   componentDidMount(){
@@ -23,21 +24,32 @@ class HomePage extends Component{
       this.getProgressFromEvents(nextProps.events, nextProps.workdays);
   }
 
-  openNotification = (e) => {
-    console.log(e)
-    const key = `open${Date.now()}`;
-    notification.config({
-      placement: "bottomRight",
-    });
-    notification.open({
-      style: {
-        textAlign: "justify"
-      },
-      duration: 0,
-      message: 'Task-Eat',
-      description: 'Task-Eat est une application web de gestion d\'activités enseignantes développé dans le cadre d\'un projet de fin d\'année de Master 1 au sein de l\'école d`\'ingénieur ISEN Brest par deux étudiants de Master 1 : Stéphane Perreaux et Thomas Orvain. Leur encadrant de projet, Pierre-Jean Bouvet, enseignant chercheur, utilisait un logiciel de gestion de tâches (Laboxy) depuis quelque temps mais n\'en était pas totalement satisfait. L\'encadrant proposa donc aux étudiants de réaliser un logiciel possédant de nouvelles fonctionnalités permettant de faire gagner du temps aux utilisateurs. Le site se devait d\'être ergonomique et d\'intégrer une fonction d\'analyse d\'agenda.',
-      key,
-    });
+  openNotification = () => {
+    const key = 1;
+    if (this.state.notification === false)
+    {
+      this.setState({
+        notification: true
+      })
+      notification.config({
+        placement: "bottomRight",
+      });
+      notification.open({
+        style: {
+          textAlign: "justify"
+        },
+        duration: 0,
+        message: 'Task-Eat',
+        description: 'Task-Eat est une application web de gestion d\'activités enseignantes développé dans le cadre d\'un projet de fin d\'année de Master 1 au sein de l\'école d`\'ingénieur ISEN Brest par deux étudiants de Master 1 : Stéphane Perreaux et Thomas Orvain. Leur encadrant de projet, Pierre-Jean Bouvet, enseignant chercheur, utilisait un logiciel de gestion de tâches (Laboxy) depuis quelque temps mais n\'en était pas totalement satisfait. L\'encadrant proposa donc aux étudiants de réaliser un logiciel possédant de nouvelles fonctionnalités permettant de faire gagner du temps aux utilisateurs. Le site se devait d\'être ergonomique et d\'intégrer une fonction d\'analyse d\'agenda.',
+        key,
+      });
+    }
+    else {
+      this.setState({
+        notification: false
+      })
+      notification.close(1)
+    }
   };
 
   handleDateSelected = selectedDate => {
@@ -145,6 +157,10 @@ class HomePage extends Component{
 
   render() {
     return (
+      <div>
+        <div className='FirstNameLastName'>
+          {this.props.user.firstName+' '+this.props.user.lastName}
+        </div>
         <Row type="flex" style={{marginTop:10}}>
           <Col span={8}>
             <Agenda 
@@ -160,7 +176,7 @@ class HomePage extends Component{
                 selectedDate={this.state.selectedDate}
               />
             </Row>
-            <Row style={{marginTop:"1rem", marginBottom:"2rem"}}  type="flex" align="middle">
+            <Row style={{marginTop:"1rem", marginBottom:"1rem"}}  type="flex" align="middle">
               <Col span={19}>
               <Progress 
                 className="Progress"
@@ -191,6 +207,7 @@ class HomePage extends Component{
             </Row>
           </Col>
         </Row>
+        </div>
     );
   }
 }
@@ -201,6 +218,7 @@ const mapStateToProps = store => ({
   activities: store.activity.activities,
   events: store.event.events,
   workdays: store.workday.workdays,
+  user: store.user
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -8,7 +8,7 @@ import './Agenda.css';
 class Agenda extends Component{
 
   onClick = () => {
-    this.props.getSyncEvents()
+    this.props.getSyncEvents(this.props.selectedDate)
   }
 
   render(){

@@ -11,7 +11,7 @@ import Arborescence from './Arborescence';
 import Duration from './Duration';
 
 
-class SettingsPage extends Component{
+class SettingsPageAdmin extends Component{
   
   state = {
     urlCalendarValue:this.props.url
@@ -88,4 +88,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsPageAdmin);

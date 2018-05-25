@@ -51,6 +51,7 @@ router.post('/api/event', (req, res) => {
         const startDate = moment.unix(data.date)
         const endDate = moment.unix(data.date)
         endDate.add(data.duration, 'minutes')
+
         
         executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${startDate.format('YYYY-MM-DD HH:mm:ss')}', '${endDate.format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {

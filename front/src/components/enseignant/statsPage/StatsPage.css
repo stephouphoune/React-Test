@@ -20,6 +20,10 @@
   display: flex;
   justify-content: flex-start;
 }
+.FirstNameLastName{
+  display: flex;
+  justify-content: flex-end;
+}
 
 .smiley{
   max-width: 100%;

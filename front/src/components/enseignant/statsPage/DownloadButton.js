@@ -11,7 +11,7 @@ class DownloadButton extends Component {
     visible:false
   })
 
-  onClickXls = () => {
+  onClickCsv = () => {
     this.setState({
       visible:false
     })
@@ -30,16 +30,9 @@ class DownloadButton extends Component {
     {
       data.push(this.props.statsCsv[i])
     }
-    const content = (
-      <div className="ExportChoice">
-        <Button className="PDFButton">.pdf</Button>
-        <Button onClick={this.onClickXls} className="XLSButton"><CSVLink data={data} separator={";"} filename="Analyse de temps.csv">.xls</CSVLink></Button>
-      </div>
-    );
+    
     return(
-      <Popover visible={this.state.visible} content={content} placement="topLeft" trigger="click" title="Exportation de l'analyse">
-        <Button onClick={this.onClickDownload} type="primary" icon="download" shape="circle" size={'large'} ></Button>
-      </Popover>
+      <CSVLink data={data} separator={";"} filename="Analyse de temps.csv"><Button className="XLSButton" icon="download" type="primary" shape="circle" size={'large'}></Button></CSVLink>
     )
   }
 }

@@ -24,7 +24,6 @@ export const receiveSignIn = (username, firstName, lastName, url, token, isAdmin
 export const createSignIn = dispatch => (username, password) => {
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestSignIn())
-
     //Un fetch se décompose en header/body/footer si on le souhaite. 
     //Méthode GET Pour obtenir la réponse du serveur (vérification des identifiants)
     fetch(`http://localhost:3001/api/user?username=${username}&password=${password}`, {

@@ -49,6 +49,21 @@ const options  = {
 //*****************************
 class AeraChart extends Component{
   
+  
+  getDurationFromData = (data, aeraChartData) => {
+    const dataDuration = []
+    for (const data2 of aeraChartData)
+    {
+      if (data2.name === data)
+      {
+        dataDuration.push(data2.duration/60)
+      }
+    }
+    console.log(aeraChartData)
+    console.log(data)
+    console.log(dataDuration)
+    return dataDuration
+  }
 
   getChartData = () => {
     const monthTab = []
@@ -58,38 +73,42 @@ class AeraChart extends Component{
     {
         monthTab.push(moment().subtract(i,'months').format("MMMM"))
     }
+    console.log(this.props.statsActivities)
     for (const month of monthTab)
     {
       for (const activity of this.props.statsActivities)
       {
-        if (aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName) !== -1)
+        if (activity.month === month)
         {
-          continue
-        }
-        else if (activity.month === month)
+        if (aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName) === -1)
         {
-          aeraChartData.push({name:activity.activityName, duration:activity.duration, month:month})
+            aeraChartData.push({name:activity.activityName, duration:activity.duration, month:month})
         }
-        else {
-          aeraChartData.push({name:activity.activityName, duration:0, month:month})
+        else 
+          aeraChartData[aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName)]={name:activity.activityName, duration:activity.duration, month:month}
         }
+      else if (aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName) === -1)
+        aeraChartData.push({name:activity.activityName, duration:0, month:month})
+        //else console.log("Déjà dans le tableau", aeraChartData.find(data => data.month === month && data.name === activity.activityName))
       }
     }
+
     for (const data of aeraChartData)
     {
-      if (aeraChartDataName.includes(data.name))
-        continue
-      else aeraChartDataName.push(data.name)
+      if (!aeraChartDataName.includes(data.name))
+        aeraChartDataName.push(data.name)
     }
 
-    /*return {
+    
+    
+    return {
       labels: monthTab,
-      datasets: [aeraChartDataName.map(data => {
+      datasets: aeraChartDataName.map(data => ({
           label: data,
-          backgroundColor: getRandomColors(aeraChartDataName.length)[aeraChartDataName.findIndex(data2 => data2 === "Evaluation")],
-          data: activity.duration,
-        })]}
-    }*/
+          backgroundColor: getRandomColors(aeraChartDataName.length)[aeraChartDataName.findIndex(data2 => data2 === data)],
+          data: this.getDurationFromData(data, aeraChartData)
+        }))}
+    
   }
 
   render() {

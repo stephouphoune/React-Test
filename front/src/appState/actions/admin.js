@@ -5,12 +5,14 @@ const requestSignIn = () => ({
     type: types.ADMIN_REQUEST_SIGNIN
 })
 
-export const receiveSignIn = (username, firstName, lastName, url, signinError) => ({
+export const receiveSignIn = (username, firstName, lastName, token, url, isAdmin, signinError) => ({
     type: types.ADMIN_RECEIVE_SIGNIN,
     username,
     firstName, 
     lastName,
+    token,
     url,
+    isAdmin,
     signinError,
 })
 
@@ -41,9 +43,9 @@ export const connectionAdmin = dispatch => (username) => {
     //Résultat <body>
     .then(body => {
             const data = JSON.parse(body)
-            dispatch(receiveSignIn(username, data.firstName, data.lastName, data.url, false))
+            dispatch(receiveSignIn(username, data.firstName, data.lastName, data.token, data.url, data.isAdmin, false))
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
-        dispatch(receiveSignIn(null, null, null, null, true))
+        dispatch(receiveSignIn(null, null, null, null, null, null,true))
     })
 }

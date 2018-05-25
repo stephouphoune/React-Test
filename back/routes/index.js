@@ -2,16 +2,16 @@ const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
 const executeQuery = require('../services/executeQuery')
-
+const bcrypt = require('bcryptjs')
 /* GET home page. */
 router.get('/api/user', (req, res) => {
   
   //ES6 -> const username = req.query.username et
   //const password = req.query.password
   const { username, password } = req.query
-
+  
   try {
-    executeQuery('SELECT username, firstName, lastName, password, url_calendar, isAdmin FROM user WHERE username='+'"'+username+'"', (err,rows) => {
+    executeQuery(`SELECT username, firstName, lastName, password, url_calendar, isAdmin FROM user WHERE username='${username}'`, (err,rows) => {
       if (err) {
         res.status(500);
         res.end()
@@ -28,13 +28,13 @@ router.get('/api/user', (req, res) => {
       try {
         console.log(rows)
         const user = JSON.parse(JSON.stringify(rows))[0];
-        if (user.password===password) {
+        if (bcrypt.compareSync(password, user.password)) {
             const isAdmin = user.isAdmin ? true : false;
-            const token = jwt.sign({ username, password, isAdmin }, 'monsupermotdepasseincracable');
+            const token = jwt.sign({ username, isAdmin }, 'monsupermotdepasseincracable');
             const firstName=user.firstName
             const lastName=user.lastName
             const url = user.url_calendar
-            console.log('------------', url)
+            
             const responseBody = JSON.stringify({
               token,
               username, 
@@ -47,6 +47,11 @@ router.get('/api/user', (req, res) => {
             res.send(responseBody)
             res.end()
             return;
+        }
+        else {
+          res.status(500)
+          res.end()
+          return
         }
   
        } catch (e) {

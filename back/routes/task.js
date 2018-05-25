@@ -93,6 +93,10 @@ router.post('/api/task', (req, res) => {
 });
 
 router.put('/api/task/:id', (req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+}
   try {
       const data = req.body
       const taskId = req.params.id
@@ -123,6 +127,10 @@ router.put('/api/task/:id', (req, res) => {
 });
 
 router.delete('/api/task/:id', asyncHandler(async(req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+}
   //Route qui décrit un paramètre d'entrée (c'est du routing)
   const { id } = req.params
 
@@ -131,6 +139,10 @@ router.delete('/api/task/:id', asyncHandler(async(req, res) => {
 }))
 
 router.patch('/api/task/:id', asyncHandler(async(req, res) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401)
+    return res.end()
+}
   const data = req.body
   const { id } = req.params
 

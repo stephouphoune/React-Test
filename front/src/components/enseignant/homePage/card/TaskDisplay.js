@@ -5,6 +5,7 @@ import { deleteEvent } from '../../../../appState/actions/event'
 import './TaskDisplay.css';
 import 'moment/locale/fr.js';
 import moment from 'moment'
+import humanizeDuration from 'humanize-duration'
 
 //differentes taches presentes dans la liste et modifiables
 class TaskDisplay extends Component{
@@ -48,7 +49,7 @@ class TaskDisplay extends Component{
               </Popconfirm>,
               ]}
             >
-                Durée : {event.duration} minutes
+                Durée : {humanizeDuration(event.duration*60000, {language:'fr'})}
                 <List.Item.Meta
                   title={event.name}
                   description={event.description}

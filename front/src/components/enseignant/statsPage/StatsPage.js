@@ -20,8 +20,8 @@ class StatsPage extends Component{
   componentWillReceiveProps = (nextProps) => {
     if (this.props.events != nextProps.events)
     {  
-      //nextProps.getStatsActivities()
-      //nextProps.getStatsCsv()
+      nextProps.getStatsActivities()
+      nextProps.getStatsCsv()
     }
   }
 
@@ -44,7 +44,11 @@ class StatsPage extends Component{
   render(){
     return(
         <div>
-          <Row className='RowCardChart'>
+          
+          <div className='FirstNameLastName'>
+          {this.props.user.firstName+' '+this.props.user.lastName}
+          </div>
+          <Row className='RowCardChart' style={{marginTop:10}}>
             <Col span={12} className='PieColumn'>
               <Card title={this.state.choice ? 'Comparaison entre les '+this.state.choice+' en heures' : ''}
                     bordered={true}
@@ -76,7 +80,8 @@ class StatsPage extends Component{
 }
 
 const mapStateToProps = store => ({
-  events: store.event.events
+  events: store.event.events,
+  user: store.user
 })
 
 const mapDispatchToProps = dispatch => ({

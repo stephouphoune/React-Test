@@ -31,7 +31,7 @@ const store = createStore(
         activity:activityReducer,
         task:taskReducer,
         label:labelReducer, 
-        users:usersReducer,
+        users:persistReducer(persistConfig,usersReducer),
         workday:workdayReducer,
         event:eventReducer,
         statsTasks:statsTasksReducer,

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Form, Icon, Input, Button, Checkbox} from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Calendar, message } from 'antd';
 import { createSignIn } from '../../appState/actions/user'
-import { Calendar, message } from 'antd';
 import './Login.css'
 
 class Login extends Component {
@@ -11,6 +10,10 @@ class Login extends Component {
     state = {
         username: '',
         password: ''
+    }
+
+    connexion = () => {
+        this.props.signin(this.state.username, this.state.password)
     }
 
     render() {
@@ -49,14 +52,14 @@ class Login extends Component {
                             placeholder="Password" />
                         <Button 
                             className="ButtonLogin"
-                            onClick={() => signin(username, password)} //Comment mettre deux fonctions ici ?
+                            onClick={this.connexion}
                             loading={signinLoading ? true : false}
                             type="primary" 
                             htmlType="submit"
                             icon="key">
                         Connexion
-                        </Button>   
-                    </Form.Item>   
+                        </Button>
+                    </Form.Item> 
             </div>
         );
     }
