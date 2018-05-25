@@ -1,6 +1,6 @@
 import * as types from '../types/user'
 import store from '../createReduxStore'
-
+import { getCurrentToken } from '../reducers/admin'
 const requestSignIn = () => ({
     type: types.USER_REQUEST_SIGNIN
 })
@@ -62,7 +62,7 @@ export const modifyUrlCalendar = dispatch => (url) => {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }

@@ -1,5 +1,7 @@
 import * as types from '../types/admin'
 import store from '../createReduxStore'
+import { getCurrentToken } from '../reducers/admin'
+import { fullPurge } from './fullPurge'
 
 const requestSignIn = () => ({
     type: types.ADMIN_REQUEST_SIGNIN
@@ -44,6 +46,8 @@ export const connectionAdmin = dispatch => (username) => {
     .then(body => {
             const data = JSON.parse(body)
             dispatch(receiveSignIn(username, data.firstName, data.lastName, data.token, data.url, data.isAdmin, false))
+            dispatch(fullPurge())
+
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveSignIn(null, null, null, null, null, null,true))

@@ -24,7 +24,6 @@ router.get('/api/admin', (req, res) => {
                 
                 const user = JSON.parse(JSON.stringify(rows))[0];
                 const isAdmin = user.isAdmin ? true:false
-                console.log(isAdmin)
                 const { username, firstName, lastName, url_calendar} = user
                 const token = jwt.sign({ username, isAdmin }, 'monsupermotdepasseincracable');
                 

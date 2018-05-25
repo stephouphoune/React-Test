@@ -5,7 +5,8 @@ import moment from 'moment'
 import { fullReload } from './fullReload';
 import { receiveSignIn } from '../actions/user'
 import { forceReset } from '../actions/reset'
-import getCurrentToken from '../reducers/admin'
+import { getCurrentToken } from '../reducers/admin'
+import { fullPurge } from '../actions/fullPurge'
 
 const requestPostEvent = () => ({
     type: types.REQUEST_POST_EVENT
@@ -123,7 +124,7 @@ export const postEvent = dispatch => ({ activity, project, task, description, du
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
@@ -180,7 +181,7 @@ export const deleteEvent = dispatch => (eventId) => {
     fetch(`http://localhost:3001/api/event/${eventId}`, {
         method: 'DELETE',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
@@ -215,7 +216,7 @@ export const modifyEvent = dispatch => (event) => {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }

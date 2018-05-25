@@ -1,5 +1,6 @@
 import * as types from '../types/label'
 import * as Rtypes from '../types/reset'
+import * as Ptypes from '../types/fullPurge'
 
 const initialState = {
     labels:[]

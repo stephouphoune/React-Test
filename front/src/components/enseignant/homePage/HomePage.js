@@ -159,7 +159,7 @@ class HomePage extends Component{
     return (
       <div>
         <div className='FirstNameLastName'>
-          {this.props.user.firstName+' '+this.props.user.lastName}
+          {'Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
         </div>
         <Row type="flex" style={{marginTop:10}}>
           <Col span={8}>

@@ -1,6 +1,8 @@
 import * as types from '../types/project'
 import store from '../createReduxStore'
 import { requestGetTasks } from './task'
+import { getCurrentToken } from '../reducers/admin'
+
 
 const requestProject = () => ({
     type: types.REQUEST_GET_PROJECTS

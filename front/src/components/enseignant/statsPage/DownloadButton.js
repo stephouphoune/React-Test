@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Radio, Button, Icon, Popover } from 'antd';
 import {CSVLink, CSVDownload} from 'react-csv';
-import { getStatsCsv } from '../../../appState/actions/statsCsv'
+import moment from 'moment'
 import './DownloadButton.css';
 
 class DownloadButton extends Component {
@@ -25,10 +25,11 @@ class DownloadButton extends Component {
 
   render(){
 
-    const data = [['Activité', 'Projet', 'Tâche', 'Durée (heures)']]
-    for (let i=0;i<this.props.statsCsv.length;i++)
+    const data = [['Mois', 'Année', 'Activité', 'Durée (heures)']]
+    const activityDuration = this.props.statsActivities.sort()
+    for (let i=0;i<this.props.statsActivities.length;i++)
     {
-      data.push(this.props.statsCsv[i])
+      data.push([moment(this.props.statsActivities[i].month, 'M').format('MMMM'), this.props.statsActivities[i].year, this.props.statsActivities[i].name, this.props.statsActivities[i].duration/60])
     }
     
     return(
@@ -38,15 +39,10 @@ class DownloadButton extends Component {
 }
 
 const mapStateToProps = store => ({
-  statsCsv: store.statsCsv.statsCsv,
+  statsActivities: store.statsActivities.statsActivities,
   events: store.event.events
-})
-
-const mapDispatchToProps = dispatch => ({
-  getStatsCsv: getStatsCsv(dispatch),
 })
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
 )(DownloadButton);

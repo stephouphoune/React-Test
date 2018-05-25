@@ -1,5 +1,6 @@
 import * as types from '../types/activity'
 import store from '../createReduxStore'
+import { getCurrentToken } from '../reducers/admin'
 
 const requestGetActivity = () => ({
     type: types.REQUEST_GET_ACTIVITIES

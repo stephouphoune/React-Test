@@ -13,15 +13,10 @@ import moment from 'moment'
 
 class StatsPage extends Component{
 
-  componentDidMount = () => {
-    this.props.getStatsActivities()
-  }
-
   componentWillReceiveProps = (nextProps) => {
     if (this.props.events != nextProps.events)
     {  
       nextProps.getStatsActivities()
-      nextProps.getStatsCsv()
     }
   }
 
@@ -46,7 +41,7 @@ class StatsPage extends Component{
         <div>
           
           <div className='FirstNameLastName'>
-          {this.props.user.firstName+' '+this.props.user.lastName}
+            {'Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
           </div>
           <Row className='RowCardChart' style={{marginTop:10}}>
             <Col span={12} className='PieColumn'>

@@ -59,9 +59,6 @@ class AeraChart extends Component{
         dataDuration.push(data2.duration/60)
       }
     }
-    console.log(aeraChartData)
-    console.log(data)
-    console.log(dataDuration)
     return dataDuration
   }
 
@@ -73,7 +70,6 @@ class AeraChart extends Component{
     {
         monthTab.push(moment().subtract(i,'months').format("MMMM"))
     }
-    console.log(this.props.statsActivities)
     for (const month of monthTab)
     {
       for (const activity of this.props.statsActivities)
@@ -89,7 +85,7 @@ class AeraChart extends Component{
         }
       else if (aeraChartData.findIndex(data => data.month === month && data.name ===activity.activityName) === -1)
         aeraChartData.push({name:activity.activityName, duration:0, month:month})
-        //else console.log("Déjà dans le tableau", aeraChartData.find(data => data.month === month && data.name === activity.activityName))
+        
       }
     }
 
@@ -98,7 +94,6 @@ class AeraChart extends Component{
       if (!aeraChartDataName.includes(data.name))
         aeraChartDataName.push(data.name)
     }
-
     
     
     return {
@@ -108,9 +103,9 @@ class AeraChart extends Component{
           backgroundColor: getRandomColors(aeraChartDataName.length)[aeraChartDataName.findIndex(data2 => data2 === data)],
           data: this.getDurationFromData(data, aeraChartData)
         }))}
-    
+        
   }
-
+  
   render() {
     return (
       <Line 

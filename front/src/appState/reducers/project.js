@@ -1,5 +1,6 @@
 import * as types from '../types/project'
 import * as Rtypes from '../types/reset'
+import * as Ptypes from '../types/fullPurge'
 
 const initialState = {
     projects:[]
@@ -7,6 +8,7 @@ const initialState = {
 
 const projectReducer = (state = initialState, action) => {
     switch (action.type) {
+        case Ptypes.FULL_PURGE:
         case Rtypes.FORCE_RESET:
             return initialState;
         case types.DELETE_PROJECTS:

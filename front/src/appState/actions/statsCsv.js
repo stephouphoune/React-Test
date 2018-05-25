@@ -1,6 +1,6 @@
 import * as types from '../types/statsCsv'
 import store from '../createReduxStore'
-
+import { getCurrentToken } from '../reducers/admin'
 const receiveStatsCsv = (statsCsv = []) => ({
     type: types.RECEIVE_GET_STATS_CSV,
     statsCsv
@@ -10,7 +10,7 @@ export const getStatsCsv = dispatch => () => {
     fetch(`http://localhost:3001/api/statsCsv`, {
         method: 'GET',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }

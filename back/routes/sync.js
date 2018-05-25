@@ -160,7 +160,7 @@ const createEvent = async(event, username) => {
   const endDate = moment(new Date(event.endDate).toMysqlFormat())
   const duration = endDate.diff(startDate, "minutes")
 
-  await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${new Date(event.startDate).toMysqlFormat()}', '${new Date(event.endDate).toMysqlFormat()}', '${event.isenId}', '${event.activityName} - ${event.projectName} - ${event.taskName}', '${taskId}', '${username}', '${duration}')`)
+  await executeQuery2(`INSERT INTO event VALUES(NULL, '${event.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${new Date(event.startDate).toMysqlFormat()}', '${new Date(event.endDate).toMysqlFormat()}', '${event.isenId}', '${event.activityName.replace("\'", "\\\'")} - ${event.projectName.replace("\'", "\\\'")} - ${event.taskName.replace("\'", "\\\'")}', '${taskId}', '${username}', '${duration}')`)
 }
 
 const updateEvent = async(event, username) => {
@@ -168,38 +168,38 @@ const updateEvent = async(event, username) => {
   const startDate = moment(new Date(event.startDate).toMysqlFormat())
   const endDate = moment(new Date(event.endDate).toMysqlFormat())
   const duration = endDate.diff(startDate, "minutes")
-  await executeQuery2(`UPDATE event SET startDate='${new Date(event.startDate).toMysqlFormat()}', endDate='${new Date(event.endDate).toMysqlFormat()}', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${event.activityName} - ${event.projectName} - ${event.taskName}', description='${event.description}', duration='${duration}' WHERE isen_id='${event.isenId}' AND username='${username}'`)
+  await executeQuery2(`UPDATE event SET startDate='${new Date(event.startDate).toMysqlFormat()}', endDate='${new Date(event.endDate).toMysqlFormat()}', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${event.activityName.replace("\'", "\\\'")} - ${event.projectName.replace("\'", "\\\'")} - ${event.taskName.replace("\'", "\\\'")}', description='${event.description.replace("\'", "\\\'")}', duration='${duration}' WHERE isen_id='${event.isenId}' AND username='${username}'`)
 }
 
 const createActivity = async(activityName) => {
-  const rows = await executeQuery2(`INSERT INTO activity VALUES (NULL, '${activityName}', 0, 0)`)
+  const rows = await executeQuery2(`INSERT INTO activity VALUES (NULL, '${activityName.replace("\'", "\\\'")}', 0, 0)`)
   return rows.insertId
 }
 
 const createProject = async(projectName, activityId) => {
-  const rows = await executeQuery2(`INSERT INTO project VALUES (NULL, '${projectName}', '${activityId}', 0, 0)`)
+  const rows = await executeQuery2(`INSERT INTO project VALUES (NULL, '${projectName.replace("\'", "\\\'")}', '${activityId}', 0, 0)`)
   return rows.insertId
 }
 
 const createTask = async(taskName, projectId) => {
-  const rows = await executeQuery2(`INSERT INTO task VALUES (NULL, '${taskName}', '', '${projectId}', 0, 0, 0)`)
+  const rows = await executeQuery2(`INSERT INTO task VALUES (NULL, '${taskName.replace("\'", "\\\'")}', '', '${projectId}', 0, 0, 0)`)
   return rows.insertId
 }
 
 const getTaskId = async(taskName, projectId) => {
-  const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName}' AND project_id='${projectId}' AND isDeleted='0'`)
+  const rows = await executeQuery2(`SELECT task_id FROM task WHERE name='${taskName.replace("\'", "\\\'")}' AND project_id='${projectId}' AND isDeleted='0'`)
   const taskId = JSON.parse(JSON.stringify(rows)).map(task => task.task_id)
   return taskId[0] || -1
 }
 
 const getProjectId = async(projectName, activityId) => {
-  const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName}' AND activity_id='${activityId}' AND isDeleted='0'`)
+  const rows = await executeQuery2(`SELECT project_id FROM project WHERE name='${projectName.replace("\'", "\\\'")}' AND activity_id='${activityId}' AND isDeleted='0'`)
   const projectId = JSON.parse(JSON.stringify(rows)).map(project => project.project_id)
   return projectId[0] || -1
 }
 
 const getActivityId = async(activityName) => {
-  const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName}' AND isDeleted='0'`)
+  const rows = await executeQuery2(`SELECT activity_id FROM activity WHERE name='${activityName.replace("\'", "\\\'")}' AND isDeleted='0'`)
   const activityId = JSON.parse(JSON.stringify(rows)).map(activity => activity.activity_id)
   return activityId[0] || -1
 }

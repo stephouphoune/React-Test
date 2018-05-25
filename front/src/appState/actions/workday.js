@@ -1,6 +1,6 @@
 import * as types from '../types/workday'
 import store from '../createReduxStore'
-
+import { getCurrentToken } from '../reducers/admin'
 const requestWorkdays = () => ({
     type: types.REQUEST_GET_WORKDAYS
 })
@@ -60,7 +60,7 @@ export const modifyWorkdays = dispatch => (workdayId, duration) => {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }

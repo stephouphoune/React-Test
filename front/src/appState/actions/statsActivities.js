@@ -1,6 +1,7 @@
 import * as types from '../types/statsActivities'
 import store from '../createReduxStore'
 import moment from 'moment'
+import { getCurrentToken } from '../reducers/admin'
 
 const receiveStatsActivities = (statsActivities = []) => ({
     type: types.RECEIVE_GET_STATS_ACTIVITIES,
@@ -11,7 +12,7 @@ export const getStatsActivities = dispatch => () => {
     fetch(`http://localhost:3001/api/statsActivities`, {
         method: 'GET',
         headers: {
-            'X-AUTH-TOKEN': store.getState().user.token,
+            'X-AUTH-TOKEN': getCurrentToken(store.getState()),
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
         }
