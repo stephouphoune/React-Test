@@ -2,7 +2,7 @@ import * as types from '../types/project'
 import store from '../createReduxStore'
 import { requestGetTasks } from './task'
 import { getCurrentToken } from '../reducers/admin'
-
+import { message } from 'antd'
 
 const requestProject = () => ({
     type: types.REQUEST_GET_PROJECTS
@@ -164,6 +164,7 @@ export const deleteProject = dispatch => (projectId) => {
     })
     .then(body => {
         dispatch(receiveDeleteProject(projectId))
+        message.success(`Le projet a bien été supprimé !`);
     })
     .catch(() => {
         dispatch(receiveDeleteProject())

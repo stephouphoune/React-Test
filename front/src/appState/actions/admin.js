@@ -4,6 +4,8 @@ import { getCurrentToken } from '../reducers/admin'
 import { fullPurge } from './fullPurge'
 import { fullReload } from './fullReload';
 import { forceReset } from './reset'
+import { message } from 'antd'
+
 const requestSignIn = () => ({
     type: types.ADMIN_REQUEST_SIGNIN
 })
@@ -47,11 +49,17 @@ export const connectionAdmin = dispatch => (username, date) => {
     .then(body => {
             const data = JSON.parse(body)
             dispatch(receiveSignIn(username, data.firstName, data.lastName, data.token, data.url, data.isAdmin, false))
-            dispatch(forceReset())
+            dispatch(fullPurge())
             fullReload(dispatch)(date)
-
+            message.success(`Vous êtes connecté au compte de ${data.firstName} ${data.lastName}`)
+            
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires
         dispatch(receiveSignIn(null, null, null, null, null, null,true))
     })
+}
+
+export const deconnectionAdmin = dispatch => (date) => {
+    dispatch(forceReset())
+    fullReload(dispatch)(date)
 }

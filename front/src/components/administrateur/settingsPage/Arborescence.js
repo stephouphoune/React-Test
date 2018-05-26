@@ -105,20 +105,17 @@ class Arborescence extends Component{
         if (this.getDeleteTargetEntity() === 'activity'){
             const activity = this.props.activities.find(activity => activity.id === activityNode.id)
             this.props.deleteActivity(activity.id)
-            message.success(`"${activity.name}" a bien été supprimé !`);
 
             return
         }
         if (this.getDeleteTargetEntity() === 'project'){
             const project = this.props.projects.find(project => project.id === projectNode.id)
             this.props.deleteProject(project.id)
-            message.success(`"${project.name}" a bien été supprimé !`)
             return
         }
         if (this.getDeleteTargetEntity() === 'task'){
             const task = this.props.tasks.find(task => task.id === taskNode.id)
             this.props.deleteTask(task.id)
-            message.success(`"${task.name}" a bien été supprimé !`)
             return
         }
     }

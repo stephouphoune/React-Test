@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Line } from 'react-chartjs-2'
 import moment from 'moment'
 import { getStatsActivities } from '../../../appState/actions/statsActivities'
-
+import { PureComponent } from 'react'
 //inserer des donnees a traiter
 function rainbow(numOfSteps, step) {
   // This function generates vibrant, "evenly spaced" colours (i.e. no clustering). This is ideal for creating easily distinguishable vibrant markers in Google Maps and other apps.
@@ -48,9 +48,10 @@ const options  = {
 
 
 //*****************************
-class AeraChart extends Component{
+class AeraChart extends PureComponent{
   
   componentWillReceiveProps = (nextProps) => {
+    console.log('props', this.props, 'nextProps', nextProps)
     if (this.props.events !== nextProps.events)
     nextProps.getStatsActivities()
   }

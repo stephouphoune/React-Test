@@ -6,6 +6,7 @@ import './HomePage.css';
 import Agenda from './Agenda';
 import Manage from './card/Manage';
 import { postEvent, getEvents, modifyEvent } from '../../../appState/actions/event'
+import { deconnectionAdmin } from '../../../appState/actions/admin'
 
 class HomePage extends Component{
   state = {
@@ -135,11 +136,14 @@ class HomePage extends Component{
   }
 
   getProgressFromEvents = (events, workdays = this.props.workdays) => {
+    
+    console.log(this.props.workdays)
     const duration = events.filter(event => moment(event.startDate).isSame(this.state.selectedDate, 'day')).reduce((acc, event) =>
     {
       return acc+event.duration
     }, 0)
     const currentDayOfWeek = parseInt(this.state.selectedDate.format('e'), 10)
+    console.log(currentDayOfWeek)
     const durationDay = workdays.find(item => item.id === currentDayOfWeek)
     const progress = Math.round((duration/(durationDay.duration*60))*100)
     const boundProgress = progress > 100 ? 100 : progress
@@ -159,7 +163,8 @@ class HomePage extends Component{
     return (
       <div>
         <div className='FirstNameLastName'>
-          {'Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
+        {this.props.admin.token ? <Button style={{marginRight:'0.5rem'}} size="small" icon="poweroff" type="danger" shape="circle" onClick={() => this.props.deconnectionAdmin(moment())}></Button> : ''}
+        {this.props.admin.token ? 'Connecté en tant que : '+this.props.admin.firstName+' '+this.props.admin.lastName : 'Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
         </div>
         <Row type="flex" style={{marginTop:10}}>
           <Col span={8}>
@@ -176,7 +181,7 @@ class HomePage extends Component{
                 selectedDate={this.state.selectedDate}
               />
             </Row>
-            <Row style={{marginTop:"1rem", marginBottom:"1rem"}}  type="flex" align="middle">
+            <Row style={{marginTop:"1rem", marginBottom:"0.5rem"}}  type="flex" align="middle">
               <Col span={19}>
               <Progress 
                 className="Progress"
@@ -218,13 +223,15 @@ const mapStateToProps = store => ({
   activities: store.activity.activities,
   events: store.event.events,
   workdays: store.workday.workdays,
-  user: store.user
+  user: store.user,
+  admin: store.admin
 });
 
 const mapDispatchToProps = dispatch => ({
   postEvent: postEvent(dispatch),
   getEvents: getEvents(dispatch), 
   modifyEvent: modifyEvent(dispatch),
+  deconnectionAdmin: deconnectionAdmin(dispatch)
 })
 
 export default connect(

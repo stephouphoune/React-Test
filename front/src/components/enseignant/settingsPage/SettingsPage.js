@@ -49,20 +49,8 @@ class SettingsPage extends Component{
                   </Col>
                 </Row>
 
-                <div className="LanguageContainer2">
-                    <div>
-                      Langue : 
-                    </div>
-                    <div>
-                      <Select defaultValue="Francais" onChange={handleChange}>
-                          <Select.Option value="francais">Francais</Select.Option>
-                          <Select.Option value="english">English</Select.Option>
-                      </Select>
-                    </div>
-                </div>
-
                 <Row type="flex" justify="center">
-                  <Button style={{marginTop:"3rem"}} type="primary" ghost onClick={this.enterLoading}>
+                  <Button style={{marginTop:"15rem"}} type="primary" size='large' ghost onClick={this.enterLoading}>
                     Enregistrer les modifications
                   </Button>
                 </Row>

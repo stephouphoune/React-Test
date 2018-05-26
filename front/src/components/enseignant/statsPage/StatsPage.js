@@ -7,6 +7,7 @@ import PieChart from './PieChart';
 import Select from './Select';
 import { getStatsActivities } from '../../../appState/actions/statsActivities'
 import { getStatsCsv } from '../../../appState/actions/statsCsv'
+import { deconnectionAdmin } from '../../../appState/actions/admin'
 import DownloadButton from './DownloadButton';
 import moment from 'moment'
 
@@ -34,7 +35,8 @@ class StatsPage extends Component{
         <div>
           
           <div className='FirstNameLastName'>
-            {'Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
+            {this.props.admin.token ? <Button style={{marginRight:'0.5rem'}} size="small" icon="poweroff" type="danger" shape="circle" onClick={() => this.props.deconnectionAdmin(moment())}></Button> : ''}
+            {this.props.admin.token ? ' Connecté en tant que : '+this.props.admin.firstName+' '+this.props.admin.lastName : ' Connecté en tant que : '+this.props.user.firstName+' '+this.props.user.lastName}
           </div>
           <Row className='RowCardChart' style={{marginTop:10}}>
             <Col span={12} className='PieColumn'>
@@ -69,12 +71,14 @@ class StatsPage extends Component{
 
 const mapStateToProps = store => ({
   events: store.event.events,
-  user: store.user
+  user: store.user,
+  admin: store.admin
 })
 
 const mapDispatchToProps = dispatch => ({
   getStatsActivities: getStatsActivities(dispatch),
-  getStatsCsv: getStatsCsv(dispatch)
+  getStatsCsv: getStatsCsv(dispatch), 
+  deconnectionAdmin: deconnectionAdmin(dispatch)
 })
 
 export default connect(

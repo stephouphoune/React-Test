@@ -1,4 +1,5 @@
 import * as types from '../types/admin'
+import * as Rtypes from '../types/reset'
 
 const initialState = {
     username: null,
@@ -20,6 +21,8 @@ export const getCurrentToken = state => {
 
 const adminReducer = (state = initialState, action) => {
     switch (action.type) {
+        case Rtypes.FORCE_RESET:
+            return initialState;
         case types.ADMIN_REQUEST_SIGNIN:
             return {
                 ...state,

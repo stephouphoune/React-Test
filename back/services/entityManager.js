@@ -192,7 +192,7 @@ const getEventsStatsProjects = async(username, projectId) => {
     const rawRows = await executeQuery2(`SELECT task_id FROM task WHERE project_id='${projectId}'`)
     const taskIds = JSON.parse(JSON.stringify(rawRows))
     const sqlTaskIds = taskIds.map(item => item.task_id).join(', ')
-    const rawRows2 = await executeQuery2(`SELECT duration FROM event WHERE task_id in (${sqlTaskIds}) AND isDeleted='0'`)
+    const rawRows2 = await executeQuery2(`SELECT duration FROM event WHERE task_id in (${sqlTaskIds}) AND isDeleted='0' AND username='${username}'`)
     const duration = JSON.parse(JSON.stringify(rawRows2))
     
     return duration

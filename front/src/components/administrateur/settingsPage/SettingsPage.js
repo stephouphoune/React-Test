@@ -52,17 +52,6 @@ class SettingsPageAdmin extends Component{
                               />
                             </div>
                         </div>
-                        <div className="LanguageContainer">
-                            <div className="LanguageText">
-                              Langue : 
-                            </div>
-                            <div className="Language">
-                              <Select defaultValue="Francais">
-                                  <Select.Option value="francais">Francais</Select.Option>
-                                  <Select.Option value="english">English</Select.Option>
-                              </Select>
-                            </div>
-                        </div>
                         <Duration saveUrlCalendar={this.saveUrlCalendar}/>
                     </Card>
                   </Col>

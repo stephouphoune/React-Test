@@ -1,6 +1,8 @@
 import * as types from '../types/task'
 import store from '../createReduxStore'
 import { getCurrentToken } from '../reducers/admin'
+import { message } from 'antd'
+
 const requestTask = () => ({
     type: types.REQUEST_GET_TASKS
 })
@@ -96,6 +98,7 @@ export const deleteTask = dispatch => (taskId) => {
     })
     .then(body => {
         dispatch(receiveDeleteTask(taskId))
+        message.success(`La tâche a bien été supprimée !`);
     })
     .catch(() => {
         dispatch(receiveDeleteTask())

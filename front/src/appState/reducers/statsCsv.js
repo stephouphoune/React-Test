@@ -1,5 +1,6 @@
 import * as types from '../types/statsCsv'
 import * as Rtypes from '../types/reset'
+import * as Ptypes from '../types/fullPurge'
 
 const initialState = {
     statsCsv:[]
@@ -7,6 +8,7 @@ const initialState = {
 
 const statsCsvReducer = (state = initialState, action) => {
     switch (action.type) {
+        case Ptypes.FULL_PURGE:
         case Rtypes.FORCE_RESET:
             return initialState;
         case types.RECEIVE_GET_STATS_CSV:

@@ -1,6 +1,7 @@
 import * as types from '../types/activity'
 import store from '../createReduxStore'
 import { getCurrentToken } from '../reducers/admin'
+import { message } from 'antd'
 
 const requestGetActivity = () => ({
     type: types.REQUEST_GET_ACTIVITIES
@@ -118,6 +119,7 @@ export const deleteActivity = dispatch => (activityId) => {
     })
     .then(body => {
         dispatch(receiveDeleteActivity(activityId))
+        message.success(`L\'activité a bien été supprimée !`);
     })
     .catch(() => {
         dispatch(receiveDeleteActivity())

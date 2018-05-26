@@ -23,6 +23,8 @@
 .FirstNameLastName{
   display: flex;
   justify-content: flex-end;
+  align-content: center;
+  text-align: center;
 }
 
 .smiley{
