@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import { requestGetUsers } from '../../../appState/actions/users'
 import { connectionAdmin } from '../../../appState/actions/admin'
 import './Administration.css';
-
-
+import moment from 'moment'
 
 class Administration extends Component{
 
@@ -22,7 +21,7 @@ class Administration extends Component{
 
     connection = () => {
         if (this.state.userSelected)
-            this.props.connectionAdmin(this.state.username)
+            this.props.connectionAdmin(this.state.username, moment())
     }
 
     handleChange = (username) => {

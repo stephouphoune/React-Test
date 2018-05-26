@@ -67,7 +67,7 @@ router.post('/api/task', (req, res) => {
   }
   try {
     const data = req.body
-    executeQuery(`INSERT INTO task VALUES (NULL, '${data.name}','', '${data.projectId}',0 , 1, 0)`, (err, result) => {
+    executeQuery(`INSERT INTO task VALUES (NULL, '${data.name.replace("\'", "\\\'")}','', '${data.projectId}',0 , 1, 0)`, (err, result) => {
         if (err) {
             res.status(500);
             res.end()
@@ -100,7 +100,7 @@ router.put('/api/task/:id', (req, res) => {
   try {
       const data = req.body
       const taskId = req.params.id
-      executeQuery(`UPDATE task SET name='${data.name}' WHERE task_id='${taskId}'`, (err, result) => {
+      executeQuery(`UPDATE task SET name='${data.name.replace("\'", "\\\'")}' WHERE task_id='${taskId}'`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()

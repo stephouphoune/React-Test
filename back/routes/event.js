@@ -53,7 +53,7 @@ router.post('/api/event', (req, res) => {
         endDate.add(data.duration, 'minutes')
 
         
-        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${startDate.format('YYYY-MM-DD HH:mm:ss')}', '${endDate.format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
+        executeQuery(`INSERT INTO event VALUES(NULL, '${data.description.replace("\'", "\\\'")}', '0', '0', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${now.format('YYYY-MM-DD HH:mm:ss')}', '${startDate.format('YYYY-MM-DD HH:mm:ss')}', '${endDate.format('YYYY-MM-DD HH:mm:ss')}', ${'NULL'}, '${data.name.replace("\'", "\\\'")}', '${data.taskId}', '${req.user.username}', ${data.duration})`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
@@ -123,7 +123,7 @@ router.put('/api/event/:id', (req, res) => {
         const eventId = req.params.id
         const user = req.user
         //console.log(req.body)
-        executeQuery(`UPDATE event SET description='${data.description}', isModified='1', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${data.name}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
+        executeQuery(`UPDATE event SET description='${data.description.replace("\'", "\\\'")}', isModified='1', lastUpdateDate='${now.format('YYYY-MM-DD HH:mm:ss')}', name='${data.name.replace("\'", "\\\'")}', task_id='${data.taskId}', duration=${data.duration} WHERE event_id=${eventId} AND username='${user.username}'`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()

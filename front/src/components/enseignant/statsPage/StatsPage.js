@@ -13,13 +13,6 @@ import moment from 'moment'
 
 class StatsPage extends Component{
 
-  componentWillReceiveProps = (nextProps) => {
-    if (this.props.events != nextProps.events)
-    {  
-      nextProps.getStatsActivities()
-    }
-  }
-
   state = {
     isLoaded:false,
     choice:null

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Line } from 'react-chartjs-2'
 import moment from 'moment'
+import { getStatsActivities } from '../../../appState/actions/statsActivities'
 
 //inserer des donnees a traiter
 function rainbow(numOfSteps, step) {
@@ -49,6 +50,11 @@ const options  = {
 //*****************************
 class AeraChart extends Component{
   
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.events !== nextProps.events)
+    nextProps.getStatsActivities()
+  }
+
   
   getDurationFromData = (data, aeraChartData) => {
     const dataDuration = []
@@ -59,6 +65,7 @@ class AeraChart extends Component{
         dataDuration.push(data2.duration/60)
       }
     }
+    console.log(dataDuration)
     return dataDuration
   }
 
@@ -66,6 +73,7 @@ class AeraChart extends Component{
     const monthTab = []
     const aeraChartData = []
     const aeraChartDataName = []
+
     for (let i=5;i>=0;i--)
     {
         monthTab.push(moment().subtract(i,'months').format("MMMM"))
@@ -131,13 +139,17 @@ const getProperStats = store => {
     })
 }
 
-
+const mapDispatchToProps = dispatch => ({
+  getStatsActivities: getStatsActivities(dispatch)
+})
 
 const mapStateToProps = store => ({
   statsActivities: getProperStats(store),
-  activities:store.activity.activities
+  activities:store.activity.activities,
+  events:store.event.events
 })
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AeraChart);

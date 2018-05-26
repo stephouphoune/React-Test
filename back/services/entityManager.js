@@ -134,9 +134,10 @@ const getEventsStatsActivities = async(username) => {
             const stat = activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id && stat.month === event.month)]
             const newStat = {
                 ...stat,
-                duration: stat.duration + event.duration
+                duration: stat.duration + event.duration,
+                month:event.month
             }
-            activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id)] = newStat
+            activitiesStats[activitiesStats.findIndex(stat => stat.activityId === activity.activity_id && stat.month === event.month)] = newStat
         }
     }
     return activitiesStats

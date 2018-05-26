@@ -63,7 +63,7 @@ router.post('/api/project', (req, res) => {
     }
     try {
       const data = req.body
-      executeQuery(`INSERT INTO project VALUES (NULL, '${data.name}', '${data.activityId}' , 1, 0)`, (err, result) => {
+      executeQuery(`INSERT INTO project VALUES (NULL, '${data.name.replace("\'", "\\\'")}', '${data.activityId}' , 1, 0)`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()
@@ -97,7 +97,7 @@ router.put('/api/project/:id', (req, res) => {
       const data = req.body
       console.log('-------------------', data)
       const projectId = req.params.id
-      executeQuery(`UPDATE project SET name='${data.name}' WHERE project_id='${projectId}'`, (err, result) => {
+      executeQuery(`UPDATE project SET name='${data.name.replace("\'", "\\\'")}' WHERE project_id='${projectId}'`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()

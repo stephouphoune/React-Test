@@ -2,7 +2,8 @@ import * as types from '../types/admin'
 import store from '../createReduxStore'
 import { getCurrentToken } from '../reducers/admin'
 import { fullPurge } from './fullPurge'
-
+import { fullReload } from './fullReload';
+import { forceReset } from './reset'
 const requestSignIn = () => ({
     type: types.ADMIN_REQUEST_SIGNIN
 })
@@ -18,7 +19,7 @@ export const receiveSignIn = (username, firstName, lastName, token, url, isAdmin
     signinError,
 })
 
-export const connectionAdmin = dispatch => (username) => {
+export const connectionAdmin = dispatch => (username, date) => {
 
     //dispatch = envoi/utilisation de la méthode en argument
     dispatch(requestSignIn())
@@ -46,7 +47,8 @@ export const connectionAdmin = dispatch => (username) => {
     .then(body => {
             const data = JSON.parse(body)
             dispatch(receiveSignIn(username, data.firstName, data.lastName, data.token, data.url, data.isAdmin, false))
-            dispatch(fullPurge())
+            dispatch(forceReset())
+            fullReload(dispatch)(date)
 
     }).catch(() => {
         //Null pour faire ensuite des tests avec des expressions ternaires

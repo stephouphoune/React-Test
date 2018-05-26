@@ -29,7 +29,7 @@ class DownloadButton extends Component {
     const activityDuration = this.props.statsActivities.sort()
     for (let i=0;i<this.props.statsActivities.length;i++)
     {
-      data.push([moment(this.props.statsActivities[i].month, 'M').format('MMMM'), this.props.statsActivities[i].year, this.props.statsActivities[i].name, this.props.statsActivities[i].duration/60])
+      data.push([moment(this.props.statsActivities[i].month, 'M').format('MMMM'), this.props.statsActivities[i].year, this.props.statsActivities[i].name, (this.props.statsActivities[i].duration/60).toString().replace(/[.]/, ",")])
     }
     
     return(

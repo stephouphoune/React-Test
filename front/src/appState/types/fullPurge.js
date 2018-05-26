@@ -1,1 +1,1 @@
-const FULL_PURGE = 'FULL_PURGE'
+export const FULL_PURGE = 'FULL_PURGE'

@@ -63,7 +63,7 @@ router.post('/api/activity', (req, res) => {
     }
     try {
       const data = req.body
-      executeQuery(`INSERT INTO activity VALUES (NULL, '${data.name}' , 1, 0)`, (err, result) => {
+      executeQuery(`INSERT INTO activity VALUES (NULL, '${data.name.replace("\'", "\\\'")}' , 1, 0)`, (err, result) => {
           if (err) {
               res.status(500);
               res.end()
@@ -94,7 +94,7 @@ router.put('/api/activity/:id', (req, res) => {
     try {
         const data = req.body
         const activityId = req.params.id
-        executeQuery(`UPDATE activity SET name='${data.name}' WHERE activity_id='${activityId}'`, (err, result) => {
+        executeQuery(`UPDATE activity SET name='${data.name.replace("\'", "\\\'")}' WHERE activity_id='${activityId}'`, (err, result) => {
             if (err) {
                 res.status(500);
                 res.end()
